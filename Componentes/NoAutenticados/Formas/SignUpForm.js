@@ -33,8 +33,8 @@ const validate = (values) => {
     const errors = {}
     if (!values.nombre) {
         errors.nombre = 'Nombre requerido'
-    } else if (values.nombre.length < 5) {
-        errors.nombre = 'El nombre debe contener minimo 5 caracteres'
+    } else if (values.nombre.length < 6) {
+        errors.nombre = 'El nombre debe contener minimo 6 caracteres'
     } else if (values.nombre.length > 25) {
         errors.nombre = 'El nombre debe contener maximo 25 caracteres'
     }
@@ -47,8 +47,8 @@ const validate = (values) => {
 
     if (!values.password) {
         errors.password = 'Contraseña requerida'
-    } else if (values.password.length < 5) {
-        errors.password = 'La contraseña debe contener minimo 5 caracteres'
+    } else if (values.password.length < 6) {
+        errors.password = 'La contraseña debe contener minimo 6 caracteres'
     } else if (values.password.length > 25) {
         errors.password = 'La contraseña debe contener maximo 25 caracteres'
     }
@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         width: width,
         marginTop: 10,
-        padding: 10,
+        padding: 5,
         borderRadius: 5,
         backgroundColor: '#FAFAFA'
     },

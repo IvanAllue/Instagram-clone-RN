@@ -36,8 +36,8 @@ const validate = (values) => {
 
     if (!values.password) {
         errors.password = 'Contraseña requerida'
-    } else if (values.password.length < 5) {
-        errors.password = 'La contraseña debe contener minimo 5 caracteres'
+    } else if (values.password.length < 6) {
+        errors.password = 'La contraseña debe contener minimo 6 caracteres'
     } else if (values.password.length > 25) {
         errors.password = 'La contraseña debe contener maximo 25 caracteres'
     }

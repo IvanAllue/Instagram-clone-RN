@@ -12,14 +12,14 @@ var width = Dimensions.get('window').width;
 
 class SignUp extends Component {
   render() {
-    console.log(this.props.numero)
+    
     return (
       <View style={styles.container}>
         <View style={{
           flex: 1, alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <Image style={{width: 200, height: 70, resizeMode: 'stretch'}} source={require('../../assets/logoinsta.png')}  />
+          <Image style={{width: 170, height: 70, resizeMode: 'stretch'}} source={require('../../assets/logoinsta.png')}  />
           <Text style={styles.texto}>Registrate para ver fotos y videos de tus amigos</Text>
           <SignUpForm />
 
