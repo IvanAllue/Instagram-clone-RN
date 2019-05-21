@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, TextInput, StyleSheet, TouchableHighlight } from 'react-native'
+import { Text, View, TextInput, StyleSheet, TouchableOpacity, Dimensions, Button } from 'react-native'
 import { Field, reduxForm } from 'redux-form'
 
-
+var width = Dimensions.get('window').width * 0.8;
 const fieldNombre = (props) => {
     return (
         <View>
@@ -15,10 +15,11 @@ const fieldNombre = (props) => {
                 autoCapitalize='none'
                 secureTextEntry={props.input.name === 'password' ? true : false}
                 onBlur={props.input.onBlur}
+                style={styles.input}
             />
 
             {props.meta.error && props.meta.touched &&
-                <Text>{props.meta.error}</Text>
+                <Text style={{color: '#808080', fontSize: 12, fontWeight: 'bold', }}>{props.meta.error}</Text>
             }
         </View>
     )
@@ -48,14 +49,17 @@ const SignInForm = (props) => {
 
     return (
         <View>
-            <Field name="correo" component={fieldNombre} ph='correo' />
-            <Field name="password" component={fieldNombre} ph='******' />
-            <TouchableHighlight
+            <Field name="correo" component={fieldNombre} ph='Correo Electrónico' />
+            <Field name="password" component={fieldNombre} ph='Contraseña' />
+            <TouchableOpacity
+                style={styles.boton}
+                
+                
                 onPress={props.handleSubmit((values) => { console.log(values) })}
                 underlayColor="white"
             >
-                <Text>Registrar</Text>
-            </TouchableHighlight>
+            <Text style={{  textAlign: 'center', color: '#fff', fontWeight: 'bold'}}>Entrar</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -65,3 +69,22 @@ export default reduxForm({
     form: 'SignInForm',
     validate
 })(SignInForm)
+
+const styles = StyleSheet.create({
+    input: {
+        borderColor: '#E1E1E1',
+        borderWidth: 1,
+        width: width,
+        marginTop: 15,
+        padding: 10,
+        borderRadius: 5,
+        backgroundColor: '#FAFAFA'
+    },
+    boton: {
+        backgroundColor: '#1194F6',
+            marginTop: 15,
+            padding: 13,
+            borderRadius: 5,
+          
+    }
+});
