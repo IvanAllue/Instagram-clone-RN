@@ -2,6 +2,9 @@ import React, { Component } from 'react'
 import { Text, View, TextInput, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import { Field, reduxForm } from 'redux-form'
 
+import { autenticacion } from '../../../Store/Servicios/Firebase'
+
+
 var width = Dimensions.get('window').width * 0.8;
 
 const fieldNombre = (props) => {
@@ -20,7 +23,7 @@ const fieldNombre = (props) => {
             />
 
             {props.meta.error && props.meta.touched &&
-                <Text style={{color: '#808080', fontSize: 12, fontWeight: 'bold', }}>{props.meta.error}</Text>
+                <Text style={{ color: '#808080', fontSize: 12, fontWeight: 'bold', }}>{props.meta.error}</Text>
             }
         </View>
     )
@@ -69,11 +72,18 @@ const SignUpForm = (props) => {
             <Field name="password" component={fieldNombre} ph='Contraseña' />
             <Field name="confirmacion" component={fieldNombre} ph='Repetir Contraseña' />
             <TouchableOpacity
-                onPress={props.handleSubmit((values) => { console.log(values) })}
+                onPress={props.handleSubmit((values) => {
+                    autenticacion.createUserWithEmailAndPassword(values.correo, values.password).then((values) =>{
+
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    });
+                })}
                 underlayColor="white"
                 style={styles.boton}
             >
-                <Text style={{  textAlign: 'center', color: '#fff', fontWeight: 'bold'}}>Registrarse</Text>
+                <Text style={{ textAlign: 'center', color: '#fff', fontWeight: 'bold' }}>Registrarse</Text>
             </TouchableOpacity>
         </View>
     )
@@ -97,9 +107,9 @@ const styles = StyleSheet.create({
     },
     boton: {
         backgroundColor: '#1194F6',
-            marginTop: 10,
-            padding: 10,
-            borderRadius: 5,
-          
+        marginTop: 10,
+        padding: 10,
+        borderRadius: 5,
+
     }
 });

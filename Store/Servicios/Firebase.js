@@ -11,3 +11,5 @@ var firebaseConfig = {
   };
 
   firebase.initializeApp(firebaseConfig);
+
+  export const autenticacion = firebase.auth()
