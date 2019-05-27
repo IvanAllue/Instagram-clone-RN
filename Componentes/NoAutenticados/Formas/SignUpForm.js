@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { Text, View, TextInput, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import { Field, reduxForm } from 'redux-form'
 
-import { autenticacion } from '../../../Store/Servicios/Firebase'
 
 
 var width = Dimensions.get('window').width * 0.8;
@@ -72,14 +71,10 @@ const SignUpForm = (props) => {
             <Field name="password" component={fieldNombre} ph='Contraseña' />
             <Field name="confirmacion" component={fieldNombre} ph='Repetir Contraseña' />
             <TouchableOpacity
-                onPress={props.handleSubmit((values) => {
-                    autenticacion.createUserWithEmailAndPassword(values.correo, values.password).then((values) =>{
-
-                    })
-                    .catch(function (error) {
-                        console.log(error)
-                    });
-                })}
+                onPress={props.handleSubmit(
+                    props.registro
+                    
+                )}
                 underlayColor="white"
                 style={styles.boton}
             >

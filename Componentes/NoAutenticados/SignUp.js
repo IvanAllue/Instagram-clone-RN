@@ -3,6 +3,7 @@ import { Text, View, TouchableHighlight, StyleSheet, Dimensions, Image } from 'r
 
 //react-redux
 import { connect } from 'react-redux'
+import  actionRegistro  from '../../Store/Servicios/Acciones'
 
 
 //form
@@ -10,7 +11,15 @@ import SignUpForm from './Formas/SignUpForm.js'
 
 var width = Dimensions.get('window').width;
 
+
+
 class SignUp extends Component {
+
+  registroDelUsuario = (values) =>{
+   
+    this.props.registro(values)
+  }
+
   render() {
     
     return (
@@ -20,8 +29,9 @@ class SignUp extends Component {
           justifyContent: 'center',
         }}>
           <Image style={{width: 170, height: 70, resizeMode: 'stretch'}} source={require('../../assets/logoinsta.png')}  />
+         
           <Text style={styles.texto}>Registrate para ver fotos y videos de tus amigos</Text>
-          <SignUpForm />
+          <SignUpForm registro={this.registroDelUsuario}/>
 
         </View>
 
@@ -67,8 +77,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    aumentar: () => {
-      //dispatch({ type: 'AUMENTAR_REDUCERPRUEBA' })
+    registro: (values) => {
+      dispatch(actionRegistro(values))
     }
   }
 }

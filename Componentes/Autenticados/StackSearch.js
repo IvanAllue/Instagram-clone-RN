@@ -17,6 +17,9 @@ const StackSearch = createStackNavigator({
     Comentarios: {
         screen: Comentarios
     }
+},
+{
+    headerMode: 'none'
 })
 
 export default createAppContainer(StackSearch);

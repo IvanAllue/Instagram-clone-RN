@@ -55,7 +55,7 @@ const SignInForm = (props) => {
                 style={styles.boton}
                 
                 
-                onPress={props.handleSubmit((values) => { console.log(values) })}
+                onPress={props.handleSubmit(props.login)}
                 underlayColor="white"
             >
             <Text style={{  textAlign: 'center', color: '#fff', fontWeight: 'bold'}}>Entrar</Text>

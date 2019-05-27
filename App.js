@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import RutasNoAutenticadas from './Componentes/NoAutenticados/RutasNoAutenticadas'
 import RutasAutenticadas from './Componentes/Autenticados/RutasAutenticadas'
-
+import Seleccion from './Store/Seleccion'
 //react-redux
 import { Provider } from 'react-redux'
 
@@ -15,7 +15,8 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <Provider store={Store}>
-          <RutasNoAutenticadas />
+          
+          <Seleccion />
         </Provider>
 
       </View>

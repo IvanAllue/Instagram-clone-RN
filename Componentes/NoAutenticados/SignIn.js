@@ -1,12 +1,17 @@
 import React, { Component } from 'react'
-import { AppRegistry, Text, View, Button, StyleSheet, TouchableHighlight, Dimensions, Image, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableHighlight, Dimensions, Image, TouchableOpacity } from 'react-native'
 import SignInForm from './Formas/SignInForm'
-import { Font, AppLoading } from "expo";
 import { autenticacion, auth } from '../../Store/Servicios/Firebase'
+import { connect } from 'react-redux'
+import  actionLogin  from '../../Store/Servicios/Acciones'
 
 var width = Dimensions.get('window').width;
-export default class SignIn extends Component {
-
+ class SignIn extends Component {
+    signInUsuario = (values) =>{
+      
+        this.props.login(values)
+        
+    }
 
     async loginWithFacebook() {
         //ENTER YOUR APP ID 
@@ -34,7 +39,8 @@ export default class SignIn extends Component {
                     justifyContent: 'center',
                 }}>
                     <Image style={{ width: 180, height: 70, resizeMode: 'stretch' }} source={require('../../assets/logoinsta.png')} />
-                    <SignInForm />
+                    <SignInForm login = {this.signInUsuario}/>
+                 
                     <TouchableOpacity style={styles.btnFacebook}
                         onPress={() => {
                             this.loginWithFacebook()
@@ -79,3 +85,18 @@ const styles = StyleSheet.create({
     }
 
 });
+const mapStateToProps = (state, ownProps) => {
+    return {
+        prop: state.prop
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        login: (values) => {
+            dispatch(actionLogin(values))
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
