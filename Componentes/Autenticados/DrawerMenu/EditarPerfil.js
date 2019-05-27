@@ -3,12 +3,16 @@ import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Image } from 'rea
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { ImagePicker } from 'expo';
+
+import { connect } from 'react-redux'
+
+
 var width = Dimensions.get('window').width
 
 import { Avatar } from 'react-native-elements';
 
 
-export default class EditarPerfil extends Component {
+class EditarPerfil extends Component {
   state = {
     image: null,
   };
@@ -19,7 +23,20 @@ export default class EditarPerfil extends Component {
   }
 
   render() {
-    let { image } = this.state;
+
+
+
+    let { image } = this.props.imagen
+
+    if (this.props.imagen.imagen != null){
+      image = this.props.imagen.imagen
+    }
+    
+    console.log(this.props.imagen.imagen == null);
+    
+    console.log('====================================');
+    console.log({image});
+    console.log('====================================');
     return (
       <View>
         <Header
@@ -31,7 +48,10 @@ export default class EditarPerfil extends Component {
           }}
 
           leftComponent={
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {
+              this.props.limpiarImagen()
+              this.props.navigation.goBack()
+            }}>
               <Ionicons name='md-close' size={30} />
             </TouchableOpacity>
           }
@@ -40,7 +60,7 @@ export default class EditarPerfil extends Component {
             <Text style={{ fontSize: 19, marginLeft: - width * 0.5 }}>Editar perfil</Text>
           }
           rightComponent={
-            <TouchableOpacity onPress={() => { }}>
+            <TouchableOpacity onPress={() => {this.props.navigation.goBack() }}>
               <Ionicons name='md-checkmark' size={30} color={'#0077CC'} />
             </TouchableOpacity>
           }
@@ -50,12 +70,12 @@ export default class EditarPerfil extends Component {
         >
           <View style={{ alignItems: 'center' }}>
 
-            {image ?
+            {image  ?
               <Avatar
                 size={100}
                 rounded
                 source={{
-                  uri: image
+                  uri: image.uri
                 }}
               />
               :
@@ -80,22 +100,41 @@ export default class EditarPerfil extends Component {
   }
 
   _pickImage = async () => {
-    console.log('====================================');
-    console.log('qqq');
-    console.log('====================================');
+
     let result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 4],
     });
 
-    console.log(result);
+
 
     if (!result.cancelled) {
-      this.setState({ image: result.uri });
+      this.props.cargarImagen(result)
     }
   };
 
 }
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    imagen: state.reducerImagenPerfil
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    cargarImagen: (imagen) => {
+      dispatch({ type: 'ESTABLECER_IMAGEN_PERFIL', imagen: imagen })
+    },
+
+    limpiarImagen: () => {
+      dispatch({ type: 'LIMPIAR_IMAGEN_PERFIL'})
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditarPerfil)
+
 
 const styles = StyleSheet.create({
   container: {

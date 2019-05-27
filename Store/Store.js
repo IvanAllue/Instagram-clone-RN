@@ -36,10 +36,12 @@ const reducerSesion = (state = null, action) => {
 const reducerImagenPerfil = (state = { imagen: null }, action) => {
     switch (action.type) {
         case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
-
+       
+       
+      
             return { imagen: action.imagen }
         case CONSTANTES.LIMPIAR_IMAGEN_PERFIL:
-            return state
+            return {imagen: null}
 
         default:
             return state;

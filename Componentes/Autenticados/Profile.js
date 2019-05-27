@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Button, TouchableOpacity, Dimensions } from 're
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import GestionPerfil from './ProfileItems/GestionPerfil'

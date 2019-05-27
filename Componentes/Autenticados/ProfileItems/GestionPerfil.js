@@ -1,12 +1,41 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { connect } from 'react-redux'
+import { Avatar } from 'react-native-elements';
 
 const GestionPerfil = (props) => {
+     let { image } = props.imagen
+
+     if (props.imagen.imagen != null) {
+         image = props.imagen.imagen
+     }
+    
 
     return (
         <View style={styles.container}>
-            <View style={{ flex: 4, backgroundColor: '#646484' }}>
-                <Text>qqq</Text>
+            <View style={{ flex: 3, justifyContent: 'center' }}>
+                <View style={{ alignItems: 'center',  }}>
+
+                    {image ?
+                        <Avatar
+                            size={100}
+                            rounded
+                            source={{
+                                uri: image.uri
+                            }}
+                        />
+                        :
+
+                        <Avatar
+                            size={100}
+                            rounded
+                            source={{
+                                uri:
+                                    'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',
+                            }}
+                        />
+                    }
+                </View>
             </View>
             <View style={{ flex: 7, backgroundColor: '#fff' }}>
                 <View style={{ flex: 1 }}>
@@ -41,4 +70,16 @@ const styles = StyleSheet.create({
     }
 });
 
-export default GestionPerfil
+const mapStateToProps = (state, ownProps) => {
+    return {
+        imagen: state.reducerImagenPerfil
+    }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(GestionPerfil)

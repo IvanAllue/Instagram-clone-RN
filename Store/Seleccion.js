@@ -26,6 +26,7 @@ class Seleccion extends Component {
     return (
       <View style={{ flex: 1 }}>
         {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}      
+        {/* <EditarPerfil /> */}
       </View>
     );
   }
