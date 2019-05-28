@@ -15,20 +15,36 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
 
 
 
-const subirFotoCloudinary = async ({ imagen }) => {
+
+const subirFotoPerfil = async ({ imagen }) => {
+
     if (imagen != null) {
         const splitName = imagen.uri.split('/')
-        const foto = {
-            uri: imagen.uri,
-            type: imagen.type,
-            name: [...splitName].pop()
-        }
-               
-        const response = await fetch('file:///document/image:74.png') 
-        const blob = await response.blob()
-        const snapshot = await storage.ref('ppp').put(blob)        
-        return await storage.ref('ppp').getDownloadURL().then(url => url);
-       
+        const name = [...splitName].pop()
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', imagen.uri, true);
+            xhr.send(null);
+        });
+
+
+        const ref = storage.ref(name)
+
+        const snapshot = await ref.put(blob);
+
+
+        blob.close();
+
+        return await snapshot.ref.getDownloadURL();
     }
 }
 
@@ -65,7 +81,7 @@ function* sagaRegistro(values) {
 function* sagaImagenPerfil(values) {
     try {
         const imagen = yield select(state => state.reducerImagenPerfil)
-        const urlFoto = yield call(subirFotoCloudinary, imagen)
+        const urlFoto = yield call(subirFotoPerfil, imagen)
         console.log('====================================');
         console.log(urlFoto);
         console.log('====================================');
