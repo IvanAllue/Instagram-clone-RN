@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Dimensions, StyleSheet, Image } from 'react-native';
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { ImagePicker } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 
 import { connect } from 'react-redux'
 
@@ -13,6 +13,12 @@ import { Avatar } from 'react-native-elements';
 
 
 class EditarPerfil extends Component {
+
+  conseguirPermisos = async () => {
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    await Permissions.askAsync(Permissions.CAMERA);
+  }
+
   state = {
     image: null,
   };
@@ -28,15 +34,10 @@ class EditarPerfil extends Component {
 
     let { image } = this.props.imagen
 
-    if (this.props.imagen.imagen != null){
+    if (this.props.imagen.imagen != null) {
       image = this.props.imagen.imagen
     }
-    
-    console.log(this.props.imagen.imagen == null);
-    
-    console.log('====================================');
-    console.log({image});
-    console.log('====================================');
+
     return (
       <View>
         <Header
@@ -60,17 +61,25 @@ class EditarPerfil extends Component {
             <Text style={{ fontSize: 19, marginLeft: - width * 0.5 }}>Editar perfil</Text>
           }
           rightComponent={
-            <TouchableOpacity onPress={() => {this.props.navigation.goBack() }}>
+            <TouchableOpacity onPress={() => {
+              this.props.confirmarCambios()
+              this.props.navigation.goBack()
+            }}>
               <Ionicons name='md-checkmark' size={30} color={'#0077CC'} />
             </TouchableOpacity>
           }
         />
         <TouchableOpacity
-          onPress={this._pickImage}
+
+          onPress={() => {
+            this.conseguirPermisos()
+            this._pickImage()
+          }
+          }
         >
           <View style={{ alignItems: 'center' }}>
 
-            {image  ?
+            {image ?
               <Avatar
                 size={100}
                 rounded
@@ -95,7 +104,7 @@ class EditarPerfil extends Component {
 
           <Text style={{ fontSize: 17, color: '#0077CC', textAlign: 'center' }}>Cambiar foto del perfil</Text>
         </TouchableOpacity>
-      </View>
+      </View >
     );
   }
 
@@ -109,6 +118,8 @@ class EditarPerfil extends Component {
 
 
     if (!result.cancelled) {
+      console.log(result);
+
       this.props.cargarImagen(result)
     }
   };
@@ -128,7 +139,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     },
 
     limpiarImagen: () => {
-      dispatch({ type: 'LIMPIAR_IMAGEN_PERFIL'})
+      dispatch({ type: 'LIMPIAR_IMAGEN_PERFIL' })
+    },
+    confirmarCambios: () => {
+      dispatch({ type: 'CONFIRMAR_CAMBIOS_PERFIL' })
     }
   }
 }

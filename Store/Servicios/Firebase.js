@@ -15,3 +15,4 @@ var firebaseConfig = {
   export const autenticacion = firebase.auth()
   export const baseDatos = firebase.database()
   export const auth = firebase.auth
+  export const storage = firebase.storage()

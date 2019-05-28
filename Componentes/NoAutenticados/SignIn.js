@@ -15,13 +15,14 @@ var width = Dimensions.get('window').width;
 
     async loginWithFacebook() {
         //ENTER YOUR APP ID 
-        const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('363665401174622', { permissions: ['public_profile'] })
+        const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('363665401174622', { permissions: ['public_profile', 'email'] })
     
         if (type == 'success') {
     
           const credential = auth.FacebookAuthProvider.credential(token)
     
-          autenticacion.signInWithCredential(credential).then((values) => {console.log(values)})
+          
+          autenticacion.signInWithCredential(credential).then((values) => {this.props.loginFb(values)})
           .catch((error) => {
             console.log(error)
           })
@@ -94,7 +95,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         login: (values) => {
-            dispatch(actionLogin(values))
+            dispatch({type: 'LOGIN', datos:values})
+        },
+        loginFb: (values) => {
+            dispatch({type: 'LOGIN_FACEBOOK', datos: values})
         }
     }
 }

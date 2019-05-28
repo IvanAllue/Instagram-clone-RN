@@ -16,3 +16,7 @@ export const actionEstablecerSesion = (values) =>(
 export const actionCerrarSesion = () =>(
     {type: CONSTANTES.CERRAR_SESION }
 )
+
+export const loginFacebook = (values) =>(
+    {type: CONSTANTES.LOGIN_FACEBOOK, datos:values }
+)
