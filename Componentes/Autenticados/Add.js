@@ -29,8 +29,8 @@ export default class Add extends Component {
   setPhotos() {
     return this.state.image.map((item, k) => {
       return (
-        <TouchableOpacity onPress={() => { this.setNewImage(item.node.image.uri) }}>
-          <Image key={k} source={{ uri: item.node.image.uri }} style={{ width: 100, height: 100 }}></Image>
+        <TouchableOpacity key={k} onPress={() => { this.setNewImage(item.node.image.uri) }}>
+          <Image  source={{ uri: item.node.image.uri }} style={{ width: 100, height: 100 }}></Image>
         </TouchableOpacity>
       )
     })
