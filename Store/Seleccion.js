@@ -8,11 +8,11 @@ import RutasNoAutenticadas from '../Componentes/NoAutenticados/RutasNoAutenticad
 import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
-import EditarPerfil from '../Componentes/Autenticados/DrawerMenu/EditarPerfil'
-class Seleccion extends Component {
+import AddTabNavigator from '../Componentes/Autenticados/AddTabNavigator'
 
+class Seleccion extends Component {
   componentDidMount() {
-    
+
     this.props.autenticacion()
   }
 
@@ -25,8 +25,8 @@ class Seleccion extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}      
-        {/* <EditarPerfil /> */}
+        {/* {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}       */}
+        <AddTabNavigator />
       </View>
     );
   }
@@ -45,9 +45,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       autenticacion.onAuthStateChanged(function (user) {
         if (user) {
           dispatch(actionEstablecerSesion(user))
-         
+
         } else {
-         
+
           dispatch(actionCerrarSesion())
         }
       });

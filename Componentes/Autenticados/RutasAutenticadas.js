@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import StackHome from './StackHome'
 import StackSearch from './StackSearch'
-import Add from './Add'
+import AddTabNavigator from './AddTabNavigator'
 import StackFollow from './StackFollow'
 // import Profile from './Profile'
 import DrawerProfile from './DrawerProfile'
@@ -39,7 +39,7 @@ const RutasAutenticadas = createBottomTabNavigator({
         }
     },
     Add: {
-        screen: Add,
+        screen: AddTabNavigator,
         navigationOptions: ({ navigation }) => {
             
 

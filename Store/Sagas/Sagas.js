@@ -52,7 +52,7 @@ const subirFotoPerfil = async ({ imagen }) => {
 
 
 function* sagaLogin(values) {
-   
+  
     try {
         const resultado = yield call(loginEnFirebase, values.datos)
         console.log('====================================');
@@ -101,7 +101,7 @@ function* sagaLoginFacebook(values){
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro)
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)
-    yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
+  //  yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
     yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)
     console.log('Desde nuestra funcion generadora')
 }
