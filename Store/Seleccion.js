@@ -11,9 +11,9 @@ import { actionCerrarSesion } from './Servicios/Acciones'
 import NuevaPublicacion from '../Componentes/Autenticados/AddComponents/NuevaPublicacion'
 
 class Seleccion extends Component {
-  componentDidMount() {
+  async componentDidMount() {
 
-    this.props.autenticacion()
+    await this.props.autenticacion()
   }
 
   constructor(props) {
@@ -23,6 +23,7 @@ class Seleccion extends Component {
   }
 
   render() {
+    
     return (
       <View style={{ flex: 1 }}>
         {/* {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}       */}

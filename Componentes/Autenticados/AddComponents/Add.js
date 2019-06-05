@@ -5,14 +5,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux'
 
-import actionImagenSeleccionada from '../../../Store/Servicios/Acciones'
 
+import {  Permissions } from 'expo';
 
 var width = Dimensions.get('window').width;
 
  class Add extends Component {
 
-  componentDidMount() {
+  async componentDidMount() {
+    await Permissions.askAsync(Permissions.CAMERA);
+    await Permissions.askAsync(Permissions.CAMERA_ROLL);
     this.getPhotos()
   }
 

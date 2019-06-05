@@ -11,13 +11,26 @@ const loginEnFirebase = ({ correo, password }) =>
 const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' + uid).set({
     usuario: nombre,
     email: email
-})
+}).then(response => response)
+
+const escribirAutorPublicaciones = ({uid, key}) => baseDatos.ref(`autor-publicaciones/${uid}`).update({ [key]: true})
+
+const subirFotoDatabase = (datos) =>  {
+    console.log('====================================');
+    console.log(datos);
+    console.log('====================================');
+    return baseDatos.ref('publicaciones/').push({
+        url: datos.url,
+        texto: datos.pie,
+        uid: datos.uid
+     })
+}
 
 
 
 
 const subirFotoPerfil = async ({ imagen }) => {
-
+    
     if (imagen != null) {
         const splitName = imagen.uri.split('/')
         const name = [...splitName].pop()
@@ -47,6 +60,44 @@ const subirFotoPerfil = async ({ imagen }) => {
         return await snapshot.ref.getDownloadURL();
     }
 }
+
+
+
+
+const subirImagenStorage = async ( imagen ) => {
+    console.log('====================================');
+    console.log(imagen);
+    console.log('====================================');
+    if (imagen != null) {
+        const splitName = imagen.split('/')
+        const name = [...splitName].pop()
+
+        const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest();
+            xhr.onload = function () {
+                resolve(xhr.response);
+            };
+            xhr.onerror = function (e) {
+                console.log(e);
+                reject(new TypeError('Network request failed'));
+            };
+            xhr.responseType = 'blob';
+            xhr.open('GET', imagen, true);
+            xhr.send(null);
+        });
+
+
+        const ref = storage.ref(name)
+
+        const snapshot = await ref.put(blob);
+
+
+        blob.close();
+
+        return await snapshot.ref.getDownloadURL();
+    }
+}
+
 
 
 
@@ -98,10 +149,25 @@ function* sagaLoginFacebook(values){
     console.log('====================================');
 }
 
+function* subirImagen(values){
+    const autor = yield select(state => state.reducerSesion)
+    const urlFoto = yield call(subirImagenStorage,values.datos.imagen)
+    datosFinales = {url: urlFoto, pie: values.datos.pie, uid: autor.user.uid}
+    const subirFoto = yield call(subirFotoDatabase,datosFinales)
+   const resultadoEscribirAutorPublicaciones = yield call(escribirAutorPublicaciones, {uid: autor.user.uid, key: subirFoto.key})
+    
+
+
+   
+
+    
+}
+
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro)
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)
   //  yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
     yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)
+    yield takeEvery(CONSTANTES.SUBIR_IMAGEN, subirImagen)
     console.log('Desde nuestra funcion generadora')
 }

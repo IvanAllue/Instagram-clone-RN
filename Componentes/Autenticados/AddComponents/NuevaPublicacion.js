@@ -3,10 +3,12 @@ import { Text, View, ImageEditor, Image, TouchableHighlight, Dimensions, TextInp
 import { connect } from 'react-redux'
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
 var width = Dimensions.get('window').width;
 
 class NuevaPublicacion extends PureComponent {
+    state = {
+       pieDeFoto : ""
+      };
     render() {
         return (
             <View>
@@ -27,7 +29,10 @@ class NuevaPublicacion extends PureComponent {
                     }
 
                     rightComponent={
-                        <TouchableHighlight onPress={() => { this.props.navigation.navigate('NuevaPublicacion') }}>
+                        <TouchableHighlight onPress={() => { 
+                            publicacion = {imagen: 'content://media/external/images/media/74', pie: this.state.pieDeFoto}
+                            this.props.publicarImagen(publicacion)
+                         }}>
                             <Text style={{ color: '#0077CC', fontSize: 18, marginLeft: -10 }}> Compartir </Text>
                         </TouchableHighlight>
                     }
@@ -39,7 +44,7 @@ class NuevaPublicacion extends PureComponent {
                         <Image source={{ uri: 'content://media/external/images/media/74' }} style={{ width: 70, height: 70 }}></Image>
                     </View>
                     <View style={{flex:8,  justifyContent: "center",}}>
-                        <TextInput placeholder="Escribe un pie de foto..." />
+                        <TextInput placeholder="Escribe un pie de foto..." onChangeText={(text)=>{this.setState({pieDeFoto: text})}}/>
 
                     </View>
 
@@ -55,13 +60,14 @@ class NuevaPublicacion extends PureComponent {
 const mapStateToProps = (state, ownProps) => {
     return {
         imagen: state.reducerImagenSeleccionada
+        
     }
 }
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
-        dispatch1: () => {
-            dispatch(actionCreator)
+        publicarImagen: (values) => {
+            dispatch({type:"SUBIR_IMAGEN", datos: values})
         }
     }
 }
