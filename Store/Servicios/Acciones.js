@@ -17,3 +17,9 @@ export const actionFacebookLogin = (values) =>(
     {type: CONSTANTES.LOGIN_FACEBOOK, datos:values }
 )
 
+export const actionImagenSeleccionada = (values) =>{
+    return {type:'ooo' , datos:values}
+}
+
+
+

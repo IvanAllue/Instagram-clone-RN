@@ -3,11 +3,14 @@ import { Text, View, StyleSheet, Button, TouchableOpacity, CameraRoll, Image, Di
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import { connect } from 'react-redux'
+
+import actionImagenSeleccionada from '../../../Store/Servicios/Acciones'
 
 
 var width = Dimensions.get('window').width;
 
-export default class Add extends Component {
+ class Add extends Component {
 
   componentDidMount() {
     this.getPhotos()
@@ -17,9 +20,13 @@ export default class Add extends Component {
     image: [],
     imageSelected: null
   };
-  setNewImage(uri) {
+  async setNewImage(uri) {
 
     this.setState({ imageSelected: uri });
+    await this.props.imagenSeleccionada(uri)
+
+    console.log(this.props.imagen.imagenSeleccionada);
+    
 
 
   }
@@ -30,7 +37,7 @@ export default class Add extends Component {
     return this.state.image.map((item, k) => {
       return (
         <TouchableOpacity key={k} onPress={() => { this.setNewImage(item.node.image.uri) }}>
-          <Image  source={{ uri: item.node.image.uri }} style={{ width: 100, height: 100 }}></Image>
+          <Image source={{ uri: item.node.image.uri }} style={{ width: 100, height: 100 }}></Image>
         </TouchableOpacity>
       )
     })
@@ -55,8 +62,8 @@ export default class Add extends Component {
           }
 
           rightComponent={this.state.imageSelected != null &&
-            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
-              <Text style={{color: '#0077CC' , fontSize: 18, marginLeft: -10}}> Siguiente </Text>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate('NuevaPublicacion') }}>
+              <Text style={{ color: '#0077CC', fontSize: 18, marginLeft: -10 }}> Siguiente </Text>
             </TouchableOpacity>
           }
         />
@@ -85,3 +92,20 @@ const styles = StyleSheet.create({
 
   },
 });
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    imagen: state.reducerImagenSeleccionada
+  }
+}
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    imagenSeleccionada: (values) => {
+      dispatch({type:'IMAGEN_SELECCIONADA' , datos:values})
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Add)

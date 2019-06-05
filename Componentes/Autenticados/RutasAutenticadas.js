@@ -29,8 +29,7 @@ const RutasAutenticadas = createBottomTabNavigator({
     Search: {
         screen: StackSearch,
         navigationOptions: ({ navigation }) => {
-            let { routeName } = navigation.state.routes[navigation.state.index]
-
+            navigation
             let navigationOptions = {}
             if (routeName === 'Comentarios') {
                 navigationOptions.tabBarVisible = false;

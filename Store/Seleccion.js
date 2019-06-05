@@ -8,7 +8,7 @@ import RutasNoAutenticadas from '../Componentes/NoAutenticados/RutasNoAutenticad
 import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
-import AddTabNavigator from '../Componentes/Autenticados/AddTabNavigator'
+import NuevaPublicacion from '../Componentes/Autenticados/AddComponents/NuevaPublicacion'
 
 class Seleccion extends Component {
   componentDidMount() {
@@ -26,7 +26,7 @@ class Seleccion extends Component {
     return (
       <View style={{ flex: 1 }}>
         {/* {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}       */}
-        <AddTabNavigator />
+        <NuevaPublicacion />
       </View>
     );
   }

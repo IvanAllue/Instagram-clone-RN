@@ -36,15 +36,27 @@ const reducerSesion = (state = null, action) => {
 const reducerImagenPerfil = (state = { imagen: null }, action) => {
     switch (action.type) {
         case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
-       
-       
-      
+
+
+
             return { imagen: action.imagen }
         case CONSTANTES.LIMPIAR_IMAGEN_PERFIL:
-            return {imagen: null}
+            return { imagen: null }
 
         default:
             return state;
+    }
+}
+
+reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
+    switch (action.type) {
+        case CONSTANTES.IMAGEN_SELECCIONADA:
+           
+            return { imagenSeleccionada: action.datos }
+        default:
+            return state
+
+
     }
 }
 
@@ -54,7 +66,8 @@ const reducers = combineReducers({
     reducerPrueba,
     form,
     reducerSesion,
-    reducerImagenPerfil
+    reducerImagenPerfil,
+    reducerImagenSeleccionada
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))
