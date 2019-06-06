@@ -60,6 +60,16 @@ reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
     }
 }
 
+reducerDatosProfile = (state = { datosUser: null }, action) => {
+    switch (action.type) {
+        case  CONSTANTES.GUARDAR_DATOS_USER:
+          return  {datosUser: action.datos}
+        default:
+            return state
+    }
+   
+}
+
 
 const reducers = combineReducers({
     //reducerPrueba: reducerPrueba
@@ -67,7 +77,8 @@ const reducers = combineReducers({
     form,
     reducerSesion,
     reducerImagenPerfil,
-    reducerImagenSeleccionada
+    reducerImagenSeleccionada,
+    reducerDatosProfile
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

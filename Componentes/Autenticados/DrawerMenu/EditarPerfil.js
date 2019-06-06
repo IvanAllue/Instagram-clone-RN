@@ -14,14 +14,24 @@ import { Avatar } from 'react-native-elements';
 
 class EditarPerfil extends Component {
 
+ async componentWillMount(){
+  await this.setState({datosUser: JSON.stringify(this.props.datosUsuario.datosUser)})
+
+  }
+
+  
+  state = {
+    image: null,
+    loading: true,
+    datosUser: null
+  };
+
   conseguirPermisos = async () => {
     await Permissions.askAsync(Permissions.CAMERA_ROLL);
     await Permissions.askAsync(Permissions.CAMERA);
   }
 
-  state = {
-    image: null,
-  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -37,6 +47,8 @@ class EditarPerfil extends Component {
     if (this.props.imagen.imagen != null) {
       image = this.props.imagen.imagen
     }
+    
+   
 
     return (
       <View>
@@ -93,8 +105,7 @@ class EditarPerfil extends Component {
                 size={100}
                 rounded
                 source={{
-                  uri:
-                    'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',
+                  uri: JSON.parse(this.state.datosUser).fotoPerfil
                 }}
               />
             }
@@ -128,7 +139,8 @@ class EditarPerfil extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    imagen: state.reducerImagenPerfil
+    imagen: state.reducerImagenPerfil,
+    datosUsuario: state.reducerDatosProfile
   }
 }
 

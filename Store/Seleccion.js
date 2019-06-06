@@ -8,13 +8,15 @@ import RutasNoAutenticadas from '../Componentes/NoAutenticados/RutasNoAutenticad
 import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
-import NuevaPublicacion from '../Componentes/Autenticados/AddComponents/NuevaPublicacion'
+import Profile from '../Componentes/Autenticados/Profile'
 
 class Seleccion extends Component {
   async componentDidMount() {
 
     await this.props.autenticacion()
   }
+
+
 
   constructor(props) {
     super(props);
@@ -23,11 +25,12 @@ class Seleccion extends Component {
   }
 
   render() {
+
     
     return (
       <View style={{ flex: 1 }}>
-        {/* {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}       */}
-        <NuevaPublicacion />
+        {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}      
+        {/* <Profile /> */}
       </View>
     );
   }

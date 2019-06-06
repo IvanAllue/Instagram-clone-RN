@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import { Avatar } from 'react-native-elements';
 
 const GestionPerfil = (props) => {
+    
      let { image } = props.imagen
 
      if (props.imagen.imagen != null) {
@@ -15,8 +16,7 @@ const GestionPerfil = (props) => {
         <View style={styles.container}>
             <View style={{ flex: 3, justifyContent: 'center' }}>
                 <View style={{ alignItems: 'center',  }}>
-
-                    {image ?
+                {image ?
                         <Avatar
                             size={100}
                             rounded
@@ -31,10 +31,11 @@ const GestionPerfil = (props) => {
                             rounded
                             source={{
                                 uri:
-                                    'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',
+                                props.foto,
                             }}
                         />
                     }
+                        
                 </View>
             </View>
             <View style={{ flex: 7, backgroundColor: '#fff' }}>
