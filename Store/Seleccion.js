@@ -8,36 +8,40 @@ import RutasNoAutenticadas from '../Componentes/NoAutenticados/RutasNoAutenticad
 import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
-import Profile from '../Componentes/Autenticados/Profile'
 
 class Seleccion extends Component {
-  async componentDidMount() {
-
+  componentDidUpdate() {
+    if (this.state.loading == true) {
+      this.setState({ loading: false })
+    }
+  }
+  async componentWillMount() {
     await this.props.autenticacion()
   }
-
-
-
   constructor(props) {
     super(props);
     this.state = {
+      loading: true
     };
   }
 
   render() {
+    if (this.state.loading == false) {
+      return (
+        <View style={{ flex: 1 }}>
+          {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}
+        </View>
+      );
+    } else {
+      return (
+        <View>
 
-    
-    return (
-      <View style={{ flex: 1 }}>
-        {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}      
-        {/* <Profile /> */}
-      </View>
-    );
+        </View>
+      )
+    }
   }
 }
-
 const mapStateToProps = (state, ownProps) => {
-
   return {
     usuario: state.reducerSesion
   }
@@ -49,9 +53,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       autenticacion.onAuthStateChanged(function (user) {
         if (user) {
           dispatch(actionEstablecerSesion(user))
-
         } else {
-
           dispatch(actionCerrarSesion())
         }
       });

@@ -22,14 +22,24 @@ const reducerSesion = (state = null, action) => {
 
     switch (action.type) {
         case CONSTANTES.ESTABLECER_SESION:
-            
-            return {user: action.datos } 
+
+            return { user: action.datos }
         case CONSTANTES.CERRAR_SESION:
             return null;
 
         default:
 
             return state;
+    }
+}
+
+const reducerDescargarPublicaciones = (state = null, action) => {
+
+    switch (action.type) {
+        case CONSTANTES.OBTENER_PUBLICACIONES:
+            return [...action.publicaciones]
+        default:
+            return state
     }
 }
 
@@ -51,7 +61,7 @@ const reducerImagenPerfil = (state = { imagen: null }, action) => {
 reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
     switch (action.type) {
         case CONSTANTES.IMAGEN_SELECCIONADA:
-           
+
             return { imagenSeleccionada: action.datos }
         default:
             return state
@@ -62,12 +72,12 @@ reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
 
 reducerDatosProfile = (state = { datosUser: null }, action) => {
     switch (action.type) {
-        case  CONSTANTES.GUARDAR_DATOS_USER:
-          return  {datosUser: action.datos}
+        case CONSTANTES.GUARDAR_DATOS_USER:
+            return { datosUser: action.datos }
         default:
             return state
     }
-   
+
 }
 
 
@@ -78,7 +88,8 @@ const reducers = combineReducers({
     reducerSesion,
     reducerImagenPerfil,
     reducerImagenSeleccionada,
-    reducerDatosProfile
+    reducerDatosProfile,
+    reducerDescargarPublicaciones
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

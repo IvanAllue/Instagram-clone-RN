@@ -39,6 +39,8 @@ const subirFotoDatabase = (datos) => {
 const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' +uid).once('value', function (snapshot) {        
         return snapshot.val()
      })
+    
+
 //
 // TRABAJAR CON FOTOS
 //
@@ -162,6 +164,28 @@ function* sagaConseguirUsuario(values){
  
 }
 
+const conseguirPublicaciones = () => baseDatos.ref('publicaciones/').once('value').then(snapshot => {
+    let publicaciones = []
+    snapshot.forEach(child =>{
+       key =child.key
+      texto =child.val().texto
+      uid = child.val().uid
+      url = child.val().url
+
+      let publicacion = {key, texto, uid, url}
+    
+      publicaciones.push(publicacion)                        
+    })
+    return publicaciones
+    
+})
+
+function* sagaDescargarPublicaciones(){
+    const publicaciones = yield call(conseguirPublicaciones)
+    const descargar = yield put({type: CONSTANTES.OBTENER_PUBLICACIONES, publicaciones})
+    
+}
+
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro)
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)
@@ -169,5 +193,6 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)
     yield takeEvery(CONSTANTES.SUBIR_IMAGEN, sagaSubirImagen)
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario)
+    yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones)
     console.log('Desde nuestra funcion generadora')
 }

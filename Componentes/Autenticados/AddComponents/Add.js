@@ -58,7 +58,7 @@ var width = Dimensions.get('window').width;
             borderBottomWidth: 0.5,
           }}
           leftComponent={
-            <TouchableOpacity onPress={() => { this.props.navigation.goBack() }}>
+            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Home') }}>
               <Ionicons name='md-close' size={35} />
             </TouchableOpacity>
           }

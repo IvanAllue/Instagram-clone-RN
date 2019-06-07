@@ -6,6 +6,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var width = Dimensions.get('window').width;
 
 class NuevaPublicacion extends PureComponent {
+    async subirImagenBd(){
+        publicacion = {imagen: this.props.imagen.imagenSeleccionada , pie: this.state.pieDeFoto}
+        await this.props.publicarImagen(publicacion)
+        this.props.navigation.navigate('Home')
+    }
     state = {
        pieDeFoto : ""
       };
@@ -30,8 +35,7 @@ class NuevaPublicacion extends PureComponent {
 
                     rightComponent={
                         <TouchableHighlight onPress={() => { 
-                            publicacion = {imagen: 'content://media/external/images/media/74', pie: this.state.pieDeFoto}
-                            this.props.publicarImagen(publicacion)
+                          this.subirImagenBd()
                          }}>
                             <Text style={{ color: '#0077CC', fontSize: 18, marginLeft: -10 }}> Compartir </Text>
                         </TouchableHighlight>
@@ -41,7 +45,7 @@ class NuevaPublicacion extends PureComponent {
                 <View style={{ height: 90, borderBottomColor: '#A6A6A6', borderBottomWidth: 0.2, borderTopColor: '#D6D6D6', borderTopWidth: 0.8, flexDirection:"row" }}>
                     <View style={{flex:2,  marginLeft: 10,  justifyContent: "center",}}>
                         {/* <Image source={{ uri: this.props.imagen.imagenSeleccionada }} style={{ width: 50, height: 50 }}></Image> */}
-                        <Image source={{ uri: 'content://media/external/images/media/74' }} style={{ width: 70, height: 70 }}></Image>
+                        <Image source={{ uri: this.props.imagen.imagenSeleccionada }} style={{ width: 70, height: 70 }}></Image>
                     </View>
                     <View style={{flex:8,  justifyContent: "center",}}>
                         <TextInput placeholder="Escribe un pie de foto..." onChangeText={(text)=>{this.setState({pieDeFoto: text})}}/>
