@@ -5,31 +5,46 @@ import functionPrimaria from './Sagas/Sagas'
 import CONSTANTES from './Sagas/Constantes'
 
 
-const reducerPrueba = (state = [0], action) => {
+
+const sagaMiddleware = createSagaMiddleware()
+
+const reducerSesion = (state = null, action) => {
     switch (action.type) {
-        case 'AUMENTAR_REDUCERPRUEBA':
-            return [...state, 1];
-
-
+        case CONSTANTES.ESTABLECER_SESION:
+            return { user: action.datos }
+        case CONSTANTES.CERRAR_SESION:
+            return null;
         default:
             return state;
     }
 }
 
-const sagaMiddleware = createSagaMiddleware()
-
-const reducerSesion = (state = null, action) => {
-
+const reducerImagenPerfil = (state = { imagen: null }, action) => {
     switch (action.type) {
-        case CONSTANTES.ESTABLECER_SESION:
-
-            return { user: action.datos }
-        case CONSTANTES.CERRAR_SESION:
-            return null;
-
+        case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
+            return { imagen: action.imagen }
+        case CONSTANTES.LIMPIAR_IMAGEN_PERFIL:
+            return { imagen: null }
         default:
-
             return state;
+    }
+}
+
+reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
+    switch (action.type) {
+        case CONSTANTES.IMAGEN_SELECCIONADA:
+            return { imagenSeleccionada: action.datos }
+        default:
+            return state
+    }
+}
+
+reducerDatosProfile = (state = { datosUser: null }, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_DATOS_USER:
+            return { datosUser: action.datos }
+        default:
+            return state
     }
 }
 
@@ -53,59 +68,16 @@ const reducerDescargarAutores = (state = null, action) => {
     }
 }
 
-const reducerImagenPerfil = (state = { imagen: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
-
-
-
-            return { imagen: action.imagen }
-        case CONSTANTES.LIMPIAR_IMAGEN_PERFIL:
-            return { imagen: null }
-
-        default:
-            return state;
-    }
-}
-
-reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.IMAGEN_SELECCIONADA:
-
-            return { imagenSeleccionada: action.datos }
-        default:
-            return state
-
-
-    }
-}
-
-reducerDatosProfile = (state = { datosUser: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.GUARDAR_DATOS_USER:
-            return { datosUser: action.datos }
-        default:
-            return state
-    }
-
-}
-
-
 const reducers = combineReducers({
-    //reducerPrueba: reducerPrueba
-    reducerPrueba,
     form,
-    reducerSesion,
-    reducerImagenPerfil,
-    reducerImagenSeleccionada,
-    reducerDatosProfile,
-    reducerDescargarPublicaciones,
-    reducerDescargarAutores
+    reducerSesion, //LN 11
+    reducerImagenPerfil, //LN 22
+    reducerImagenSeleccionada, //LN 33
+    reducerDatosProfile, //LN 42
+    reducerDescargarPublicaciones, //LN 51
+    reducerDescargarAutores //LN 61
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))
-
-
 sagaMiddleware.run(functionPrimaria)
-
 export default store

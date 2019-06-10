@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
 import { connect } from 'react-redux'
 
 import { autenticacion } from './Servicios/Firebase'
@@ -9,13 +9,16 @@ import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
 
-class Seleccion extends Component {
-  componentDidMount() {
-    
-    if (this.state.loading == true) {
 
-      this.setState({ loading: false })
-    }
+ 
+
+class Seleccion extends Component {
+   componentDidMount() {
+    setTimeout(() =>{      
+      if (this.state.loading == true) {
+        this.setState({ loading: false })
+      }
+    }, 2500);   
   }
   async componentWillMount() {
     await this.props.autenticacion()
@@ -26,7 +29,6 @@ class Seleccion extends Component {
       loading: true
     };
   }
-
   render() {
     if (this.state.loading == false) {
       return (
@@ -37,19 +39,18 @@ class Seleccion extends Component {
     } else {
       return (
         <View>
-
         </View>
       )
     }
   }
 }
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     usuario: state.reducerSesion
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     autenticacion: () => {
       autenticacion.onAuthStateChanged(function (user) {

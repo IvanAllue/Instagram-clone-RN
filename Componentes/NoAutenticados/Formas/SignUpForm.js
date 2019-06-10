@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form'
 
 var width = Dimensions.get('window').width * 0.8;
 
-const fieldNombre = (props) => {
+const fieldNombre = (props) => {   
     return (
         <View>
 
@@ -14,6 +14,9 @@ const fieldNombre = (props) => {
                 placeholder={props.ph}
                 onChangeText={props.input.onChange}
                 value={props.input.value}
+                ref={props.input.name == 'correo' ? (input) => { this.firstTextInput = input; } : props.input.name == 'nombre' ? (input) => { this.secondTextInput = input; } : props.input.name == 'password' ?  (input) => { this.tercerTextInput = input; } :  (input) => { this.cuartoTextInput = input; }}            
+                onSubmitEditing={() => {  props.input.name === 'correo' ? this.secondTextInput.focus() : props.input.name === 'nombre' ? this.tercerTextInput.focus() : this.cuartoTextInput.focus() }}
+                returnKeyType={props.input.name != 'confirmacion' ? "next" : "go"}                
                 keyboardType={props.input.name === 'correo' ? 'email-address' : 'default'}
                 autoCapitalize='none'
                 secureTextEntry={props.input.name === 'password' || props.input.name === 'confirmacion' ? true : false}
@@ -73,7 +76,7 @@ const SignUpForm = (props) => {
             <TouchableOpacity
                 onPress={props.handleSubmit(
                     props.registro
-                    
+
                 )}
                 underlayColor="white"
                 style={styles.boton}

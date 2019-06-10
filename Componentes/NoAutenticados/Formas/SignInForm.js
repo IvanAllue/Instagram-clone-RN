@@ -12,10 +12,14 @@ const fieldNombre = (props) => {
                 onChangeText={props.input.onChange}
                 value={props.input.value}
                 keyboardType={props.input.name === 'correo' ? 'email-address' : 'default'}
+                ref={props.input.name != 'correo' ? (input) => { this.secondTextInput = input; } : (input) => { this.firstInput = input; }}
+                onSubmitEditing={() => {  props.input.name === 'correo' ? this.secondTextInput.focus() : 'default' }}
+
                 autoCapitalize='none'
                 secureTextEntry={props.input.name === 'password' ? true : false}
                 onBlur={props.input.onBlur}
                 style={styles.input}
+                returnKeyType = { props.input.name === 'correo' ? "next" : "go"}
             />
 
             {props.meta.error && props.meta.touched &&

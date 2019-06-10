@@ -4,14 +4,11 @@ import CONSTANTES from '../Sagas/Constantes'
 
 
 //
-//  TRABAJAR CON BD
+// SAGA REGISTRO
 //
 
 const registroEnFirebase = values =>
     autenticacion.createUserWithEmailAndPassword(values.correo, values.password).then(values => values)
-
-const loginEnFirebase = ({ correo, password }) =>
-    autenticacion.signInWithEmailAndPassword(correo, password).then(success => success).catch(error => error)
 
 const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' + uid).set({
     usuario: nombre,
@@ -19,31 +16,37 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
     fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg'
 }).then(response => response)
 
-const actualizarPerfilBD = ({ uid, url }) => baseDatos.ref('Users/' + uid).update({
-    fotoPerfil: url
-}).then(response => response)
-
-const escribirAutorPublicaciones = ({ uid, key }) => baseDatos.ref(`autor-publicaciones/${uid}`).update({ [key]: true })
-
-const subirFotoDatabase = (datos) => {
-    console.log('====================================');
-    console.log(datos);
-    console.log('====================================');
-    return baseDatos.ref('publicaciones/').push({
-        url: datos.url,
-        texto: datos.pie,
-        uid: datos.uid
-    })
+function* sagaRegistro(values) {
+    try {
+        const registro = yield call(registroEnFirebase, values.datos) //LN 10
+        const { email, uid } = registro.user
+        const { datos: { nombre } } = values
+        yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' + uid).once('value', function (snapshot) {
-    return snapshot.val()
-})
+//
+//LOGIN CORREO
+//
+
+const loginEnFirebase = ({ correo, password }) =>
+    autenticacion.signInWithEmailAndPassword(correo, password).then(success => success).catch(error => error)
+
+function* sagaLogin(values) {
+    try {
+        const resultado = yield call(loginEnFirebase, values.datos)   //LN 34    
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 //
-// TRABAJAR CON FOTOS
+//IMAGEN PERFIL
 //
+
 const subirFotoPerfil = async ({ imagen }) => {
     if (imagen != null) {
         const splitName = imagen.uri.split('/')
@@ -68,6 +71,43 @@ const subirFotoPerfil = async ({ imagen }) => {
         return await snapshot.ref.getDownloadURL();
     }
 }
+
+const actualizarPerfilBD = ({ uid, url }) => baseDatos.ref('Users/' + uid).update({
+    fotoPerfil: url
+}).then(response => response)
+
+const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' + uid).once('value', function (snapshot) {
+    return snapshot.val()
+})
+
+function* sagaImagenPerfil(values) {
+    try {
+        const imagen = yield select(state => state.reducerImagenPerfil)
+        const urlFoto = yield call(subirFotoPerfil, imagen) //LN 50
+        const autor = yield select(state => state.reducerSesion)
+
+
+        const actualizar = yield call(actualizarPerfilBD, { uid: autor.user.uid, url: urlFoto }) //LN 75
+
+        const usuario = yield call(conseguirUsuarioBd, values.datos) //LN 79
+        //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
+        yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
+    } catch (error) {
+    }
+}
+
+
+
+
+function* sagaLoginFacebook(values) {
+    console.log('====================================');
+    console.log(values);
+    console.log('====================================');
+}
+
+//
+// SUBIR IMAGEN
+//
 
 const subirImagenStorage = async (imagen) => {
     console.log('====================================');
@@ -96,73 +136,41 @@ const subirImagenStorage = async (imagen) => {
     }
 }
 
-//
-//  SAGAS
-//
-
-function* sagaLogin(values) {
-
-    try {
-        const resultado = yield call(loginEnFirebase, values.datos)
-        console.log('====================================');
-        console.log(resultado);
-        console.log('====================================');
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-function* sagaRegistro(values) {
-    try {
-        const registro = yield call(registroEnFirebase, values.datos)
-        const { email, uid } = registro.user
-        const { datos: { nombre } } = values
-        yield call(registroEnBaseDatos, { uid, email, nombre })
-
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-function* sagaImagenPerfil(values) {
-    try {
-        const imagen = yield select(state => state.reducerImagenPerfil)
-        const urlFoto = yield call(subirFotoPerfil, imagen)
-        const autor = yield select(state => state.reducerSesion)
-
-
-        const actualizar = yield call(actualizarPerfilBD, { uid: autor.user.uid, url: urlFoto })
-
-        const usuario = yield call(conseguirUsuarioBd, values.datos)
-        //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
-        yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
-    } catch (error) {
-    }
-}
-
-function* sagaLoginFacebook(values) {
+const subirFotoDatabase = (datos) => {
     console.log('====================================');
-    console.log(values);
+    console.log(datos);
     console.log('====================================');
+    return baseDatos.ref('publicaciones/').push({
+        url: datos.url,
+        texto: datos.pie,
+        uid: datos.uid
+    })
 }
+
+const escribirAutorPublicaciones = ({ uid, key }) => baseDatos.ref(`autor-publicaciones/${uid}`).update({ [key]: true })
+
 
 function* sagaSubirImagen(values) {
     const autor = yield select(state => state.reducerSesion)
-    const urlFoto = yield call(subirImagenStorage, values.datos.imagen)
+    const urlFoto = yield call(subirImagenStorage, values.datos.imagen) //LN 112
     datosFinales = { url: urlFoto, pie: values.datos.pie, uid: autor.user.uid }
-    const subirFoto = yield call(subirFotoDatabase, datosFinales)
-    const resultadoEscribirAutorPublicaciones = yield call(escribirAutorPublicaciones, { uid: autor.user.uid, key: subirFoto.key })
+    const subirFoto = yield call(subirFotoDatabase, datosFinales) //LN 139
+    const resultadoEscribirAutorPublicaciones = yield call(escribirAutorPublicaciones, { uid: autor.user.uid, key: subirFoto.key }) //LN 150
 }
 
+//
+// CONSEGUIR USUARIO
+//
+
 function* sagaConseguirUsuario(values) {
-
-
-    const usuario = yield call(conseguirUsuarioBd, values.datos)
-    //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
+    const usuario = yield call(conseguirUsuarioBd, values.datos) //LN 79
     yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
 
 }
+
+//
+// DESCARGAR PUBLICACIONES
+//
 
 const conseguirPublicaciones = () => baseDatos.ref('publicaciones/').once('value').then(snapshot => {
     let publicaciones = []
@@ -180,12 +188,12 @@ const conseguirPublicaciones = () => baseDatos.ref('publicaciones/').once('value
 
 })
 
-const descargarAutor = (uid) => baseDatos.ref('Users/'+uid).once('value').then((snapshot) => snapshot.val())
+const descargarAutor = (uid) => baseDatos.ref('Users/' + uid).once('value').then((snapshot) => snapshot.val())
 
 function* sagaDescargarPublicaciones() {
-    const publicaciones = yield call(conseguirPublicaciones)
+    const publicaciones = yield call(conseguirPublicaciones) //LN 175
 
-    const autores = yield all(publicaciones.map(publicacion => call(descargarAutor, publicacion.uid)))
+    const autores = yield all(publicaciones.map(publicacion => call(descargarAutor, publicacion.uid))) //LN 191
 
     const descargarAutores = yield put({ type: CONSTANTES.OBTENER_AUTORES, autores })
     const descargar = yield put({ type: CONSTANTES.OBTENER_PUBLICACIONES, publicaciones })
@@ -194,12 +202,12 @@ function* sagaDescargarPublicaciones() {
 }
 
 export default function* functionPrimaria() {
-    yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro)
-    yield takeEvery(CONSTANTES.LOGIN, sagaLogin)
+    yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
+    yield takeEvery(CONSTANTES.LOGIN, sagaLogin)//LN 37
     //  yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
-    yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)
-    yield takeEvery(CONSTANTES.SUBIR_IMAGEN, sagaSubirImagen)
-    yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario)
-    yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones)
+    yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)//LN 83
+    yield takeEvery(CONSTANTES.SUBIR_IMAGEN, sagaSubirImagen)//LN 153
+    yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario) //LN 165
+    yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones) //LN 193
     console.log('Desde nuestra funcion generadora')
 }
