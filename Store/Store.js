@@ -43,6 +43,8 @@ reducerDatosProfile = (state = { datosUser: null }, action) => {
     switch (action.type) {
         case CONSTANTES.GUARDAR_DATOS_USER:
             return { datosUser: action.datos }
+        case CONSTANTES.LIMPIAR_USUARIO:
+            return null
         default:
             return state
     }
@@ -52,7 +54,7 @@ const reducerDescargarPublicaciones = (state = null, action) => {
 
     switch (action.type) {
         case CONSTANTES.OBTENER_PUBLICACIONES:
-            return [...action.publicaciones]
+            return [...action.publicaciones].reverse()
         default:
             return state
     }
@@ -62,7 +64,7 @@ const reducerDescargarAutores = (state = null, action) => {
 
     switch (action.type) {
         case CONSTANTES.OBTENER_AUTORES:
-            return [...action.autores]
+            return [...action.autores].reverse()
         default:
             return state
     }

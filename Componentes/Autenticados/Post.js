@@ -24,7 +24,9 @@ export default class Post extends Component {
             />
           </View>
           <View style={{ flex: 6, justifyContent: "center" }}>
-            <Text style={{ fontWeight: "bold" }}>{this.props.autor.usuario}</Text>
+          <TouchableHighlight onPress={()=> this.props.navigation.navigate('AutorProfile',{uid: this.props.item.uid})}>
+          <Text style={{ fontWeight: "bold" }}>{this.props.autor.usuario}</Text>
+          </TouchableHighlight>
           </View>
         </View>
 

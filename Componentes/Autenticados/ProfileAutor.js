@@ -9,9 +9,11 @@ var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import GestionPerfil from './ProfileItems/GestionPerfil'
 
-class Profile extends Component {
-  componentWillMount(){
-    this.cargarDatos()
+class ProfileAutor extends Component {
+
+  componentWillUnmount(){
+    console.log('adios');
+    
   }
   
   
@@ -19,22 +21,26 @@ class Profile extends Component {
     loading: true,
     datosUser: null
   };
-
-
+  componentWillMount(){
+    this.cargarDatos()
+  }
 
   async cargarDatos() {
-   
-   await this.props.conseguirUsuario(this.props.usuario.user.uid)
-   
-    setTimeout(async ()=>{
-      if (this.state.loading && this.props.datosUsuario.datosUser != null) {     
-        await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
-        await this.setState({ loading: false })
-        console.log(this.state.datosUser);        
-      }
-    },1000)
+    const autorId = this.props.navigation.getParam('uid',this.props.usuario.user.uid);
+    await this.props.conseguirUsuario(autorId)
     
-  }
+     setTimeout(async ()=>{
+       if (this.state.loading && this.props.datosUsuario.datosUser != null) {     
+         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
+         await this.setState({ loading: false })
+         console.log(this.state.datosUser);        
+       }
+     },50)
+     
+   }
+ 
+
+
 
   irEditarPerfil = (values) => {
 
@@ -60,7 +66,12 @@ class Profile extends Component {
               borderBottomWidth: 0.5,
             }}
             leftComponent={
-              <Text style={{ fontSize: 18 }}>{JSON.parse(this.state.datosUser).usuario}</Text>
+              <TouchableOpacity onPress={() => { this.props.navigation.goBack() }} >
+                <Ionicons name='ios-arrow-round-back' size={40} />
+              </TouchableOpacity>
+            }
+            centerComponent={
+              <Text style={{ fontSize: 18, marginLeft: -width*0.6, fontWeight: "bold" }}>{JSON.parse(this.state.datosUser).usuario}</Text>
             }
             rightComponent={
               <TouchableOpacity onPress={() => { this.props.navigation.toggleDrawer() }}>
@@ -114,7 +125,11 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     conseguirUsuario: (values) => {
       dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
+    },
+    limpiarUsuario: () => {
+      dispatch({ type: 'LIMPIAR_USUARIO'})
+
     }
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileAutor)

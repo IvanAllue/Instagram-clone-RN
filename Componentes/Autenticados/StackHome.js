@@ -3,7 +3,7 @@ import { Text, View, TouchableHighlight, StyleSheet, Dimensions, Image } from 'r
 
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import Home from './Home'
-import Autor from './Profile'
+import Autor from './ProfileAutor'
 import Post from './Post'
 import Comentarios from './Comentarios'
 
@@ -18,8 +18,11 @@ const StackHome = createStackNavigator({
           }),
 
     },
-    Autor: {
-        screen: Autor
+    AutorProfile: {
+        screen: Autor,
+        navigationOptions:{
+            header: null
+        }
     },
     Post: {
         screen: Post

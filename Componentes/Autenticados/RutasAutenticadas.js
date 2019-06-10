@@ -24,7 +24,7 @@ const RutasAutenticadas = createBottomTabNavigator({
             }
             return navigationOptions
         },
-        
+
     },
     Search: {
         screen: StackSearch,
@@ -41,15 +41,15 @@ const RutasAutenticadas = createBottomTabNavigator({
     Add: {
         screen: AddTabNavigator,
         navigationOptions: ({ navigation }) => {
-            
+
 
             let navigationOptions = {}
-          
-                navigationOptions.tabBarVisible = false;
-            
+
+            navigationOptions.tabBarVisible = false;
+
             return navigationOptions
         }
-        
+
     },
     Follow: {
         screen: StackFollow,
@@ -68,23 +68,23 @@ const RutasAutenticadas = createBottomTabNavigator({
     }
 }, {
         defaultNavigationOptions: ({ navigation }) => ({
-            tabBarIcon: ({focused, horizontal, tintColor }) => {
+            tabBarIcon: ({ focused, horizontal, tintColor }) => {
                 const { routeName } = navigation.state;
                 let iconName;
                 if (routeName === 'Home') {
                     iconName = 'ios-home';
-                  }else if (routeName === 'Search'){
+                } else if (routeName === 'Search') {
                     iconName = 'ios-search';
-                  }else if(routeName === 'Add'){
-                    iconName = 'ios-add-circle-outline'
-                  }else if(routeName === 'Follow'){
+                } else if (routeName === 'Add') {
+                    iconName = 'md-add-circle'
+                } else if (routeName === 'Follow') {
                     iconName = `${focused ? 'ios-heart' : 'ios-heart-empty'}`;
-                  }else if(routeName === 'Profile'){
+                } else if (routeName === 'Profile') {
                     iconName = 'md-person'
-                  }
+                }
 
-                  let colorIcon = `${focused ? '#FF5733' : '#000000'}`;
-                  return <Ionicons name={iconName} size={horizontal ? 20 : 25} color={colorIcon}/>;
+                let colorIcon = `${focused ? '#FF5733' : '#000000'}`;
+                return <Ionicons name={iconName} size={horizontal ? 20 : 25} color={colorIcon} />;
             },
             title: ''
         })
