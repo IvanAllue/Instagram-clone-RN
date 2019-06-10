@@ -1,8 +1,7 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, FlatList, Image, Dimensions } from 'react-native'
+import { Text, View, StyleSheet, Button, FlatList, Image } from 'react-native'
 import { connect } from 'react-redux'
-var width = Dimensions.get('window').width;
-
+import Post from './Post'
 
 class Home extends React.Component {
  
@@ -10,20 +9,13 @@ class Home extends React.Component {
     this.props.descargarPublicaciones()
   }
   render() {
-    console.log(this.props.publicaciones);
+   
 
     return (
       <View style={styles.container}>
 
         <FlatList data={this.props.publicaciones}
-          renderItem={({ item }) => {
-            return (
-              <View style={{marginBottom: 10}}>
-                <Image style={{ width: width, height: width }} source={{uri: item.url}} />
-
-              </View>
-            )
-          }
+          renderItem={({ item, index }) => <Post item={item} navigation = {this.props.navigation} autor={this.props.autores[index]}/>
           }
         />
 
@@ -49,7 +41,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    publicaciones: state.reducerDescargarPublicaciones
+    publicaciones: state.reducerDescargarPublicaciones,
+    autores: state.reducerDescargarAutores
   }
 }
 

@@ -1,4 +1,4 @@
-import { takeEvery, call, select, put } from 'redux-saga/effects'
+import { takeEvery, call, select, put, all } from 'redux-saga/effects'
 import { autenticacion, baseDatos, storage } from '../Servicios/Firebase'
 import CONSTANTES from '../Sagas/Constantes'
 
@@ -19,7 +19,7 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
     fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg'
 }).then(response => response)
 
-const actualizarPerfilBD = ({uid, url}) => baseDatos.ref('Users/' + uid).update({
+const actualizarPerfilBD = ({ uid, url }) => baseDatos.ref('Users/' + uid).update({
     fotoPerfil: url
 }).then(response => response)
 
@@ -36,10 +36,10 @@ const subirFotoDatabase = (datos) => {
     })
 }
 
-const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' +uid).once('value', function (snapshot) {        
-        return snapshot.val()
-     })
-    
+const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' + uid).once('value', function (snapshot) {
+    return snapshot.val()
+})
+
 
 //
 // TRABAJAR CON FOTOS
@@ -130,13 +130,13 @@ function* sagaImagenPerfil(values) {
         const imagen = yield select(state => state.reducerImagenPerfil)
         const urlFoto = yield call(subirFotoPerfil, imagen)
         const autor = yield select(state => state.reducerSesion)
-        
 
-        const actualizar = yield call(actualizarPerfilBD, {uid: autor.user.uid, url: urlFoto})
+
+        const actualizar = yield call(actualizarPerfilBD, { uid: autor.user.uid, url: urlFoto })
 
         const usuario = yield call(conseguirUsuarioBd, values.datos)
         //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
-          yield put({type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
+        yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
     } catch (error) {
     }
 }
@@ -155,35 +155,42 @@ function* sagaSubirImagen(values) {
     const resultadoEscribirAutorPublicaciones = yield call(escribirAutorPublicaciones, { uid: autor.user.uid, key: subirFoto.key })
 }
 
-function* sagaConseguirUsuario(values){
+function* sagaConseguirUsuario(values) {
 
 
     const usuario = yield call(conseguirUsuarioBd, values.datos)
-   //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
-     yield put({type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
- 
+    //yield put({type:CONSTANTES.GUARDAR_DATOS_USER, datos: usuario})
+    yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
+
 }
 
 const conseguirPublicaciones = () => baseDatos.ref('publicaciones/').once('value').then(snapshot => {
     let publicaciones = []
-    snapshot.forEach(child =>{
-       key =child.key
-      texto =child.val().texto
-      uid = child.val().uid
-      url = child.val().url
+    snapshot.forEach(child => {
+        key = child.key
+        texto = child.val().texto
+        uid = child.val().uid
+        url = child.val().url
 
-      let publicacion = {key, texto, uid, url}
-    
-      publicaciones.push(publicacion)                        
+        let publicacion = { key, texto, uid, url }
+
+        publicaciones.push(publicacion)
     })
     return publicaciones
-    
+
 })
 
-function* sagaDescargarPublicaciones(){
+const descargarAutor = (uid) => baseDatos.ref('Users/'+uid).once('value').then((snapshot) => snapshot.val())
+
+function* sagaDescargarPublicaciones() {
     const publicaciones = yield call(conseguirPublicaciones)
-    const descargar = yield put({type: CONSTANTES.OBTENER_PUBLICACIONES, publicaciones})
-    
+
+    const autores = yield all(publicaciones.map(publicacion => call(descargarAutor, publicacion.uid)))
+
+    const descargarAutores = yield put({ type: CONSTANTES.OBTENER_AUTORES, autores })
+    const descargar = yield put({ type: CONSTANTES.OBTENER_PUBLICACIONES, publicaciones })
+
+
 }
 
 export default function* functionPrimaria() {

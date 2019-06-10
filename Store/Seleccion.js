@@ -10,8 +10,10 @@ import { actionEstablecerSesion } from './Servicios/Acciones';
 import { actionCerrarSesion } from './Servicios/Acciones'
 
 class Seleccion extends Component {
-  componentDidUpdate() {
+  componentDidMount() {
+    
     if (this.state.loading == true) {
+
       this.setState({ loading: false })
     }
   }

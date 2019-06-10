@@ -43,6 +43,16 @@ const reducerDescargarPublicaciones = (state = null, action) => {
     }
 }
 
+const reducerDescargarAutores = (state = null, action) => {
+
+    switch (action.type) {
+        case CONSTANTES.OBTENER_AUTORES:
+            return [...action.autores]
+        default:
+            return state
+    }
+}
+
 const reducerImagenPerfil = (state = { imagen: null }, action) => {
     switch (action.type) {
         case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
@@ -89,7 +99,8 @@ const reducers = combineReducers({
     reducerImagenPerfil,
     reducerImagenSeleccionada,
     reducerDatosProfile,
-    reducerDescargarPublicaciones
+    reducerDescargarPublicaciones,
+    reducerDescargarAutores
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))
