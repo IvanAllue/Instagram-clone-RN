@@ -96,14 +96,24 @@ function* sagaImagenPerfil(values) {
     }
 }
 
+//
+// LOGIN FACEBOOK
+//
 
 
+async function* sagaLoginFacebook(values) {
+  await  setTimeout(()=>{        
+       console.log('qqq');                             
+    }, 3000)
+    const autor = yield select(state => state.reducerSesion)
+    let uid = autor.uid
+    let email = values.datos.additionalUserInfo.profile.email
+    let nombre = values.datos.additionalUserInfo.profile.name
+    yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+   
 
-function* sagaLoginFacebook(values) {
-    console.log('====================================');
-    console.log(values);
-    console.log('====================================');
-}
+ }
+
 
 //
 // SUBIR IMAGEN
@@ -201,13 +211,38 @@ function* sagaDescargarPublicaciones() {
 
 }
 
+
+//
+// CONSEGUIR PUBLICACIONES
+//
+
+const getPublicaciones = (uid) => baseDatos.ref('autor-publicaciones/'+uid).once('value').then(snapshot => {
+   let publicaciones = []
+    snapshot.forEach(child => {
+        publicaciones.push(child.key)       
+    })
+    return publicaciones;
+})
+
+const getPublicacion = (publicacion) =>baseDatos.ref('publicaciones/'+publicacion).once('value').then(snapshot => snapshot.val())
+function* sagaConseguirPublicaciones(values){
+    let uid =  values.datos
+   const publicaciones = yield call(getPublicaciones, uid)
+   const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
+   const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
+
+}
+
+
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)//LN 37
-    //  yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
+    yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
     yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)//LN 83
     yield takeEvery(CONSTANTES.SUBIR_IMAGEN, sagaSubirImagen)//LN 153
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario) //LN 165
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones) //LN 193
+    yield takeEvery(CONSTANTES.CONSEGUIR_PUBLICACIONES, sagaConseguirPublicaciones) //LN 193
+
     console.log('Desde nuestra funcion generadora')
 }

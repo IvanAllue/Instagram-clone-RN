@@ -4,19 +4,21 @@ import { connect } from 'react-redux'
 import { Avatar } from 'react-native-elements';
 
 const GestionPerfil = (props) => {
-    
-     let { image } = props.imagen
+    console.log('====================================');
+    console.log(this.props);
+    console.log('====================================');
+    let { image } = props.imagen
 
-     if (props.imagen.imagen != null) {
-         image = props.imagen.imagen
-     }
-    
+    if (props.imagen.imagen != null) {
+        image = props.imagen.imagen
+    }
+
 
     return (
         <View style={styles.container}>
             <View style={{ flex: 3, justifyContent: 'center' }}>
-                <View style={{ alignItems: 'center',  }}>
-                {image ?
+                <View style={{ alignItems: 'center', }}>
+                    {image ?
                         <Avatar
                             size={100}
                             rounded
@@ -31,11 +33,11 @@ const GestionPerfil = (props) => {
                             rounded
                             source={{
                                 uri:
-                                props.foto,
+                                    props.foto,
                             }}
                         />
                     }
-                        
+
                 </View>
             </View>
             <View style={{ flex: 7, backgroundColor: '#fff' }}>
@@ -43,10 +45,12 @@ const GestionPerfil = (props) => {
                     <Text>qaz</Text>
                 </View>
                 <View style={{ flex: 1 }}>
-                    <TouchableOpacity style={styles.button}
-                        onPress={props.editar}>
-                        <Text style={{ textAlign: 'center' }}>Editar perfil</Text>
-                    </TouchableOpacity>
+                    {props.editor &&
+                        <TouchableOpacity style={styles.button}
+                            onPress={props.editar}>
+                            <Text style={{ textAlign: 'center' }}>Editar perfil</Text>
+                        </TouchableOpacity>
+                    }
                 </View>
             </View>
         </View>

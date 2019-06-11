@@ -1,39 +1,50 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button, TouchableOpacity, Dimensions, ProgressBarAndroid } from 'react-native'
+import { Text, View, StyleSheet, Button, TouchableOpacity, Dimensions, ProgressBarAndroid, FlatList } from 'react-native'
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
-import { baseDatos } from '../../Store/Servicios/Firebase'
-
+import PostProfile from './ProfileItems/PostProfile'
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import GestionPerfil from './ProfileItems/GestionPerfil'
 
 class Profile extends Component {
-  componentWillMount(){
+  componentWillMount() {
     this.cargarDatos()
   }
-  
-  
+
+
   state = {
     loading: true,
-    datosUser: null
+    datosUser: null,
+    publicaciones: null,
+    listaPublicaciones: null
   };
 
 
 
   async cargarDatos() {
-   
-   await this.props.conseguirUsuario(this.props.usuario.user.uid)
-   
-    setTimeout(async ()=>{
-      if (this.state.loading && this.props.datosUsuario.datosUser != null) {     
+    await this.props.conseguirPublicaciones(this.props.usuario.user.uid)
+    await this.props.conseguirUsuario(this.props.usuario.user.uid)
+
+    setTimeout(async () => {
+      if (this.state.loading && this.props.datosUsuario.datosUser != null) {
+        await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         await this.setState({ loading: false })
-        console.log(this.state.datosUser);        
+
+        listaPublicaciones = []
+        for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+          arrayLista = []
+          for (let j = i; j < i + 3; j++) {
+            arrayLista.push(this.state.publicaciones[j])
+          }
+          listaPublicaciones.push(arrayLista)
+        }
+        this.setState({ listaPublicaciones: listaPublicaciones })
       }
-    },1000)
-    
+    }, 2000)
+
   }
 
   irEditarPerfil = (values) => {
@@ -42,8 +53,8 @@ class Profile extends Component {
   }
 
   render() {
-    
-    
+
+
 
 
     if (!this.state.loading) {
@@ -71,15 +82,14 @@ class Profile extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} />
+              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true}/>
 
             </View>
 
-
-
-
-            <Button title="Post"
-              onPress={() => this.props.navigation.navigate('EditarPerfil')}></Button>
+            <FlatList data={this.state.listaPublicaciones}
+              renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
+              }
+            />
 
           </View>
 
@@ -106,7 +116,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => {
   return {
     usuario: state.reducerSesion,
-    datosUsuario: state.reducerDatosProfile
+    datosUsuario: state.reducerDatosProfile,
+    getPublicacionesUsuario: state.reducerPublicacaionesPerfilAjeno
   }
 }
 
@@ -114,7 +125,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     conseguirUsuario: (values) => {
       dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
-    }
+    }, conseguirPublicaciones: (values) => {
+      dispatch({ type: 'CONSEGUIR_PUBLICACIONES', datos: values })
+    },
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)
