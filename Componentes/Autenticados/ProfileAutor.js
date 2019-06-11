@@ -18,6 +18,7 @@ class ProfileAutor extends Component {
 
   state = {
     loading: true,
+    loadingImages: true,
     datosUser: null,
     publicaciones: null,
     listaPublicaciones: null
@@ -31,26 +32,32 @@ class ProfileAutor extends Component {
     await this.props.conseguirPublicaciones(autorId)
     await this.props.conseguirUsuario(autorId)
 
-
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
-        await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         await this.setState({ loading: false })
-
-        listaPublicaciones = []
-        for (let i = 0; i < this.state.publicaciones.length; i += 3) {
-          arrayLista = []
-          for (let j = i; j < i + 3; j++) {
-            arrayLista.push(this.state.publicaciones[j])
-          }
-          listaPublicaciones.push(arrayLista)
-        }
-        this.setState({listaPublicaciones: listaPublicaciones})
-        
-
       }
-    }, 2000)
+    }, 100)
+
+    setTimeout(async () => {
+
+      await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
+      listaPublicaciones = []
+      for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+        arrayLista = []
+        for (let j = i; j < i + 3; j++) {
+          arrayLista.push(this.state.publicaciones[j])
+        }
+        listaPublicaciones.push(arrayLista)
+      }
+      await this.setState({ listaPublicaciones: listaPublicaciones })
+
+      await this.setState({ loadingImages: false })
+
+
+    }, 1700)
+
+
 
 
 
@@ -105,10 +112,17 @@ class ProfileAutor extends Component {
             </View>
 
 
-            <FlatList data={this.state.listaPublicaciones}
-              renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation}/>
-              }
-            />
+            {!this.state.loadingImages ?
+              <FlatList data={this.state.listaPublicaciones}
+                renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
+                }
+              />
+              :
+              <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+                <ProgressBarAndroid />
+              </View>
+            }
+
 
             {/* <Button title="Post"
               onPress={() => this.props.navigation.navigate('EditarPerfil')}></Button> */}

@@ -16,6 +16,7 @@ class Profile extends Component {
 
   state = {
     loading: true,
+    loadingImages: true,
     datosUser: null,
     publicaciones: null,
     listaPublicaciones: null
@@ -29,21 +30,28 @@ class Profile extends Component {
 
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
-        await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         await this.setState({ loading: false })
-
-        listaPublicaciones = []
-        for (let i = 0; i < this.state.publicaciones.length; i += 3) {
-          arrayLista = []
-          for (let j = i; j < i + 3; j++) {
-            arrayLista.push(this.state.publicaciones[j])
-          }
-          listaPublicaciones.push(arrayLista)
-        }
-        this.setState({ listaPublicaciones: listaPublicaciones })
       }
-    }, 2000)
+    }, 200)
+
+    setTimeout(async () => {
+
+      await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
+      listaPublicaciones = []
+      for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+        arrayLista = []
+        for (let j = i; j < i + 3; j++) {
+          arrayLista.push(this.state.publicaciones[j])
+        }
+        listaPublicaciones.push(arrayLista)
+      }
+      await this.setState({ listaPublicaciones: listaPublicaciones })
+
+      await this.setState({ loadingImages: false })
+
+
+    }, 1500)
 
   }
 
@@ -58,7 +66,7 @@ class Profile extends Component {
 
 
     if (!this.state.loading) {
-
+     
 
       return (
         <View style={styles.container}>
@@ -82,14 +90,20 @@ class Profile extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true}/>
+              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true} />
 
             </View>
+            {!this.state.loadingImages ?
+              <FlatList data={this.state.listaPublicaciones}
+                renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
+                }
+              />
+              :
+              <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+                <ProgressBarAndroid />
+              </View>
+            }
 
-            <FlatList data={this.state.listaPublicaciones}
-              renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
-              }
-            />
 
           </View>
 
