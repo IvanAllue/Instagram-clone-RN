@@ -1,7 +1,7 @@
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import Add from './AddComponents/Add'
-import Foto from './AddComponents/Foto'
-import NuevaPublicacion from './AddComponents/NuevaPublicacion'
+import Add from '../AddComponents/Add'
+import Foto from '../AddComponents/Foto'
+import NuevaPublicacion from '../AddComponents/NuevaPublicacion'
 import React, { Component } from 'react'
 
 import { Text, View, StyleSheet, Button, TouchableHighlight, Image, Dimensions, ScrollView } from 'react-native'

@@ -1,8 +1,8 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import TabFollow from './TabFollow'
-import Post from './Post';
-import Autor from './Profile';
-import Comentarios from './Comentarios';
+import Post from '../Post';
+import Autor from '../Profile';
+import Comentarios from '../PostItems/Comentarios';
 
 console.disableYellowBox = true;
 

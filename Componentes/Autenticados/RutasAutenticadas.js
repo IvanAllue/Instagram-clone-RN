@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import StackHome from './StackHome'
-import StackSearch from './StackSearch'
-import AddTabNavigator from './AddTabNavigator'
-import StackFollow from './StackFollow'
+import StackHome from './Navegadores/StackHome'
+import StackSearch from './Navegadores/StackSearch'
+import AddTabNavigator from './Navegadores/AddTabNavigator'
+import StackFollow from './Navegadores/StackFollow'
 // import Profile from './Profile'
-import DrawerProfile from './DrawerProfile'
+import DrawerProfile from './Navegadores/DrawerProfile'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 

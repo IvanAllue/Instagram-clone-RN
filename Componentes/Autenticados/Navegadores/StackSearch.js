@@ -1,8 +1,8 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import Post from './Post';
-import Search from './Search'
-import Profile from './Profile';
-import Comentarios from './Comentarios';
+import Post from '../Post';
+import Search from '../Search'
+import Profile from '../Profile';
+import Comentarios from '../PostItems/Comentarios';
 
 const StackSearch = createStackNavigator({
     Search: {
