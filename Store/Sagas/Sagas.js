@@ -190,6 +190,7 @@ function* sagaSubirImagen(values) {
     datosFinales = { url: urlFoto, pie: values.datos.pie, uid: autor.user.uid }
     const subirFoto = yield call(subirFotoDatabase, datosFinales) //LN 139
     const resultadoEscribirAutorPublicaciones = yield call(escribirAutorPublicaciones, { uid: autor.user.uid, key: subirFoto.key }) //LN 150
+    yield put({type: CONSTANTES.BORRAR_IMAGEN})
 }
 
 //

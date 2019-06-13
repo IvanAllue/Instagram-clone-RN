@@ -6,11 +6,11 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
 
 
-import {  Permissions } from 'expo';
+import { Permissions } from 'expo';
 
 var width = Dimensions.get('window').width;
 
- class Add extends Component {
+class Add extends Component {
 
   async componentDidMount() {
     await Permissions.askAsync(Permissions.CAMERA);
@@ -28,7 +28,7 @@ var width = Dimensions.get('window').width;
     await this.props.imagenSeleccionada(uri)
 
     console.log(this.props.imagen.imagenSeleccionada);
-    
+
 
 
   }
@@ -58,7 +58,13 @@ var width = Dimensions.get('window').width;
             borderBottomWidth: 0.5,
           }}
           leftComponent={
-            <TouchableOpacity onPress={() => { this.props.navigation.navigate('Home') }}>
+            <TouchableOpacity onPress={() => {
+              this.props.borrarImagen()
+              this.setState({
+                imageSelected: null
+              })
+              this.props.navigation.navigate('Home')
+            }}>
               <Ionicons name='md-close' size={35} />
             </TouchableOpacity>
           }
@@ -105,7 +111,10 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     imagenSeleccionada: (values) => {
-      dispatch({type:'IMAGEN_SELECCIONADA' , datos:values})
+      dispatch({ type: 'IMAGEN_SELECCIONADA', datos: values })
+    },
+    borrarImagen: () => {
+      dispatch({ type: 'BORRAR_IMAGEN' })
     }
   }
 }

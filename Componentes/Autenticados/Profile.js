@@ -116,7 +116,7 @@ class Profile extends Component {
             </View>
             {!this.state.loadingImages ?
               <ScrollView>
-              <FlatList data={this.state.listaPublicaciones}
+              <FlatList data={this.state.listaPublicaciones} style={{marginBottom: 200}}
                 renderItem={({ item }) =>  <PostProfile item={item} navigation={this.props.navigation} usuario={this.props.datosUsuario.datosUser} editor={true}/>
                 }
               />

@@ -6,16 +6,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var width = Dimensions.get('window').width;
 
 class NuevaPublicacion extends PureComponent {
+   
     async subirImagenBd(){
         publicacion = {imagen: this.props.imagen.imagenSeleccionada , pie: this.state.pieDeFoto}
         await this.props.publicarImagen(publicacion)
+        this.props.navigation.goBack()
+
         this.props.navigation.navigate('Home')
     }
     state = {
        pieDeFoto : ""
       };
     render() {
+        if (JSON.parse(JSON.stringify(this.props.imagen)).imagenSeleccionada == null){
+            this.props.navigation.goBack()
+        }
+        console.log(JSON.parse(JSON.stringify(this.props.imagen)));
+
         return (
+            
             <View>
                 <Header
                     backgroundColor="#FFF"
@@ -72,7 +81,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         publicarImagen: (values) => {
             dispatch({type:"SUBIR_IMAGEN", datos: values})
-        }
+        },
+       
     }
 }
 

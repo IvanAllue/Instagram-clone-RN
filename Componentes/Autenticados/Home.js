@@ -6,7 +6,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class Home extends React.Component {
   state = {
-    cargando: true
+    cargando: true,
+    refreshing: false
   }
 
   componentDidMount() {
@@ -20,14 +21,11 @@ class Home extends React.Component {
   render() {
     if (!this.state.cargando) {
       return (
-        <View style={styles.container}>
-          <TouchableHighlight onPress={() => {
-            this.props.descargarPublicaciones()
-          }}>
-            <Ionicons name='md-refresh' color='#0077CC' size={30} />
-
-          </TouchableHighlight>
+        <View style={styles.container}>         
           <FlatList data={this.props.publicaciones}
+          refreshing={this.state.refreshing}
+          onRefresh={()=>{  this.props.descargarPublicaciones()
+          }}
             renderItem={({ item, index }) =>
             <Post item={item} navigation={this.props.navigation} autor={this.props.autores[index]} />
             }
