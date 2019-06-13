@@ -10,6 +10,22 @@ import GestionPerfil from './ProfileItems/GestionPerfil'
 
 class ProfileAutor extends Component {
 
+  async cargarPublicaciones() {
+    this.setState({ publicaciones: this.props.getPublicacionesUsuario })
+    listaPublicaciones = []
+    for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+      arrayLista = []
+      for (let j = i; j < i + 3; j++) {
+        arrayLista.push(this.state.publicaciones[j])
+      }
+      listaPublicaciones.push(arrayLista)
+    }
+    this.setState({ listaPublicaciones: listaPublicaciones })
+
+    this.setState({ loadingImages: false })
+
+  }
+
   componentWillUnmount() {
     console.log('adios');
 
@@ -37,30 +53,19 @@ class ProfileAutor extends Component {
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         await this.setState({ loading: false })
       }
-    }, 100)
+    }, 200)
 
-    setTimeout(async () => {
-
-      await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
-      listaPublicaciones = []
-      for (let i = 0; i < this.state.publicaciones.length; i += 3) {
-        arrayLista = []
-        for (let j = i; j < i + 3; j++) {
-          arrayLista.push(this.state.publicaciones[j])
-        }
-        listaPublicaciones.push(arrayLista)
-      }
-      await this.setState({ listaPublicaciones: listaPublicaciones })
-
-      await this.setState({ loadingImages: false })
-
-
-    }, 1700)
+   
 
 
 
 
+  }
 
+  componentDidUpdate(){
+    if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
+      this.cargarPublicaciones()
+    }
   }
 
 
@@ -98,11 +103,7 @@ class ProfileAutor extends Component {
             centerComponent={
               <Text style={{ fontSize: 18, marginLeft: -width * 0.6, fontWeight: "bold" }}>{JSON.parse(this.state.datosUser).usuario}</Text>
             }
-            rightComponent={
-              <TouchableOpacity onPress={() => { this.props.navigation.toggleDrawer() }}>
-                <Ionicons name='md-menu' size={30} />
-              </TouchableOpacity>
-            }
+          
           />
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
@@ -114,7 +115,7 @@ class ProfileAutor extends Component {
 
             {!this.state.loadingImages ?
               <FlatList data={this.state.listaPublicaciones}
-                renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
+                renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} usuario={this.props.datosUsuario.datosUser} editor={false}/>
                 }
               />
               :

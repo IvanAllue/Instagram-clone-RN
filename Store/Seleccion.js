@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { connect } from 'react-redux'
 
 import { autenticacion } from './Servicios/Firebase'
-
+import Profile from '../Componentes/Autenticados/Profile'
 import RutasNoAutenticadas from '../Componentes/NoAutenticados/RutasNoAutenticadas'
 import RutasAutenticadas from '../Componentes/Autenticados/RutasAutenticadas'
 import { actionEstablecerSesion } from './Servicios/Acciones';
@@ -34,6 +34,7 @@ class Seleccion extends Component {
       return (
         <View style={{ flex: 1 }}>
           {this.props.usuario ? <RutasAutenticadas /> : <RutasNoAutenticadas />}
+          {/* <Profile/> */}
         </View>
       );
     } else {

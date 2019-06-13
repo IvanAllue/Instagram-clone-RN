@@ -11,7 +11,6 @@ const sagaMiddleware = createSagaMiddleware()
 const reducerSesion = (state = null, action) => {
     switch (action.type) {
         case CONSTANTES.ESTABLECER_SESION:
-            console.log(action.datos);
 
             return { user: action.datos }
         case CONSTANTES.CERRAR_SESION:
@@ -40,6 +39,8 @@ reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
             return state
     }
 }
+
+
 
 reducerDatosProfile = (state = { datosUser: null }, action) => {
     switch (action.type) {
@@ -72,12 +73,34 @@ const reducerDescargarAutores = (state = null, action) => {
     }
 }
 
+
+
 const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
     switch (action.type) {
         case CONSTANTES.PUBLICACIONES_PERFIL_AJENO:
             
             return [...action.publicacionesPerfil].reverse();
 
+        default:
+            return state;
+    }
+}
+
+reducerUsuariosLike = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.PONER_USUARIOS_LIKE:
+            
+            return [...action.usuariosLike]
+
+        default:
+            return state;
+    }
+}
+reducerUidsUsuarios = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.CONSEGUIR_UID_LIKES:
+            
+            return [...action.usuariosId]
         default:
             return state;
     }
@@ -91,7 +114,9 @@ const reducers = combineReducers({
     reducerDatosProfile, //LN 42
     reducerDescargarPublicaciones, //LN 51
     reducerDescargarAutores, //LN 61
-    reducerPublicacaionesPerfilAjeno
+    reducerPublicacaionesPerfilAjeno,
+    reducerUsuariosLike,
+    reducerUidsUsuarios
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

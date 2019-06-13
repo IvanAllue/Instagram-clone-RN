@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button, TouchableOpacity, Dimensions, ProgressBarAndroid, FlatList } from 'react-native'
+import { Text, View, StyleSheet, Button, TouchableOpacity, Dimensions, ProgressBarAndroid, FlatList, ScrollView } from 'react-native'
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
@@ -9,6 +9,27 @@ var height = Dimensions.get('window').height;
 import GestionPerfil from './ProfileItems/GestionPerfil'
 
 class Profile extends Component {
+  async cargarPublicaciones() {
+    this.setState({ publicaciones: this.props.getPublicacionesUsuario })
+    listaPublicaciones = []
+    for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+      arrayLista = []
+      for (let j = i; j < i + 3; j++) {
+        arrayLista.push(this.state.publicaciones[j])
+      }
+      listaPublicaciones.push(arrayLista)
+    }
+    this.setState({ listaPublicaciones: listaPublicaciones })
+
+    this.setState({ loadingImages: false })
+
+  }
+  componentDidUpdate() {
+    
+    if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
+      this.cargarPublicaciones()
+    }
+  }
   componentWillMount() {
     this.cargarDatos()
   }
@@ -35,23 +56,23 @@ class Profile extends Component {
       }
     }, 200)
 
-    setTimeout(async () => {
+    // setTimeout(async () => {
 
-      await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
-      listaPublicaciones = []
-      for (let i = 0; i < this.state.publicaciones.length; i += 3) {
-        arrayLista = []
-        for (let j = i; j < i + 3; j++) {
-          arrayLista.push(this.state.publicaciones[j])
-        }
-        listaPublicaciones.push(arrayLista)
-      }
-      await this.setState({ listaPublicaciones: listaPublicaciones })
-
-      await this.setState({ loadingImages: false })
+    //   await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
+    //   listaPublicaciones = []
+    //   for (let i = 0; i < this.state.publicaciones.length; i += 3) {
+    //     arrayLista = []
+    //     for (let j = i; j < i + 3; j++) {
+    //       arrayLista.push(this.state.publicaciones[j])
+    //     }
+    //     listaPublicaciones.push(arrayLista)
+    //   }
+    //   await this.setState({ listaPublicaciones: listaPublicaciones })
 
 
-    }, 1500)
+
+
+    // }, 2500)
 
   }
 
@@ -66,7 +87,7 @@ class Profile extends Component {
 
 
     if (!this.state.loading) {
-     
+
 
       return (
         <View style={styles.container}>
@@ -94,10 +115,12 @@ class Profile extends Component {
 
             </View>
             {!this.state.loadingImages ?
+              <ScrollView>
               <FlatList data={this.state.listaPublicaciones}
-                renderItem={({ item }) => <PostProfile item={item} navigation={this.props.navigation} />
+                renderItem={({ item }) =>  <PostProfile item={item} navigation={this.props.navigation} usuario={this.props.datosUsuario.datosUser} editor={true}/>
                 }
               />
+              </ScrollView>
               :
               <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
                 <ProgressBarAndroid />

@@ -1,6 +1,7 @@
 import { takeEvery, call, select, put, all } from 'redux-saga/effects'
 import { autenticacion, baseDatos, storage } from '../Servicios/Firebase'
 import CONSTANTES from '../Sagas/Constantes'
+import { auth } from 'firebase';
 
 
 //
@@ -78,7 +79,7 @@ const actualizarPerfilBD = ({ uid, url }) => baseDatos.ref('Users/' + uid).updat
 
 const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' + uid).once('value', function (snapshot) {
     return snapshot.val()
-})
+}).catch(()=>false)
 
 function* sagaImagenPerfil(values) {
     try {
@@ -101,18 +102,25 @@ function* sagaImagenPerfil(values) {
 //
 
 
-async function* sagaLoginFacebook(values) {
-  await  setTimeout(()=>{        
-       console.log('qqq');                             
-    }, 3000)
-    const autor = yield select(state => state.reducerSesion)
-    let uid = autor.uid
-    let email = values.datos.additionalUserInfo.profile.email
-    let nombre = values.datos.additionalUserInfo.profile.name
-    yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+function* sagaLoginFacebook(values) {
+
    
 
- }
+    let uid = values.datos.user.uid
+
+    const usuario = yield call(conseguirUsuarioBd, uid) //LN 79
+
+    if (usuario == false){
+        let email = values.datos.additionalUserInfo.profile.email
+        let nombre = values.datos.additionalUserInfo.profile.name
+        yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+    
+    }
+
+
+   
+
+}
 
 
 //
@@ -189,8 +197,9 @@ const conseguirPublicaciones = () => baseDatos.ref('publicaciones/').once('value
         texto = child.val().texto
         uid = child.val().uid
         url = child.val().url
+        likes = child.val().likes
 
-        let publicacion = { key, texto, uid, url }
+        let publicacion = { key, texto, uid, url, likes }
 
         publicaciones.push(publicacion)
     })
@@ -216,21 +225,66 @@ function* sagaDescargarPublicaciones() {
 // CONSEGUIR PUBLICACIONES
 //
 
-const getPublicaciones = (uid) => baseDatos.ref('autor-publicaciones/'+uid).once('value').then(snapshot => {
-   let publicaciones = []
+const getPublicaciones = (uid) => baseDatos.ref('autor-publicaciones/' + uid).once('value').then(snapshot => {
+    let publicaciones = []
     snapshot.forEach(child => {
-        publicaciones.push(child.key)       
+        publicaciones.push(child.key)
     })
     return publicaciones;
 })
 
-const getPublicacion = (publicacion) =>baseDatos.ref('publicaciones/'+publicacion).once('value').then(snapshot => snapshot.val())
-function* sagaConseguirPublicaciones(values){
-    let uid =  values.datos
-   const publicaciones = yield call(getPublicaciones, uid)
-   const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
-   const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
+const getPublicacion = (publicacion) => baseDatos.ref('publicaciones/' + publicacion).once('value').then(snapshot => snapshot.val())
+function* sagaConseguirPublicaciones(values) {
+    let uid = values.datos
+    const publicaciones = yield call(getPublicaciones, uid)
+    const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
+    const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
 
+}
+const guardarLikeBd = ({uid, userId}) => baseDatos.ref('publicaciones/'+uid+"/likes").update({[userId]:true})
+function* sagaDarLike(values) {
+    const autor = yield select(state => state.reducerSesion)
+
+    let uid = values.datos.uid
+    let userId = autor.user.uid
+
+    const darLikeBd = yield call(guardarLikeBd, {uid, userId })
+    
+}
+
+
+const quitarLikeBd = ({uid, userId}) => baseDatos.ref('publicaciones/'+uid+"/likes/"+userId).remove()
+function* sagaQuitarLike(values) {
+    const autor = yield select(state => state.reducerSesion)
+
+    let uid = values.datos.uid
+    let userId = autor.user.uid
+
+    const darLikeBd = yield call(quitarLikeBd, {uid, userId })
+    
+}
+
+function* conseguirUsuariosLikes(values) {
+    const publicacion = yield call(getPublicacion, values.datos)
+
+   usuariosId = []
+
+   for (i in publicacion.likes){
+       usuariosId.push(i)
+   }
+   
+    usuariosLike = []
+    for (i in publicacion.likes){
+       const usuario = yield call(conseguirUsuarioBd, i)
+       usuariosLike.push(usuario)
+    }
+    const ponerUidUser = yield put({ type: CONSTANTES.CONSEGUIR_UID_LIKES, usuariosId })
+    const ponerUsuariosLike = yield put({ type: CONSTANTES.PONER_USUARIOS_LIKE, usuariosLike })
+
+    
+    
+  
+    
 }
 
 
@@ -243,6 +297,10 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario) //LN 165
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones) //LN 193
     yield takeEvery(CONSTANTES.CONSEGUIR_PUBLICACIONES, sagaConseguirPublicaciones) //LN 193
+    yield takeEvery(CONSTANTES.DAR_LIKE, sagaDarLike) //LN 193
+    yield takeEvery(CONSTANTES.QUITAR_LIKE, sagaQuitarLike) //LN 193
+    yield takeEvery(CONSTANTES.CONSEGUIR_USUARIOS_LIKES, conseguirUsuariosLikes) //LN 193
+
 
     console.log('Desde nuestra funcion generadora')
 }

@@ -6,7 +6,8 @@ import Home from './Home'
 import Autor from './ProfileAutor'
 import Post from './Post'
 import Comentarios from './Comentarios'
-
+import PostProfileGrande from './ProfileItems/PostProfileGrande'
+import Likes from './Likes'
 
 
 const StackHome = createStackNavigator({
@@ -34,6 +35,16 @@ const StackHome = createStackNavigator({
             ,
           }),
 
+    },
+    PostProfile: {
+        screen: PostProfileGrande,
+        navigationOptions: () => ({
+            headerTitle:'Foto'
+            ,
+          }),
+       
+    },Likes:{
+        screen: Likes
     }
 
 }, {
