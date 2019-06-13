@@ -43,6 +43,7 @@ class Post extends Component {
   }
 
   render() {
+   
 
     return (
       <View>
@@ -100,7 +101,7 @@ class Post extends Component {
 
 
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Ionicons name='ios-chatbubbles' size={30} onPress={() => this.props.navigation.navigate('Comentarios')} />
+            <Ionicons name='ios-chatbubbles' size={30} onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item, usuario: this.props.usuario})} />
 
           </View>
 
@@ -112,7 +113,7 @@ class Post extends Component {
 
         </TouchableHighlight>
         </View>
-        <TouchableHighlight onPress={() => this.props.navigation.navigate('Comentarios')}>
+        <TouchableHighlight onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item})}>
           <Text>{this.props.item.texto}</Text>
         </TouchableHighlight>
         {/* <Text> Publicacion </Text>

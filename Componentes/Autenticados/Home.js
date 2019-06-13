@@ -11,7 +11,11 @@ class Home extends React.Component {
   }
 
   componentDidMount() {
+    console.log('====================================');
+    console.log(this.props);
+    console.log('====================================');
     this.props.descargarPublicaciones()
+    this.props.conseguirUsuario(this.props.usuario.user.uid)
   }
 
   componentWillReceiveProps() {
@@ -61,6 +65,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
   return {
+    usuario: state.reducerSesion,
     publicaciones: state.reducerDescargarPublicaciones,
     autores: state.reducerDescargarAutores
   }
@@ -70,6 +75,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     descargarPublicaciones: () => {
       dispatch({ type: 'DESCARGAR_PUBLICACIONES' })
+    },
+    conseguirUsuario: (values) => {
+      dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
     }
   }
 }
