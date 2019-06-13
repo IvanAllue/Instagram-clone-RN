@@ -106,6 +106,27 @@ reducerUidsUsuarios = (state = null, action) => {
     }
 }
 
+reducerErrorLogin = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.ERROR_EN_LOGIN:
+            
+            return action.error
+        default:
+            return state;
+    }
+}
+
+reducerErrorSignup = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.ERROR_EN_SIGNUP:
+            
+            
+            return action.error
+        default:
+            return state;
+    }
+}
+
 const reducers = combineReducers({
     form,
     reducerSesion, //LN 11
@@ -116,7 +137,9 @@ const reducers = combineReducers({
     reducerDescargarAutores, //LN 61
     reducerPublicacaionesPerfilAjeno,
     reducerUsuariosLike,
-    reducerUidsUsuarios
+    reducerUidsUsuarios,
+    reducerErrorLogin,
+    reducerErrorSignup
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

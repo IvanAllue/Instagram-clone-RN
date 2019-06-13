@@ -9,7 +9,7 @@ import { auth } from 'firebase';
 //
 
 const registroEnFirebase = values =>
-    autenticacion.createUserWithEmailAndPassword(values.correo, values.password).then(values => values)
+    autenticacion.createUserWithEmailAndPassword(values.correo, values.password).then(values => values).catch(()=> true)
 
 const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' + uid).set({
     usuario: nombre,
@@ -20,9 +20,17 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
 function* sagaRegistro(values) {
     try {
         const registro = yield call(registroEnFirebase, values.datos) //LN 10
-        const { email, uid } = registro.user
-        const { datos: { nombre } } = values
-        yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+        if (registro==true){
+            error =true            
+            yield put({type: CONSTANTES.ERROR_EN_SIGNUP, error})   
+        }else{
+            error =false            
+            yield put({type: CONSTANTES.ERROR_EN_SIGNUP, error})   
+            const { email, uid } = registro.user
+            const { datos: { nombre } } = values
+            yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+        }
+        
     } catch (error) {
         console.log(error);
     }
@@ -33,11 +41,19 @@ function* sagaRegistro(values) {
 //
 
 const loginEnFirebase = ({ correo, password }) =>
-    autenticacion.signInWithEmailAndPassword(correo, password).then(success => success).catch(error => error)
+    autenticacion.signInWithEmailAndPassword(correo, password).catch(error => true)
 
 function* sagaLogin(values) {
     try {
         const resultado = yield call(loginEnFirebase, values.datos)   //LN 34    
+        if (resultado == true){
+            error  = true
+            yield put({type: CONSTANTES.ERROR_EN_LOGIN, error})       
+        }else{
+            error  = false
+            yield put({type: CONSTANTES.ERROR_EN_LOGIN, error})    
+        }
+       
     } catch (error) {
         console.log(error);
     }

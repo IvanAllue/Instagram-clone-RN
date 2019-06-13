@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableHighlight, StyleSheet, Dimensions, Image } from 'react-native'
+import { Text, View, TouchableHighlight, StyleSheet, Dimensions, Image, Alert } from 'react-native'
 
 //react-redux
 import { connect } from 'react-redux'
-import  actionRegistro  from '../../Store/Servicios/Acciones'
+import actionRegistro from '../../Store/Servicios/Acciones'
 
 
 //form
@@ -15,23 +15,38 @@ var width = Dimensions.get('window').width;
 
 class SignUp extends Component {
 
-  registroDelUsuario = (values) =>{
-   
+  registroDelUsuario = (values) => {
+
     this.props.registro(values)
+
+    setTimeout(() => {
+      if (this.props.error == true) {
+        Alert.alert(
+          '¡ERROR DURANTE EL REGISTRO!',
+          'Ya existe un usuario con ese correo electronico.',
+          [
+
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+          ],
+          { cancelable: false },
+        )
+
+      }
+    }, 1200)
   }
 
   render() {
-    
+
     return (
       <View style={styles.container}>
         <View style={{
           flex: 1, alignItems: 'center',
           justifyContent: 'center',
         }}>
-          <Image style={{width: 170, height: 70, resizeMode: 'stretch'}} source={require('../../assets/logoinsta.png')}  />
-         
+          <Image style={{ width: 170, height: 70, resizeMode: 'stretch' }} source={require('../../assets/logoinsta.png')} />
+
           <Text style={styles.texto}>Registrate para ver fotos y videos de tus amigos</Text>
-          <SignUpForm registro={this.registroDelUsuario}/>
+          <SignUpForm registro={this.registroDelUsuario} />
 
         </View>
 
@@ -65,7 +80,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0.5,
 
   },
-  texto:{
+  texto: {
     color: '#9D9D9D',
     fontSize: 17,
     fontWeight: 'bold',
@@ -86,7 +101,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    numero: state.reducerPrueba
+    error: state.reducerErrorSignup
   }
 }
 

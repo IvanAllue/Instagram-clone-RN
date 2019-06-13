@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, TouchableHighlight, Dimensions, Image, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableHighlight, Dimensions, Image, TouchableOpacity, Alert } from 'react-native'
 import SignInForm from './Formas/SignInForm'
 import { autenticacion, auth } from '../../Store/Servicios/Firebase'
 import { connect } from 'react-redux'
@@ -10,9 +10,29 @@ var width = Dimensions.get('window').width;
     signInUsuario = (values) =>{
       
         this.props.login(values)
+
+        setTimeout(()=>{
+            if (this.props.error == true){
+                console.log(this.props.error);
+                
+                Alert.alert(
+                    '¡ERROR DURANTE LA IDENTIFICACIÓN!',
+                    'Correo o contraseña incorrectos.',
+                    [
+                      
+                        {text: 'OK', onPress: () => console.log('OK Pressed')},
+                      ],
+                      {cancelable: false},
+                )
+                
+            }
+        }, 1000)
+        
+
         
     }
 
+    
     async loginWithFacebook() {
         //ENTER YOUR APP ID 
         const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync('363665401174622', { permissions: ['public_profile', 'email'] })
@@ -88,7 +108,7 @@ const styles = StyleSheet.create({
 });
 const mapStateToProps = (state, ownProps) => {
     return {
-        prop: state.prop
+        error: state.reducerErrorLogin
     }
 }
 
