@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, Button, TextInput, TouchableHighlight, KeyboardAvoidingView } from 'react-native'
+import { Text, View, Button, TextInput, TouchableHighlight, KeyboardAvoidingView, FlatList } from 'react-native'
 import { Avatar } from 'react-native-elements';
 import { connect } from 'react-redux'
+import Comentario from './Comentario'
 
 class Comentarios extends Component {
   state = {
@@ -18,6 +19,8 @@ class Comentarios extends Component {
     await this.setState({ publicacion: publicacion })
     usuario = this.props.navigation.getParam('usuario', null);
     await this.setState({ usuario: usuario })
+    this.props.descargarComentarios(this.state.publicacion.key)
+
 
 
 
@@ -30,16 +33,17 @@ class Comentarios extends Component {
 
   }
 
-  enviarComentario(){
-    
-   this.props.enviarComentario({idPublicacion : this.state.publicacion.key, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser}) 
+  enviarComentario() {
+
+    this.props.enviarComentario({ idPublicacion: this.state.publicacion.key, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser })
   }
   componentDidUpdate() {
-   
-    if (this.state.loading) {
+
+    if (this.state.loading && this.props.comentarios != null) {
       this.setState({ loading: false })
 
     }
+
 
 
   }
@@ -67,8 +71,16 @@ class Comentarios extends Component {
 
           }
 
-          <View style={{ flex: 7, backgroundColor: '#f394f3' }}>
-
+          <View style={{ flex: 7}}>
+            <FlatList data={this.props.comentarios}
+              refreshing={false}
+              onRefresh={() => {
+                this.props.descargarComentarios(this.state.publicacion.key)
+              }}
+              renderItem={({ item, index }) =>
+                <Comentario item={item} navigation={this.props.navigation}  />
+              }
+            />
           </View>
           <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
 
@@ -82,7 +94,7 @@ class Comentarios extends Component {
               ></TextInput>
             </View>
             <View style={{ flex: 3, alignItems: "center" }}>
-              <TouchableHighlight onPress={()=>{this.enviarComentario()}}>
+              <TouchableHighlight onPress={() => { this.enviarComentario() }}>
                 <Text style={{ color: '#0077CC' }}>Publicar</Text>
               </TouchableHighlight>
             </View>
@@ -99,7 +111,8 @@ class Comentarios extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
   return {
-    imagenPerfil: state.reducerDatosProfile
+    imagenPerfil: state.reducerDatosProfile,
+    comentarios: state.reducerComentarios
   }
 }
 
@@ -107,6 +120,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     enviarComentario: (values) => {
       dispatch({ type: 'ENVIAR_COMENTARIO', datos: values })
+    }, descargarComentarios: (values) => {
+      dispatch({ type: 'DESCARGAR_COMENTARIOS', datos: values })
     }
   }
 }

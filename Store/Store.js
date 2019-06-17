@@ -26,6 +26,9 @@ import {reducerUidsUsuarios} from './Reducers/Home' //Obtiene la uid de los usua
 import {reducerErrorLogin} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de login
 import {reducerErrorSignup} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de signUp
 
+//PUBLICACIONES
+
+import {reducerComentarios} from './Reducers/Publicaciones'
 
 const sagaMiddleware = createSagaMiddleware()
 
@@ -44,7 +47,9 @@ const reducers = combineReducers({
     reducerUidsUsuarios,
     
     reducerErrorLogin,
-    reducerErrorSignup
+    reducerErrorSignup,
+    
+    reducerComentarios
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))
