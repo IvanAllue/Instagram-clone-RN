@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button, TouchableOpacity, CameraRoll, Image, Dimensions, ScrollView } from 'react-native'
+import { Text, View, StyleSheet, Button, TouchableOpacity, CameraRoll, Image, Dimensions, ScrollView, FlatList } from 'react-native'
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 
 
 import { Permissions } from 'expo';
+
+import AddGaleriaImagenes from './AddGaleriaImagenes'
 
 var width = Dimensions.get('window').width;
 
@@ -20,7 +22,8 @@ class Add extends Component {
 
   state = {
     image: [],
-    imageSelected: null
+    imageSelected: null,
+    listaImagenes: null,
   };
   async setNewImage(uri) {
 
@@ -32,19 +35,27 @@ class Add extends Component {
 
 
   }
-  getPhotos = () => {
-    CameraRoll.getPhotos({ first: 50, assetType: 'Photos' }).then(response => this.setState({ image: response.edges }))
-  }
-  setPhotos() {
-    return this.state.image.map((item, k) => {
-      return (
-        <TouchableOpacity key={k} onPress={() => { this.setNewImage(item.node.image.uri) }}>
-          <Image source={{ uri: item.node.image.uri }} style={{ width: 100, height: 100 }}></Image>
-        </TouchableOpacity>
-      )
-    })
-  }
+  getPhotos = async () => {
+    await CameraRoll.getPhotos({ first: 50, assetType: 'Photos' }).then(response => this.setState({ image: response.edges }))
+    listaPublicaciones = []
+    for (let i = 0; i < this.state.image.length; i += 4) {
+      arrayLista = []
+      for (let j = i; j < i + 4; j++) {
+        arrayLista.push(this.state.image[j])
+      }
+      listaPublicaciones.push(arrayLista)
+    }
+    this.setState({ listaImagenes: listaPublicaciones })
 
+  }
+   listener = async (uri) => {
+   this.setState({imageSelected: uri})
+
+   await this.props.imagenSeleccionada(uri)
+
+
+  }
+  
   render() {
 
     return (
@@ -80,10 +91,15 @@ class Add extends Component {
           {this.state.imageSelected != null &&
             <Image source={{ uri: this.state.imageSelected }} style={{ width: width, height: width }}></Image>
           }
+          {this.state.listaImagenes != null &&
+            <View style={{ flex: 1, flexDirection: "row" }}>
+              <FlatList data={this.state.listaImagenes} style={{ marginBottom: 200 }}
+                renderItem={({ item }) => <AddGaleriaImagenes item={item} listener={this.listener} />
+                }
+              />
+            </View>
+          }
 
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            {this.setPhotos()}
-          </View>
 
         </ScrollView>
 
