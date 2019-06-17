@@ -28,7 +28,8 @@ export const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
         case CONSTANTES.PUBLICACIONES_PERFIL_AJENO:
             
             return [...action.publicacionesPerfil].reverse();
-
+        case CONSTANTES.LIMPIAR_PUBLICACIONES_PERFIL_AJENO: 
+        return null
         default:
             return state;
     }

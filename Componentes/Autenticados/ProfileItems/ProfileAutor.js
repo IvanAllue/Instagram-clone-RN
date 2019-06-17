@@ -27,6 +27,7 @@ class ProfileAutor extends Component {
   }
 
   componentWillUnmount() {
+    this.props.limpiarUsuarioImagenes()
     console.log('adios');
 
   }
@@ -163,12 +164,16 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     conseguirUsuario: (values) => {
       dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
     },
-    limpiarUsuario: () => {
-      dispatch({ type: 'LIMPIAR_USUARIO' })
+    limpiarUsuarioImagenes: () => {
+      dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
 
     }, conseguirPublicaciones: (values) => {
       dispatch({ type: 'CONSEGUIR_PUBLICACIONES', datos: values })
     },
+    limpiarUsuario: () => {
+      dispatch({ type: 'LIMPIAR_USUARIO' })
+
+    }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileAutor)

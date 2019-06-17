@@ -12,12 +12,15 @@ export default class Comentario extends Component {
         };
 
     }
-    componentWillMount() {
-        this.setState({ comentario: JSON.parse(JSON.stringify(this.props.item)) })
+    async componentWillMount() {
+     await   this.setState({ comentario: JSON.parse(JSON.stringify(this.props.item)) })
+     console.log('====================================');
+     console.log(this.state.comentario.autorId);
+     console.log('====================================');
     }
 
     render() {
-
+       
         return (
             <View style={{ height: 50, flexDirection: "row", marginBottom: 5 }}>
                 <View style={{ flex: 2, alignItems: "center" }}>
