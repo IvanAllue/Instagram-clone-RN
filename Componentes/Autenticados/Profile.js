@@ -47,32 +47,14 @@ class Profile extends Component {
 
   async cargarDatos() {
     await this.props.conseguirPublicaciones(this.props.usuario.user.uid)
-    await this.props.conseguirUsuario(this.props.usuario.user.uid)
 
-    setTimeout(async () => {
+   
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         await this.setState({ loading: false })
       }
-    }, 200)
+  
 
-    // setTimeout(async () => {
-
-    //   await this.setState({ publicaciones: this.props.getPublicacionesUsuario })
-    //   listaPublicaciones = []
-    //   for (let i = 0; i < this.state.publicaciones.length; i += 3) {
-    //     arrayLista = []
-    //     for (let j = i; j < i + 3; j++) {
-    //       arrayLista.push(this.state.publicaciones[j])
-    //     }
-    //     listaPublicaciones.push(arrayLista)
-    //   }
-    //   await this.setState({ listaPublicaciones: listaPublicaciones })
-
-
-
-
-    // }, 2500)
 
   }
 

@@ -10,6 +10,16 @@ export const reducerDescargarPublicaciones = (state = null, action) => {
             return state
     }
 }
+export const reducerDatosProfile = (state = { datosUser: null }, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_DATOS_USER:
+            return { datosUser: action.datos }
+        case CONSTANTES.LIMPIAR_USUARIO:
+            return null
+        default:
+            return state
+    }
+}
 
 export const reducerDescargarAutores = (state = null, action) => {
 
@@ -23,34 +33,4 @@ export const reducerDescargarAutores = (state = null, action) => {
 
 
 
-export const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.PUBLICACIONES_PERFIL_AJENO:
-            
-            return [...action.publicacionesPerfil].reverse();
-        case CONSTANTES.LIMPIAR_PUBLICACIONES_PERFIL_AJENO: 
-        return null
-        default:
-            return state;
-    }
-}
 
-export const reducerUsuariosLike = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.PONER_USUARIOS_LIKE:
-            
-            return [...action.usuariosLike]
-
-        default:
-            return state;
-    }
-}
-export const reducerUidsUsuarios = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.CONSEGUIR_UID_LIKES:
-            
-            return [...action.usuariosId]
-        default:
-            return state;
-    }
-}

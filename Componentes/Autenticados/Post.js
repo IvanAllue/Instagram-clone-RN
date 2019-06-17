@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, Button, Dimensions, Image, TouchableHighlight } from 'react-native'
 import { Avatar } from 'react-native-elements';
-import DoubleClick from 'react-native-double-click';
+// import DoubleClick from 'react-native-double-click';
 import { connect } from 'react-redux'
 
 import { Header } from 'react-native-elements';
@@ -11,6 +11,7 @@ var width = Dimensions.get('window').width;
 
 
 class Post extends Component {
+  
   componentWillMount() {
     cont = 0
     for (let i in this.props.item.likes) {
@@ -18,23 +19,18 @@ class Post extends Component {
         this.setState({ like: true })
       }
       cont++
-
     }
     this.setState({ contLike: cont })
-
   }
 
   async cambiarEstado() {
     await this.setState({ like: !this.state.like })
     if (this.state.like) {
-
       this.props.darLike({ uid: this.props.item.key })
       this.setState({ contLike: this.state.contLike + 1 })
     } else {
       this.props.quitarLike({ uid: this.props.item.key })
       this.setState({ contLike: this.state.contLike - 1 })
-
-
     }
   }
   state = {
@@ -115,10 +111,7 @@ class Post extends Component {
         </View>
         <TouchableHighlight onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item})}>
           <Text>{this.props.item.texto}</Text>
-        </TouchableHighlight>
-        {/* <Text> Publicacion </Text>
-        <Button title="Comentarios"
-        onPress={()=>this.props.navigation.navigate('Comentarios')}></Button> */}
+        </TouchableHighlight>       
       </View>
     )
   }

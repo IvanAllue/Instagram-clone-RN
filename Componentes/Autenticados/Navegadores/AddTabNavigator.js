@@ -19,7 +19,16 @@ const AddTabNavigator = createBottomTabNavigator({
     screen: Foto
   },
   NuevaPublicacion: {
-    screen: NuevaPublicacion
+    screen: NuevaPublicacion,
+    navigationOptions: ({ navigation }) => {
+
+
+      let navigationOptions = {}
+
+      navigationOptions.tabBarVisible = false;
+
+      return navigationOptions
+  }
   }
 }, {
 

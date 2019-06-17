@@ -5,9 +5,8 @@ import functionPrimaria from './Sagas/Sagas'
 
 //DATOS USUARIO PERFILES
 
-import {reducerSesion} from './Reducers/DatosUsuarioPerfil' //-> Obtiene los datos de usuario desde firebase
-import {reducerDatosProfile} from './Reducers/DatosUsuarioPerfil' //Requiere: uid -> Obtiene los datos del usuario de la BD
-import {reducerImagenPerfil} from './Reducers/DatosUsuarioPerfil' //-> Obtiene la url de la imagen que se va a cambiar por el usuario
+import {reducerPublicacaionesPerfilAjeno} from './Reducers/Profile' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+import {reducerImagenPerfil} from './Reducers/Profile' //-> Obtiene la url de la imagen que se va a cambiar por el usuario
 
 //ADD
 
@@ -16,19 +15,21 @@ import {reducerImagenSeleccionada} from './Reducers/Add' //-> Imagen que el usua
 //HOME
 
 import {reducerDescargarPublicaciones} from './Reducers/Home' //-> Obtiene todas las publicaciones
+import {reducerDatosProfile} from './Reducers/Home' //Requiere: uid -> Obtiene los datos del usuario de la BD
 import {reducerDescargarAutores} from './Reducers/Home'  //-> Obtiene los datos de usuario de la BD de los usuarios que tienen una publicacion minimo subida
-import {reducerPublicacaionesPerfilAjeno} from './Reducers/Home' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
-import {reducerUsuariosLike} from './Reducers/Home' //Obtiene los usuarios BD que han dado like a una foto
-import {reducerUidsUsuarios} from './Reducers/Home' //Obtiene la uid de los usuarios que han dado like a una foto
+
 
 //NO AUTENTICADAS
 
 import {reducerErrorLogin} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de login
 import {reducerErrorSignup} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de signUp
+import {reducerSesion} from './Reducers/NoAutenticadas' //-> Obtiene los datos de usuario desde firebase
 
 //PUBLICACIONES
 
-import {reducerComentarios} from './Reducers/Publicaciones'
+import {reducerComentarios} from './Reducers/Post/Comentarios' //Obtiene los comentarios de una publicacion
+import {reducerUsuariosLike} from './Reducers/Post/Likes' //Obtiene los usuarios BD que han dado like a una foto
+import {reducerUidsUsuarios} from './Reducers/Post/Likes' //Obtiene la uid de los usuarios que han dado like a una foto
 
 const sagaMiddleware = createSagaMiddleware()
 

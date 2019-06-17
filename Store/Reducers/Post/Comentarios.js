@@ -1,4 +1,4 @@
-import CONSTANTES from '../Sagas/Constantes'
+import CONSTANTES from '../../Sagas/Constantes'
 
 export const reducerComentarios = (state = null, action) => {
     switch (action.type) {

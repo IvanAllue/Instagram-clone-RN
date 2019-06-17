@@ -1,12 +1,11 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button, FlatList, Image, TouchableHighlight, ProgressBarAndroid, TouchableWithoutFeedback } from 'react-native'
+import { View, StyleSheet, FlatList, ProgressBarAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import Post from './Post'
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 class Home extends React.Component {
   state = {
-    cargando: true,
+    loading: true,
     refreshing: false
   }
 
@@ -16,11 +15,11 @@ class Home extends React.Component {
   }
 
   componentWillReceiveProps() {
-    this.setState({ cargando: false })
+    this.setState({ loading: false })
   }
 
   render() {
-    if (!this.state.cargando) {
+    if (!this.state.loading) {
       return (
         <View style={styles.container}>         
           <FlatList data={this.props.publicaciones}
@@ -30,13 +29,7 @@ class Home extends React.Component {
             renderItem={({ item, index }) =>
             <Post item={item} navigation={this.props.navigation} autor={this.props.autores[index]} />
             }
-          />
-
-          {/* <Button title="Publicacion"
-          onPress={()=>this.props.navigation.navigate('Autor')}></Button>
-  
-  <Button title="Comentarios"
-          onPress={()=>this.props.navigation.navigate('Comentarios')}></Button> */}
+          />         
         </View>
       )
     } else {
@@ -60,7 +53,7 @@ const styles = StyleSheet.create({
 });
 
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   return {
     usuario: state.reducerSesion,
     publicaciones: state.reducerDescargarPublicaciones,
@@ -68,7 +61,7 @@ const mapStateToProps = (state, ownProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch, ownProps) => {
+const mapDispatchToProps = (dispatch) => {
   return {
     descargarPublicaciones: () => {
       dispatch({ type: 'DESCARGAR_PUBLICACIONES' })

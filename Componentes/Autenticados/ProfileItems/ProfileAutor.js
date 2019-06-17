@@ -125,10 +125,6 @@ class ProfileAutor extends Component {
               </View>
             }
 
-
-            {/* <Button title="Post"
-              onPress={() => this.props.navigation.navigate('EditarPerfil')}></Button> */}
-
           </View>
 
         </View>
