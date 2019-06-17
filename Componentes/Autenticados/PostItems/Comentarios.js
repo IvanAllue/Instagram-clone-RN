@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { Text, View, Button } from 'react-native'
+import { Text, View, Button, TextInput, TouchableHighlight, KeyboardAvoidingView } from 'react-native'
 import { Avatar } from 'react-native-elements';
 import { connect } from 'react-redux'
 
- class Comentarios extends Component {
+class Comentarios extends Component {
   state = {
     autorPublicacion: null,
     publicacion: null,
     loading: true,
-    usuario: null
+    usuario: null,
+    comentario: ''
   }
   async componentWillMount() {
     autorPublicacion = this.props.navigation.getParam('autor', null);
@@ -17,16 +18,29 @@ import { connect } from 'react-redux'
     await this.setState({ publicacion: publicacion })
     usuario = this.props.navigation.getParam('usuario', null);
     await this.setState({ usuario: usuario })
-   
-    this.setState({ loading: false })
-   
-    
+
+
+
 
   }
-  componentDidUpdate(){
-    console.log('====================================');
-    console.log(this.props.imagenPerfil);
-    console.log('====================================');
+
+  async cambioTexto(texto) {
+    await this.setState({ texto: texto })
+    console.log(this.state.texto)
+
+  }
+
+  enviarComentario(){
+    
+   this.props.enviarComentario({idPublicacion : this.state.publicacion.key, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser}) 
+  }
+  componentDidUpdate() {
+   
+    if (this.state.loading) {
+      this.setState({ loading: false })
+
+    }
+
 
   }
   render() {
@@ -36,6 +50,7 @@ import { connect } from 'react-redux'
         <View></View>
       )
     } else {
+
 
       return (
         <View style={{ flex: 1 }}>
@@ -55,17 +70,28 @@ import { connect } from 'react-redux'
           <View style={{ flex: 7, backgroundColor: '#f394f3' }}>
 
           </View>
-          <View style={{ flex: 1, flexDirection: "row" }}>
-            <View style={{flex: 2, backgroundColor: '#747474'}}>
-            
+          <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
 
+            <View style={{ flex: 2, alignItems: "center" }}>
+              <Avatar size={40} rounded source={{ uri: JSON.parse(JSON.stringify(this.props.imagenPerfil.datosUser)).fotoPerfil }} />
             </View>
-            <View style={{flex: 7,  backgroundColor: '#434343'}}></View>
-            <View style={{flex: 3, backgroundColor: '#989898'}}></View>
+            <View style={{ flex: 7, }}>
+              <TextInput
+                placeholder="Añade un comentario..."
+                onChangeText={(texto) => { this.cambioTexto(texto) }}
+              ></TextInput>
+            </View>
+            <View style={{ flex: 3, alignItems: "center" }}>
+              <TouchableHighlight onPress={()=>{this.enviarComentario()}}>
+                <Text style={{ color: '#0077CC' }}>Publicar</Text>
+              </TouchableHighlight>
+            </View>
           </View>
+
+
           {/* <Button title="Publicacion"
       onPress={()=>this.props.navigation.navigate('Autor')}></Button> */}
-        </View>
+        </View >
       )
     }
 
@@ -79,11 +105,11 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
-    dispatch1: () => {
-      dispatch(actionCreator)
+    enviarComentario: (values) => {
+      dispatch({ type: 'ENVIAR_COMENTARIO', datos: values })
     }
   }
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps, )(Comentarios)
+export default connect(mapStateToProps, mapDispatchToProps)(Comentarios)

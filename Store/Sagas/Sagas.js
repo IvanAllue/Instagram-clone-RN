@@ -305,6 +305,26 @@ function* conseguirUsuariosLikes(values) {
 }
 
 
+const escribirComentario = ({publicacionId ,comentario}) =>{
+    console.log(comentario);
+    
+   return baseDatos.ref('publicaciones/'+ publicacionId +"/comentarios/").push(comentario)
+}
+
+function* sagaEnviarComentario(values) {
+    
+    const autor = yield select(state => state.reducerSesion)
+    console.log('====================================');
+    console.log(JSON.parse(JSON.stringify(values.datos.datosUser)).fotoPerfil);
+    console.log('====================================');
+
+    let comentario = {autorId: autor.user.uid, publicacionId: values.datos.idPublicacion, contenido: values.datos.texto, fotoPerfil: JSON.parse(JSON.stringify(values.datos.datosUser)).fotoPerfil, nombreUsuario: JSON.parse(JSON.stringify(values.datos.datosUser)).usuario}
+
+   const enviarBd = yield call(escribirComentario, {publicacionId: comentario.publicacionId, comentario: comentario})
+
+}
+
+
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)//LN 37
@@ -317,6 +337,7 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.DAR_LIKE, sagaDarLike) //LN 193
     yield takeEvery(CONSTANTES.QUITAR_LIKE, sagaQuitarLike) //LN 193
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIOS_LIKES, conseguirUsuariosLikes) //LN 193
+    yield takeEvery(CONSTANTES.ENVIAR_COMENTARIO, sagaEnviarComentario) //LN 193
 
 
     console.log('Desde nuestra funcion generadora')

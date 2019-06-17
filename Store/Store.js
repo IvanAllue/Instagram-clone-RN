@@ -2,144 +2,47 @@ import { createStore, combineReducers, applyMiddleware } from 'redux'
 import { reducer as form } from 'redux-form'
 import createSagaMiddleware from 'redux-saga'
 import functionPrimaria from './Sagas/Sagas'
-import CONSTANTES from './Sagas/Constantes'
 
+//DATOS USUARIO PERFILES
+
+import {reducerSesion} from './Reducers/DatosUsuarioPerfil' //-> Obtiene los datos de usuario desde firebase
+import {reducerDatosProfile} from './Reducers/DatosUsuarioPerfil' //Requiere: uid -> Obtiene los datos del usuario de la BD
+import {reducerImagenPerfil} from './Reducers/DatosUsuarioPerfil' //-> Obtiene la url de la imagen que se va a cambiar por el usuario
+
+//ADD
+
+import {reducerImagenSeleccionada} from './Reducers/Add' //-> Imagen que el usuario piensa subir en un post
+
+//HOME
+
+import {reducerDescargarPublicaciones} from './Reducers/Home' //-> Obtiene todas las publicaciones
+import {reducerDescargarAutores} from './Reducers/Home'  //-> Obtiene los datos de usuario de la BD de los usuarios que tienen una publicacion minimo subida
+import {reducerPublicacaionesPerfilAjeno} from './Reducers/Home' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+import {reducerUsuariosLike} from './Reducers/Home' //Obtiene los usuarios BD que han dado like a una foto
+import {reducerUidsUsuarios} from './Reducers/Home' //Obtiene la uid de los usuarios que han dado like a una foto
+
+//NO AUTENTICADAS
+
+import {reducerErrorLogin} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de login
+import {reducerErrorSignup} from './Reducers/NoAutenticadas' //Comprueba si hay errores en el envio de formulario de signUp
 
 
 const sagaMiddleware = createSagaMiddleware()
 
-const reducerSesion = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.ESTABLECER_SESION:
-
-            return { user: action.datos }
-        case CONSTANTES.CERRAR_SESION:
-            return null;
-        default:
-            return state;
-    }
-}
-
-const reducerImagenPerfil = (state = { imagen: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.ESTABLECER_IMAGEN_PERFIL:
-            return { imagen: action.imagen }
-        case CONSTANTES.LIMPIAR_IMAGEN_PERFIL:
-            return { imagen: null }
-        default:
-            return state;
-    }
-}
-
-reducerImagenSeleccionada = (state = { imagenSeleccionada: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.IMAGEN_SELECCIONADA:
-            return { imagenSeleccionada: action.datos }
-        case CONSTANTES.BORRAR_IMAGEN: 
-            return { imagenSeleccionada: null }
-        default:
-            return state
-    }
-}
-
-
-
-reducerDatosProfile = (state = { datosUser: null }, action) => {
-    switch (action.type) {
-        case CONSTANTES.GUARDAR_DATOS_USER:
-            return { datosUser: action.datos }
-        case CONSTANTES.LIMPIAR_USUARIO:
-            return null
-        default:
-            return state
-    }
-}
-
-const reducerDescargarPublicaciones = (state = null, action) => {
-
-    switch (action.type) {
-        case CONSTANTES.OBTENER_PUBLICACIONES:
-            return [...action.publicaciones].reverse()
-        default:
-            return state
-    }
-}
-
-const reducerDescargarAutores = (state = null, action) => {
-
-    switch (action.type) {
-        case CONSTANTES.OBTENER_AUTORES:
-            return [...action.autores].reverse()
-        default:
-            return state
-    }
-}
-
-
-
-const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.PUBLICACIONES_PERFIL_AJENO:
-            
-            return [...action.publicacionesPerfil].reverse();
-
-        default:
-            return state;
-    }
-}
-
-reducerUsuariosLike = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.PONER_USUARIOS_LIKE:
-            
-            return [...action.usuariosLike]
-
-        default:
-            return state;
-    }
-}
-reducerUidsUsuarios = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.CONSEGUIR_UID_LIKES:
-            
-            return [...action.usuariosId]
-        default:
-            return state;
-    }
-}
-
-reducerErrorLogin = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.ERROR_EN_LOGIN:
-            
-            return action.error
-        default:
-            return state;
-    }
-}
-
-reducerErrorSignup = (state = null, action) => {
-    switch (action.type) {
-        case CONSTANTES.ERROR_EN_SIGNUP:
-            
-            
-            return action.error
-        default:
-            return state;
-    }
-}
-
 const reducers = combineReducers({
     form,
-    reducerSesion, //LN 11
-    reducerImagenPerfil, //LN 22
-    reducerImagenSeleccionada, //LN 33
-    reducerDatosProfile, //LN 42
-    reducerDescargarPublicaciones, //LN 51
-    reducerDescargarAutores, //LN 61
+    reducerSesion, 
+    reducerDatosProfile,
+    reducerImagenPerfil, 
+
+    reducerImagenSeleccionada, 
+    
+    reducerDescargarPublicaciones, 
+    reducerDescargarAutores, 
     reducerPublicacaionesPerfilAjeno,
     reducerUsuariosLike,
     reducerUidsUsuarios,
+    
     reducerErrorLogin,
     reducerErrorSignup
 })
