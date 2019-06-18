@@ -15,24 +15,37 @@ var width = Dimensions.get('window').width;
 
 class SignUp extends Component {
 
+
+  componentDidUpdate(){
+    if (this.props.error == 0) {
+      Alert.alert(
+        '¡ERROR DURANTE EL REGISTRO!',
+        'Ya existe un usuario con ese correo electronico.',
+        [
+
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false },
+      )
+
+    }else if(this.props.error == 1){
+      Alert.alert(
+        '¡ERROR DURANTE EL REGISTRO!',
+        'Ya existe un usuario con ese nombre.',
+        [
+
+          { text: 'OK', onPress: () => console.log('OK Pressed') },
+        ],
+        { cancelable: false },
+      )
+    }
+  }
+
   registroDelUsuario = (values) => {
 
     this.props.registro(values)
 
-    setTimeout(() => {
-      if (this.props.error == true) {
-        Alert.alert(
-          '¡ERROR DURANTE EL REGISTRO!',
-          'Ya existe un usuario con ese correo electronico.',
-          [
-
-            { text: 'OK', onPress: () => console.log('OK Pressed') },
-          ],
-          { cancelable: false },
-        )
-
-      }
-    }, 1200)
+   
   }
 
   render() {

@@ -17,19 +17,51 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
     fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg'
 }).then(response => response)
 
+const listaUsuarios = ({ uid, nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).set({
+    [uid]: true
+})
+
+const comprobarNombre = ({ nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).once('value').then(snapshot => {
+   
+    if (snapshot.val() == null){
+        console.log('nulo');
+
+        return false
+    }else{
+        return true
+    }
+    
+}).catch(snapshot => false)
+
 function* sagaRegistro(values) {
     try {
-        const registro = yield call(registroEnFirebase, values.datos) //LN 10
-        if (registro == true) {
-            error = true
+        const { datos: { nombre } } = values
+        const existe = yield call(comprobarNombre, { nombre })
+        console.log(existe);
+
+        if (existe) {
+            error = 1
             yield put({ type: CONSTANTES.ERROR_EN_SIGNUP, error })
         } else {
-            error = false
-            yield put({ type: CONSTANTES.ERROR_EN_SIGNUP, error })
-            const { email, uid } = registro.user
-            const { datos: { nombre } } = values
-            yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+            const registro = yield call(registroEnFirebase, values.datos) //LN 10
+            if (registro == true) {
+                error = 0
+                yield put({ type: CONSTANTES.ERROR_EN_SIGNUP, error })
+            } else {
+                error = false
+                yield put({ type: CONSTANTES.ERROR_EN_SIGNUP, error })
+                const { email, uid } = registro.user
+                yield call(registroEnBaseDatos, { uid, email, nombre })  //LN 13
+                yield call(listaUsuarios, { uid, nombre })
+            }
+
+
         }
+
+
+
+
+
 
     } catch (error) {
         console.log(error);
@@ -305,7 +337,7 @@ function* conseguirUsuariosLikes(values) {
 }
 
 
-const escribirComentario = ({ publicacionId, comentario }) =>  baseDatos.ref('publicaciones/' + publicacionId + "/comentarios/").push(comentario)
+const escribirComentario = ({ publicacionId, comentario }) => baseDatos.ref('publicaciones/' + publicacionId + "/comentarios/").push(comentario)
 
 
 
@@ -320,28 +352,28 @@ function* sagaEnviarComentario(values) {
 
     const enviarBd = yield call(escribirComentario, { publicacionId: comentario.publicacionId, comentario: comentario })
 
-    const subirComentarioStore = yield put({type: CONSTANTES.COMENTARIOS_STORE_UNO, datos: comentario})
+    const subirComentarioStore = yield put({ type: CONSTANTES.COMENTARIOS_STORE_UNO, datos: comentario })
 
-    
+
 }
 
-const descargarComentariosBd = (publicacionId)=> baseDatos.ref('publicaciones/' + publicacionId + "/comentarios/").once('value').then(snapshot => {
-        let arrayComentarios = []
-        snapshot.forEach(comentario => {
-           arrayComentarios.push(comentario)
-            
-        })
-        return arrayComentarios
+const descargarComentariosBd = (publicacionId) => baseDatos.ref('publicaciones/' + publicacionId + "/comentarios/").once('value').then(snapshot => {
+    let arrayComentarios = []
+    snapshot.forEach(comentario => {
+        arrayComentarios.push(comentario)
+
     })
+    return arrayComentarios
+})
 
 
 
 function* sagaDescargarComentarios(values) {
-    
-     const conseguirComentarios = yield call(descargarComentariosBd,   values.datos)
+
+    const conseguirComentarios = yield call(descargarComentariosBd, values.datos)
 
 
-    const subirAlStore = yield put({type: CONSTANTES.COMENTARIOS_STORE_TODOS, datos: conseguirComentarios})
+    const subirAlStore = yield put({ type: CONSTANTES.COMENTARIOS_STORE_TODOS, datos: conseguirComentarios })
 }
 
 
