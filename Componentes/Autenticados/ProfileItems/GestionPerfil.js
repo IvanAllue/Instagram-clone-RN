@@ -4,9 +4,7 @@ import { connect } from 'react-redux'
 import { Avatar } from 'react-native-elements';
 
 const GestionPerfil = (props) => {
-    console.log('====================================');
-    console.log(this.props);
-    console.log('====================================');
+   
     let { image } = props.imagen
 
     if (props.imagen.imagen != null) {

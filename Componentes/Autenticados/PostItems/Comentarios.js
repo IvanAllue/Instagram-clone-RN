@@ -91,10 +91,13 @@ class Comentarios extends Component {
               <TextInput
                 placeholder="Añade un comentario..."
                 onChangeText={(texto) => { this.cambioTexto(texto) }}
+                ref={input => { this.textInput = input }} 
               ></TextInput>
             </View>
             <View style={{ flex: 3, alignItems: "center" }}>
-              <TouchableHighlight onPress={() => { this.enviarComentario() }}>
+              <TouchableHighlight onPress={() => { 
+                this.enviarComentario() 
+                this.textInput.clear()}}>
                 <Text style={{ color: '#0077CC' }}>Publicar</Text>
               </TouchableHighlight>
             </View>

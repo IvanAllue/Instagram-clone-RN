@@ -3,6 +3,7 @@ import Post from '../Post';
 import Search from '../Search'
 import Profile from '../Profile';
 import Comentarios from '../PostItems/Comentarios';
+import SearchProfile from '../SearchItems/SearchProfile'
 
 const StackSearch = createStackNavigator({
     Search: {
@@ -16,6 +17,9 @@ const StackSearch = createStackNavigator({
     },
     Comentarios: {
         screen: Comentarios
+    },
+    SearchProfile: {
+        screen:SearchProfile
     }
 },
 {
