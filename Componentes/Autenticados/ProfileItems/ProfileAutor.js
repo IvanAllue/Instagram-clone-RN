@@ -22,7 +22,9 @@ class ProfileAutor extends Component {
     }
     this.setState({ listaPublicaciones: listaPublicaciones })
 
-    this.setState({ loadingImages: false })
+    await this.setState({ loadingImages: false })
+    await this.setState({ loading: false })
+
 
   }
 
@@ -54,7 +56,6 @@ class ProfileAutor extends Component {
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
-        await this.setState({ loading: false })
       }
     }, 200)
 
@@ -111,7 +112,7 @@ class ProfileAutor extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={false} />
+              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={false} user={JSON.parse(this.state.datosUser)} publicaciones={this.state.publicaciones.length  } />
 
             </View>
 

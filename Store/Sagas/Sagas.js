@@ -14,7 +14,7 @@ const registroEnFirebase = values =>
 const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' + uid).set({
     usuario: nombre,
     email: email,
-    fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg'
+    fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',    
 }).then(response => response)
 
 const listaUsuarios = ({ uid, nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).set({

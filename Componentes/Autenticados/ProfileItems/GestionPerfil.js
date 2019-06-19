@@ -1,16 +1,25 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Button } from 'react-native';
 import { connect } from 'react-redux'
 import { Avatar } from 'react-native-elements';
 
 const GestionPerfil = (props) => {
-   
+    seguidores = 0
+    seguidos = 0
     let { image } = props.imagen
 
     if (props.imagen.imagen != null) {
         image = props.imagen.imagen
     }
+    if (typeof props.user.seguidores == 'undefined') {
+    }
+    if (typeof props.user.seguidores != 'undefined') {
 
+    }
+
+    console.log('====================================');
+    console.log(props);
+    console.log('====================================');
 
     return (
         <View style={styles.container}>
@@ -39,14 +48,55 @@ const GestionPerfil = (props) => {
                 </View>
             </View>
             <View style={{ flex: 7, backgroundColor: '#fff' }}>
-                <View style={{ flex: 1 }}>
-                    <Text>qaz</Text>
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                    <View style={{ flex: 5, flexDirection: "column" }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
+                                {props.publicaciones}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 14, color: '#808080' }}>
+                                Publicaciones
+                        </Text>
+                        </View>
+                    </View>
+                    <View style={{ flex: 5, flexDirection: "column" }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
+                                {seguidores}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 14, color: '#808080' }}>
+                                Seguidores
+                        </Text>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 5 }}>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
+                                {seguidos}
+                            </Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                            <Text style={{ textAlign: "center", fontSize: 14, color: '#808080' }}>
+                                Seguidos
+                        </Text>
+                        </View>
+                    </View>
                 </View>
                 <View style={{ flex: 1 }}>
-                    {props.editor &&
+                    {props.editor ?
                         <TouchableOpacity style={styles.button}
                             onPress={props.editar}>
                             <Text style={{ textAlign: 'center' }}>Editar perfil</Text>
+                        </TouchableOpacity>
+                        :
+                        <TouchableOpacity style={styles.buttonSeguir}
+                            onPress={props.editar}>
+                            <Text style={{ textAlign: 'center', color: '#fff', fontWeight: "bold" }}>Seguir</Text>
                         </TouchableOpacity>
                     }
                 </View>
@@ -70,6 +120,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         borderRadius: 5,
+    },
+    buttonSeguir: {
+        backgroundColor: '#2296F3',
+        marginRight: 5,
+        borderRadius: 5,
+        padding: 5,
+
     }
 });
 

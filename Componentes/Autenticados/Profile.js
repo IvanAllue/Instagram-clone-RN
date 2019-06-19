@@ -21,7 +21,9 @@ class Profile extends Component {
     }
     this.setState({ listaPublicaciones: listaPublicaciones })
 
-    this.setState({ loadingImages: false })
+    await this.setState({ loadingImages: false })
+    await this.setState({ loading: false })
+
 
   }
   componentDidUpdate() {
@@ -51,7 +53,6 @@ class Profile extends Component {
    
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
-        await this.setState({ loading: false })
       }
   
 
@@ -93,7 +94,7 @@ class Profile extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true} />
+              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true}  publicaciones={this.state.listaPublicaciones.length} user={this.props.datosUsuario.datosUser} />
 
             </View>
             {!this.state.loadingImages ?
