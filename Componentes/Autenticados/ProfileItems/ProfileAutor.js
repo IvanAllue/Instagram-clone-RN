@@ -22,6 +22,9 @@ class ProfileAutor extends Component {
     }
     this.setState({ listaPublicaciones: listaPublicaciones })
 
+
+
+
     await this.setState({ loadingImages: false })
     await this.setState({ loading: false })
 
@@ -40,7 +43,8 @@ class ProfileAutor extends Component {
     loadingImages: true,
     datosUser: null,
     publicaciones: null,
-    listaPublicaciones: null
+    listaPublicaciones: null,
+    editor: false
   };
   componentWillMount() {
     this.props.limpiarUsuarioImagenes()
@@ -56,6 +60,11 @@ class ProfileAutor extends Component {
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
+        if (this.props.usuarioProio.user.uid == autorId){
+            this.setState({editor: true})
+        }
+        
+        
       }
     }, 200)
 
@@ -116,7 +125,7 @@ class ProfileAutor extends Component {
               uid={this.state.autorId} 
               editar={this.irEditarPerfil}
                foto={JSON.parse(this.state.datosUser).fotoPerfil} 
-               editor={false} user={JSON.parse(this.state.datosUser)} 
+               editor={this.state.editor} user={JSON.parse(this.state.datosUser)} 
                publicaciones={this.state.publicaciones.length  } />
 
             </View>
@@ -159,7 +168,8 @@ const mapStateToProps = (state, ownProps) => {
   return {
     usuario: state.reducerSesion,
     datosUsuario: state.reducerDatosProfileAjeno,
-    getPublicacionesUsuario: state.reducerPublicacaionesPerfilAjeno
+    getPublicacionesUsuario: state.reducerPublicacaionesPerfilAjeno,
+    usuarioProio: state.reducerSesion
   }
 }
 
