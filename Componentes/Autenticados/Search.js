@@ -23,10 +23,7 @@ export default class Search extends Component {
         <View style={{ flex: 9, backgroundColor: '#454545' }}>
 
         </View>
-        {/* <Button title="Ir a los post"
-        onPress={()=>{this.props.navigation.navigate('Post')}}> */}
-
-        {/* </Button> */}
+       
       </View>
     )
   }

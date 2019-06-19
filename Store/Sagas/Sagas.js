@@ -18,7 +18,7 @@ const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' +
 }).then(response => response)
 
 const listaUsuarios = ({ uid, nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).set({
-    [uid]: true
+   uid: uid
 })
 
 const comprobarNombre = ({ nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).once('value').then(snapshot => {
@@ -376,6 +376,21 @@ function* sagaDescargarComentarios(values) {
     const subirAlStore = yield put({ type: CONSTANTES.COMENTARIOS_STORE_TODOS, datos: conseguirComentarios })
 }
 
+const buscarNombreEnBd = (nombre) => baseDatos.ref('ListaUsuarios/').orderByKey().startAt(nombre).endAt(nombre+"\uf8ff").once('value').then(snapshot => {
+   arrayUsuarios = []
+
+   snapshot.forEach(snap => {
+       arrayUsuarios.push({nombre: snap.key, datos: snap.val()})
+   })
+    return arrayUsuarios   
+    
+})
+function* sagaBuscarUsuarioPorNombre(values) {
+  const usuarios = yield call(buscarNombreEnBd, values.datos)
+
+  yield put({type: CONSTANTES.USUARIOS_BUSCADOS_NOMBRE, usuarios})
+    
+}
 
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
@@ -391,6 +406,8 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIOS_LIKES, conseguirUsuariosLikes) //LN 193
     yield takeEvery(CONSTANTES.ENVIAR_COMENTARIO, sagaEnviarComentario) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_COMENTARIOS, sagaDescargarComentarios) //LN 193
+    yield takeEvery(CONSTANTES.SAGA_BUSCAR_USUARIO_NOMBRE, sagaBuscarUsuarioPorNombre) //LN 193
+
 
 
 

@@ -46,11 +46,11 @@ class Likes extends PureComponent {
                   <TouchableWithoutFeedback onPress={()=>{this.props.navigation.navigate('AutorProfile', { uid: this.props.userUids[index] })}}>
                 <View style={{ height: 80, marginLeft: 20, flexDirection: "row", marginTop: 10 }}>
                   <View style={{ flex: 2 }}>
-                    <Avatar size={75} rounded source={{ uri: JSON.parse(JSON.stringify(item)).fotoPerfil }} />
+                    <Avatar size={55} rounded source={{ uri: JSON.parse(JSON.stringify(item)).fotoPerfil }} />
 
                   </View>
-                  <View style={{ flex: 6 }}>
-                    <Text style={{ fontWeight: "bold", fontSize: 18, marginTop: 15 }}>{JSON.parse(JSON.stringify(item)).usuario}</Text>
+                  <View style={{ flex: 9 }}>
+                    <Text style={{ fontWeight: "bold", fontSize: 15, marginTop: 15 }}>{JSON.parse(JSON.stringify(item)).usuario}</Text>
                   </View>
                 </View>
               </TouchableWithoutFeedback>

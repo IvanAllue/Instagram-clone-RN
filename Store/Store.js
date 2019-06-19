@@ -31,6 +31,8 @@ import {reducerComentarios} from './Reducers/Post/Comentarios' //Obtiene los com
 import {reducerUsuariosLike} from './Reducers/Post/Likes' //Obtiene los usuarios BD que han dado like a una foto
 import {reducerUidsUsuarios} from './Reducers/Post/Likes' //Obtiene la uid de los usuarios que han dado like a una foto
 
+import {reducerUsuariosBuscados} from './Reducers/Search' //Obtiene la uid de los usuarios que han dado like a una foto
+
 const sagaMiddleware = createSagaMiddleware()
 
 const reducers = combineReducers({
@@ -50,7 +52,9 @@ const reducers = combineReducers({
     reducerErrorLogin,
     reducerErrorSignup,
     
-    reducerComentarios
+    reducerComentarios,
+
+    reducerUsuariosBuscados
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

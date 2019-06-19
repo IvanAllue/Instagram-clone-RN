@@ -28,6 +28,7 @@ class ProfileAutor extends Component {
 
   componentWillUnmount() {
     this.props.limpiarUsuarioImagenes()
+     this.props.conseguirUsuario( this.props.usuario.user.uid)
     console.log('adios');
 
   }
@@ -41,6 +42,7 @@ class ProfileAutor extends Component {
     listaPublicaciones: null
   };
   componentWillMount() {
+    this.props.limpiarUsuarioImagenes()
     this.cargarDatos()
   }
 
