@@ -14,23 +14,23 @@ const registroEnFirebase = values =>
 const registroEnBaseDatos = ({ uid, email, nombre }) => baseDatos.ref('Users/' + uid).set({
     usuario: nombre,
     email: email,
-    fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',    
+    fotoPerfil: 'https://biospain2018.org/wp-content/uploads/2018/08/everis-logo.jpg',
 }).then(response => response)
 
 const listaUsuarios = ({ uid, nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).set({
-   uid: uid
+    uid: uid
 })
 
 const comprobarNombre = ({ nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).once('value').then(snapshot => {
-   
-    if (snapshot.val() == null){
+
+    if (snapshot.val() == null) {
         console.log('nulo');
 
         return false
-    }else{
+    } else {
         return true
     }
-    
+
 }).catch(snapshot => false)
 
 function* sagaRegistro(values) {
@@ -376,20 +376,54 @@ function* sagaDescargarComentarios(values) {
     const subirAlStore = yield put({ type: CONSTANTES.COMENTARIOS_STORE_TODOS, datos: conseguirComentarios })
 }
 
-const buscarNombreEnBd = (nombre) => baseDatos.ref('ListaUsuarios/').orderByKey().startAt(nombre).endAt(nombre+"\uf8ff").once('value').then(snapshot => {
-   arrayUsuarios = []
+const buscarNombreEnBd = (nombre) => baseDatos.ref('ListaUsuarios/').orderByKey().startAt(nombre).endAt(nombre + "\uf8ff").once('value').then(snapshot => {
+    arrayUsuarios = []
 
-   snapshot.forEach(snap => {
-       arrayUsuarios.push({nombre: snap.key, datos: snap.val()})
-   })
-    return arrayUsuarios   
-    
+    snapshot.forEach(snap => {
+        arrayUsuarios.push({ nombre: snap.key, datos: snap.val() })
+    })
+    return arrayUsuarios
+
 })
 function* sagaBuscarUsuarioPorNombre(values) {
-  const usuarios = yield call(buscarNombreEnBd, values.datos)
+    const usuarios = yield call(buscarNombreEnBd, values.datos)
 
-  yield put({type: CONSTANTES.USUARIOS_BUSCADOS_NOMBRE, usuarios})
+    yield put({ type: CONSTANTES.USUARIOS_BUSCADOS_NOMBRE, usuarios })
+
+}
+const seguirUserBd = ({ uid, userId }) => baseDatos.ref('Users/' + uid + '/followers').update(
+    {
+        [userId]: true
+    }
+)
+const subirContadorSeguidores = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
+    contFollowers: cantidad
+})
+
+const seguidoUserBd = ({ uid, userId }) => baseDatos.ref('Users/' + uid + '/follow').update(
+    {
+        [userId]: true
+    }
+)
+const subirContadorSeguidos = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
+    contFollows: cantidad
+})
+
+function* sagaSeguirUsuario(values) {
+    const usuario = yield select(state => state.reducerSesion)
+
+    yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
+
+    yield call(subirContadorSeguidores, { uid: values.values.uid, cantidad: values.values.user.contFollowers + 1 })
+
+    usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
     
+    yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
+
+    yield call(subirContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(usuarioActual)).contFollows + 1 })
+
+
+
 }
 
 export default function* functionPrimaria() {
@@ -407,6 +441,7 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.ENVIAR_COMENTARIO, sagaEnviarComentario) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_COMENTARIOS, sagaDescargarComentarios) //LN 193
     yield takeEvery(CONSTANTES.SAGA_BUSCAR_USUARIO_NOMBRE, sagaBuscarUsuarioPorNombre) //LN 193
+    yield takeEvery(CONSTANTES.SEGUIR_USUARIO, sagaSeguirUsuario) //LN 193
 
 
 

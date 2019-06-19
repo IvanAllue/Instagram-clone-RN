@@ -52,6 +52,7 @@ class ProfileAutor extends Component {
     const autorId = this.props.navigation.getParam('uid', this.props.usuario.user.uid);
     await this.props.conseguirPublicaciones(autorId)
     await this.props.conseguirUsuario(autorId)
+    await this.setState({autorId: autorId})
 
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
@@ -112,7 +113,7 @@ class ProfileAutor extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={false} user={JSON.parse(this.state.datosUser)} publicaciones={this.state.publicaciones.length  } />
+              <GestionPerfil uid={this.state.autorId} editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={false} user={JSON.parse(this.state.datosUser)} publicaciones={this.state.publicaciones.length  } />
 
             </View>
 
