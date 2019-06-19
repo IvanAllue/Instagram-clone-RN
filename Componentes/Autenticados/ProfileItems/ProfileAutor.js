@@ -31,7 +31,6 @@ class ProfileAutor extends Component {
   componentWillUnmount() {
     this.props.limpiarUsuarioImagenes()
      this.props.conseguirUsuario( this.props.usuario.user.uid)
-    console.log('adios');
 
   }
 
@@ -113,7 +112,12 @@ class ProfileAutor extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil uid={this.state.autorId} editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={false} user={JSON.parse(this.state.datosUser)} publicaciones={this.state.publicaciones.length  } />
+              <GestionPerfil 
+              uid={this.state.autorId} 
+              editar={this.irEditarPerfil}
+               foto={JSON.parse(this.state.datosUser).fotoPerfil} 
+               editor={false} user={JSON.parse(this.state.datosUser)} 
+               publicaciones={this.state.publicaciones.length  } />
 
             </View>
 
@@ -154,7 +158,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state, ownProps) => {
   return {
     usuario: state.reducerSesion,
-    datosUsuario: state.reducerDatosProfile,
+    datosUsuario: state.reducerDatosProfileAjeno,
     getPublicacionesUsuario: state.reducerPublicacaionesPerfilAjeno
   }
 }
@@ -162,7 +166,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     conseguirUsuario: (values) => {
-      dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
+      dispatch({ type: 'CONSEGUIR_USUARIO_PERFIL_AJENO', datos: values })
     },
     limpiarUsuarioImagenes: () => {
       dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })

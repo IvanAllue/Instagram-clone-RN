@@ -8,13 +8,21 @@ class GestionPerfil extends Component {
         super(props);
         this.state = {
             seguidores: this.props.user.contFollowers,
-            seguidos: this.props.user.contFollows
+            seguidos: this.props.user.contFollows,
+            permitido: true
         };
     }
 
-    componentWillMount(){
-       console.log(this.props);
+    componentDidMount(){
        
+        for (i in JSON.parse(JSON.stringify(this.props.datosUsuario.datosUser)).follow){
+           if (i == this.props.uid){
+                this.setState({permitido: false})
+           }
+            
+        }
+   
+
     }
 
     render() {
@@ -95,11 +103,19 @@ class GestionPerfil extends Component {
                                 <Text style={{ textAlign: 'center' }}>Editar perfil</Text>
                             </TouchableOpacity>
                             :
-                            <TouchableOpacity style={styles.buttonSeguir}
+                           this.state.permitido ? 
+                           <TouchableOpacity style={styles.buttonSeguir}
                                 onPress={
                                    ()=>{ this.props.seguirUsuario({uid: this.props.uid, user: this.props.user})}
                                 }>
                                 <Text style={{ textAlign: 'center', color: '#fff', fontWeight: "bold" }}>Seguir</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.buttonSeguir}
+                                onPress={
+                                   ()=>{ this.props.seguirUsuario({uid: this.props.uid, user: this.props.user})}
+                                }>
+                                <Text style={{ textAlign: 'center', color: '#fff', fontWeight: "bold" }}>Dejar de seguir</Text>
                             </TouchableOpacity>
                         }
                     </View>
@@ -138,7 +154,9 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        imagen: state.reducerImagenPerfil
+        imagen: state.reducerImagenPerfil,
+        datosUsuario: state.reducerDatosProfile,
+
     }
 }
 
@@ -146,6 +164,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         seguirUsuario: (values) => {
             dispatch({type: 'SEGUIR_USUARIO', values})
+        },
+        dejarDeSeguir: (values) => {
+            dispatch({type: 'DEJAR_SEGUIR_USUARIO', values})
+
         }
     }
 }

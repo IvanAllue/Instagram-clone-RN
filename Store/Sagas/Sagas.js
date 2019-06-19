@@ -24,7 +24,6 @@ const listaUsuarios = ({ uid, nombre }) => baseDatos.ref('ListaUsuarios/' + nomb
 const comprobarNombre = ({ nombre }) => baseDatos.ref('ListaUsuarios/' + nombre).once('value').then(snapshot => {
 
     if (snapshot.val() == null) {
-        console.log('nulo');
 
         return false
     } else {
@@ -37,7 +36,6 @@ function* sagaRegistro(values) {
     try {
         const { datos: { nombre } } = values
         const existe = yield call(comprobarNombre, { nombre })
-        console.log(existe);
 
         if (existe) {
             error = 1
@@ -64,7 +62,6 @@ function* sagaRegistro(values) {
 
 
     } catch (error) {
-        console.log(error);
     }
 }
 
@@ -87,7 +84,6 @@ function* sagaLogin(values) {
         }
 
     } catch (error) {
-        console.log(error);
     }
 }
 
@@ -107,7 +103,6 @@ const subirFotoPerfil = async ({ imagen }) => {
                 resolve(xhr.response);
             };
             xhr.onerror = function (e) {
-                console.log(e);
                 reject(new TypeError('Network request failed'));
             };
             xhr.responseType = 'blob';
@@ -176,9 +171,7 @@ function* sagaLoginFacebook(values) {
 //
 
 const subirImagenStorage = async (imagen) => {
-    console.log('====================================');
-    console.log(imagen);
-    console.log('====================================');
+ 
     if (imagen != null) {
         const splitName = imagen.split('/')
         const name = [...splitName].pop()
@@ -188,7 +181,6 @@ const subirImagenStorage = async (imagen) => {
                 resolve(xhr.response);
             };
             xhr.onerror = function (e) {
-                console.log(e);
                 reject(new TypeError('Network request failed'));
             };
             xhr.responseType = 'blob';
@@ -203,9 +195,7 @@ const subirImagenStorage = async (imagen) => {
 }
 
 const subirFotoDatabase = (datos) => {
-    console.log('====================================');
-    console.log(datos);
-    console.log('====================================');
+   
     return baseDatos.ref('publicaciones/').push({
         url: datos.url,
         texto: datos.pie,
@@ -231,7 +221,12 @@ function* sagaSubirImagen(values) {
 
 function* sagaConseguirUsuario(values) {
     const usuario = yield call(conseguirUsuarioBd, values.datos) //LN 79
-    yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
+    if (values.type == CONSTANTES.CONSEGUIR_USUARIO){
+        yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
+    }else{
+        yield put({ type: CONSTANTES.GUARDAR_DATOS_USER_PERFIL_AJENO, datos: usuario })
+    }
+    
 
 }
 
@@ -432,7 +427,10 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.LOGIN_FACEBOOK, sagaLoginFacebook)
     yield takeEvery(CONSTANTES.CONFIRMAR_CAMBIOS_PERFIL, sagaImagenPerfil)//LN 83
     yield takeEvery(CONSTANTES.SUBIR_IMAGEN, sagaSubirImagen)//LN 153
+
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO, sagaConseguirUsuario) //LN 165
+    yield takeEvery(CONSTANTES.CONSEGUIR_USUARIO_PERFIL_AJENO, sagaConseguirUsuario) //LN 165
+
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones) //LN 193
     yield takeEvery(CONSTANTES.CONSEGUIR_PUBLICACIONES, sagaConseguirPublicaciones) //LN 193
     yield takeEvery(CONSTANTES.DAR_LIKE, sagaDarLike) //LN 193
@@ -446,5 +444,4 @@ export default function* functionPrimaria() {
 
 
 
-    console.log('Desde nuestra funcion generadora')
 }

@@ -21,7 +21,6 @@ class NuevaPublicacion extends PureComponent {
         if (JSON.parse(JSON.stringify(this.props.imagen)).imagenSeleccionada == null){
             this.props.navigation.goBack()
         }
-        console.log(JSON.parse(JSON.stringify(this.props.imagen)));
 
         return (
             

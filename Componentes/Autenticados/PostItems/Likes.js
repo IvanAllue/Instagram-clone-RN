@@ -41,7 +41,6 @@ class Likes extends PureComponent {
           <FlatList data={this.props.usuarios}
             renderItem={({ item, index }) =>
               {
-                console.log(index)
                 return(
                   <TouchableWithoutFeedback onPress={()=>{this.props.navigation.navigate('AutorProfile', { uid: this.props.userUids[index] })}}>
                 <View style={{ height: 80, marginLeft: 20, flexDirection: "row", marginTop: 10 }}>

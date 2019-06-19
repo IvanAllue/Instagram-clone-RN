@@ -16,6 +16,8 @@ import {reducerImagenSeleccionada} from './Reducers/Add' //-> Imagen que el usua
 
 import {reducerDescargarPublicaciones} from './Reducers/Home' //-> Obtiene todas las publicaciones
 import {reducerDatosProfile} from './Reducers/Home' //Requiere: uid -> Obtiene los datos del usuario de la BD
+import {reducerDatosProfileAjeno} from './Reducers/Home' //Requiere: uid -> Obtiene los datos del usuario de la BD
+
 import {reducerDescargarAutores} from './Reducers/Home'  //-> Obtiene los datos de usuario de la BD de los usuarios que tienen una publicacion minimo subida
 
 
@@ -54,7 +56,9 @@ const reducers = combineReducers({
     
     reducerComentarios,
 
-    reducerUsuariosBuscados
+    reducerUsuariosBuscados,
+
+    reducerDatosProfileAjeno
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

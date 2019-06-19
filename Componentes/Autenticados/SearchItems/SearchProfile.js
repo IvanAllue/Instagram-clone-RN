@@ -14,7 +14,6 @@ class SearchProfile extends Component {
 
 
     render() {
-        console.log(this.props.usuariosBuscar);
 
         return (
             <View style={{ flex: 1 }}>

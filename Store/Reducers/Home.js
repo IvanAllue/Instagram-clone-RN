@@ -21,6 +21,17 @@ export const reducerDatosProfile = (state = { datosUser: null }, action) => {
     }
 }
 
+export const reducerDatosProfileAjeno = (state = { datosUser: null }, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_DATOS_USER_PERFIL_AJENO:
+            return { datosUser: action.datos }
+        case CONSTANTES.LIMPIAR_USUARIO:
+            return null
+        default:
+            return state
+    }
+}
+
 export const reducerDescargarAutores = (state = null, action) => {
 
     switch (action.type) {

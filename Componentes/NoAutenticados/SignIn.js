@@ -13,7 +13,6 @@ var width = Dimensions.get('window').width;
 
         setTimeout(()=>{
             if (this.props.error == true){
-                console.log(this.props.error);
                 
                 Alert.alert(
                     '¡ERROR DURANTE LA IDENTIFICACIÓN!',
@@ -44,7 +43,6 @@ var width = Dimensions.get('window').width;
           
           autenticacion.signInWithCredential(credential).then((values) => {this.props.loginFb(values)})
           .catch((error) => {
-            console.log(error)
           })
         }
       }

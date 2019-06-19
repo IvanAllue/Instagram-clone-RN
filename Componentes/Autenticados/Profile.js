@@ -94,7 +94,13 @@ class Profile extends Component {
           <View style={{ borderTopColor: '#D6D6D6', borderTopWidth: 1, width: width }}>
 
             <View style={{ height: height * 0.2 }}>
-              <GestionPerfil editar={this.irEditarPerfil} foto={JSON.parse(this.state.datosUser).fotoPerfil} editor={true}  publicaciones={this.state.listaPublicaciones.length} user={this.props.datosUsuario.datosUser} />
+              <GestionPerfil 
+              uid = {this.props.usuario.user.uid}
+              editar={this.irEditarPerfil} 
+              foto={JSON.parse(this.state.datosUser).fotoPerfil} 
+              editor={true}  
+              publicaciones={this.state.listaPublicaciones.length} 
+              user={JSON.parse(JSON.stringify(this.props.datosUsuario.datosUser))} />
 
             </View>
             {!this.state.loadingImages ?

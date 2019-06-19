@@ -129,7 +129,6 @@ class EditarPerfil extends Component {
 
 
     if (!result.cancelled) {
-      console.log(result);
 
       this.props.cargarImagen(result)
     }

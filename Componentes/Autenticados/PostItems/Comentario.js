@@ -14,9 +14,7 @@ export default class Comentario extends Component {
     }
     async componentWillMount() {
      await   this.setState({ comentario: JSON.parse(JSON.stringify(this.props.item)) })
-     console.log('====================================');
-     console.log(this.state.comentario.autorId);
-     console.log('====================================');
+    
     }
 
     render() {

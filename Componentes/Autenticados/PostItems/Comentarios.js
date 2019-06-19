@@ -29,7 +29,6 @@ class Comentarios extends Component {
 
   async cambioTexto(texto) {
     await this.setState({ texto: texto })
-    console.log(this.state.texto)
 
   }
 

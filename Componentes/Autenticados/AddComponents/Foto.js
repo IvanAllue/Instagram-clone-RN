@@ -23,7 +23,6 @@ class Foto extends Component {
 
 
         if (!result.cancelled) {
-            console.log(result);
             await this.setState({ image: result.uri });
             await this.props.imagenSeleccionada(result.uri)
 

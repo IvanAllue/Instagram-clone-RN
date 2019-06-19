@@ -30,7 +30,6 @@ class Add extends Component {
     this.setState({ imageSelected: uri });
     await this.props.imagenSeleccionada(uri)
 
-    console.log(this.props.imagen.imagenSeleccionada);
 
 
 

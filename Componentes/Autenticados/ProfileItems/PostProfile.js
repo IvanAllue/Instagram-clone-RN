@@ -11,7 +11,6 @@ export default class PostProfile extends PureComponent {
     }
 
     render() {
-        console.log(this.props.item);
         
         
         if (this.props.item[2] != null) {

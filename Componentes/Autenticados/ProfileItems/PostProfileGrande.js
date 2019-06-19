@@ -10,7 +10,6 @@ export default class PostProfileGrande extends PureComponent {
      this.setState({imagen:imagen})
      this.setState({usuario:user})
      this.setState({editor: editor})
-     console.log(this.state);
      
      
     }
