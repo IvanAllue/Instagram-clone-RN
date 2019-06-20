@@ -68,13 +68,13 @@ class Post extends Component {
               size={30}
               rounded
               source={{
-                uri: JSON.parse(JSON.stringify(this.props.autor)).fotoPerfil
+                uri: this.props.autor.fotoPerfil
               }}
             />
           </View>
           <View style={{ flex: 6, justifyContent: "center" }}>
             <TouchableHighlight onPress={() => this.props.navigation.navigate('AutorProfile', { uid: this.props.item.uid })}>
-              <Text style={{ fontWeight: "bold" }}>{JSON.parse(JSON.stringify(this.props.autor)).usuario}</Text>
+              <Text style={{ fontWeight: "bold" }}>{this.props.autor.usuario}</Text>
             </TouchableHighlight>
           </View>
         </View>

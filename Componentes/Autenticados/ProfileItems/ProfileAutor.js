@@ -9,7 +9,12 @@ var height = Dimensions.get('window').height;
 import GestionPerfil from './GestionPerfil'
 
 class ProfileAutor extends Component {
+async componentWillReceiveProps(){
 
+ 
+
+  
+}
   async cargarPublicaciones() {
     this.setState({ publicaciones: this.props.getPublicacionesUsuario })
     listaPublicaciones = []
@@ -32,6 +37,7 @@ class ProfileAutor extends Component {
   }
 
   componentWillUnmount() {
+    
     this.props.limpiarUsuarioImagenes()
      this.props.conseguirUsuario( this.props.usuario.user.uid)
 
@@ -53,12 +59,16 @@ class ProfileAutor extends Component {
 
   async cargarDatos() {
     const autorId = this.props.navigation.getParam('uid', this.props.usuario.user.uid);
+    console.log(autorId);
+    
     await this.props.conseguirPublicaciones(autorId)
     await this.props.conseguirUsuario(autorId)
     await this.setState({autorId: autorId})
 
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
+        console.log( this.props.datosUsuario.datosUser);
+
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         if (this.props.usuarioProio.user.uid == autorId){
             this.setState({editor: true})
@@ -75,10 +85,29 @@ class ProfileAutor extends Component {
 
   }
 
-  componentDidUpdate(){
-    if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
-      this.cargarPublicaciones()
-    }
+  async componentDidUpdate(){
+    
+    
+    const autorId = await this.props.navigation.getParam('uid', this.props.usuario.user.uid);
+    
+   
+     if (this.state.autorId != autorId){
+       await this.setState({ loading: true })
+       await this.setState({ loadingImages: true })
+   
+       await this.setState({autorId: autorId})
+   
+       this.cargarDatos()
+     }else{
+      if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
+        console.log(this.props.datosUsuario);
+        
+        this.cargarPublicaciones()
+      }
+     }
+
+
+    
   }
 
 
@@ -126,7 +155,10 @@ class ProfileAutor extends Component {
               editar={this.irEditarPerfil}
                foto={JSON.parse(this.state.datosUser).fotoPerfil} 
                editor={this.state.editor} user={JSON.parse(this.state.datosUser)} 
-               publicaciones={this.state.publicaciones.length  } />
+               publicaciones={this.state.publicaciones.length  } 
+               navigation = {this.props.navigation}
+               />
+              
 
             </View>
 

@@ -100,6 +100,7 @@ class Profile extends Component {
               foto={JSON.parse(this.state.datosUser).fotoPerfil} 
               editor={true}  
               publicaciones={this.state.listaPublicaciones.length} 
+              navigation={this.props.navigation}
               user={JSON.parse(JSON.stringify(this.props.datosUsuario.datosUser))} />
 
             </View>

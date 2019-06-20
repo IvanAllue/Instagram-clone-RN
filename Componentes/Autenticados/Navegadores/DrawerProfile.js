@@ -7,6 +7,8 @@ import Configuracion from '../DrawerMenu/Configuracion'
 import EditarPerfil from '../DrawerMenu/EditarPerfil'
 import PostProfileGrande from '../ProfileItems/PostProfileGrande'
 import Likes from '../PostItems/Likes'
+import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
+
 var width = Dimensions.get('window').width 
 const DrawerNavigator = createDrawerNavigator({
     Profile: {
@@ -26,6 +28,9 @@ const DrawerNavigator = createDrawerNavigator({
     },
     Likes:{
         screen: Likes
+    },
+    FollowersAndFollows: {
+        screen: FollowersAndFollows
     }
 },{
     drawerType: 'slide',

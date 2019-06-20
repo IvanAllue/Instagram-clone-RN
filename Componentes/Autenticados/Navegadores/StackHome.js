@@ -8,6 +8,7 @@ import Post from '../Post'
 import Comentarios from '../PostItems/Comentarios'
 import PostProfileGrande from '../ProfileItems/PostProfileGrande'
 import Likes from '../PostItems/Likes'
+import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 
 
 const StackHome = createStackNavigator({
@@ -45,6 +46,9 @@ const StackHome = createStackNavigator({
        
     },Likes:{
         screen: Likes
+    },
+    FollowersAndFollows: {
+        screen: FollowersAndFollows
     }
 
 }, {

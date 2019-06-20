@@ -6,6 +6,8 @@ import Comentarios from '../PostItems/Comentarios';
 import SearchProfile from '../SearchItems/SearchProfile'
 import PostProfileGrande from '../ProfileItems/PostProfileGrande'
 import Likes from '../PostItems/Likes'
+import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
+
 
 const StackSearch = createStackNavigator({
     Search: {
@@ -32,6 +34,9 @@ const StackSearch = createStackNavigator({
        
     },Likes:{
         screen: Likes
+    },
+    FollowersAndFollows: {
+        screen: FollowersAndFollows
     }
 
 },

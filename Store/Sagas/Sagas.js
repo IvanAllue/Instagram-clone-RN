@@ -391,7 +391,7 @@ const seguirUserBd = ({ uid, userId }) => baseDatos.ref('Users/' + uid + '/follo
         [userId]: true
     }
 )
-const subirContadorSeguidores = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
+const cambiarContadorSeguidores = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
     contFollowers: cantidad
 })
 
@@ -400,7 +400,7 @@ const seguidoUserBd = ({ uid, userId }) => baseDatos.ref('Users/' + uid + '/foll
         [userId]: true
     }
 )
-const subirContadorSeguidos = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
+const cambiarContadorSeguidos = ({ uid, cantidad }) => baseDatos.ref('Users/' + uid).update({
     contFollows: cantidad
 })
 
@@ -408,17 +408,54 @@ function* sagaSeguirUsuario(values) {
     const usuario = yield select(state => state.reducerSesion)
 
     yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
-
-    yield call(subirContadorSeguidores, { uid: values.values.uid, cantidad: values.values.user.contFollowers + 1 })
+    yield call(cambiarContadorSeguidores, { uid: values.values.uid, cantidad: values.values.user.contFollowers + 1 })
 
     usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
     
     yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
+    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(usuarioActual)).contFollows + 1 })
 
-    yield call(subirContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(usuarioActual)).contFollows + 1 })
+    yield put ({type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid})
+
+
+}
+
+const dejarSeguirUserBd = ({uidSeguido, uidSeguidor}) => baseDatos.ref('Users/'+uidSeguido+'/followers/'+uidSeguidor).remove()
+const dejarSeguidoBd = ({uidSeguido, uidSeguidor}) => baseDatos.ref('Users/'+uidSeguidor+'/follow/'+uidSeguido).remove()
+
+function* sagaDejarSeguirUsuario(values) {
+    let uidSeguido = values.values.uid
+    let userSeguido = values.values.user
+
+    const usuario = yield select(state => state.reducerSesion)
+    usuarioBd = yield call(conseguirUsuarioBd, usuario.user.uid)
+
+    let uidSeguidor = usuario.user.uid
+    let userSeguidor = usuarioBd
+
+    yield call(dejarSeguirUserBd, {uidSeguido, uidSeguidor})
+    yield call(cambiarContadorSeguidores, { uid: uidSeguido, cantidad: userSeguido.contFollowers - 1 })
+
+
+    yield call(dejarSeguidoBd, {uidSeguido, uidSeguidor})
+    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(userSeguidor)).contFollows - 1 })
+    
+    yield put ({type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid})
 
 
 
+}
+
+function* sagaObtenerListaUsuarios(values) {
+   arrayUsuarios = []
+   for (i in values.values){
+       usuario = yield call(conseguirUsuarioBd, i)
+       arrayUsuarios.push({usuario: JSON.parse(JSON.stringify(usuario)), uid: i})
+   }
+
+   yield put({type: CONSTANTES.GUARDAR_STORE_LISTA_FOLLOWER_FOLOW, arrayUsuarios})
+   
+    
 }
 
 export default function* functionPrimaria() {
@@ -440,6 +477,10 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.DESCARGAR_COMENTARIOS, sagaDescargarComentarios) //LN 193
     yield takeEvery(CONSTANTES.SAGA_BUSCAR_USUARIO_NOMBRE, sagaBuscarUsuarioPorNombre) //LN 193
     yield takeEvery(CONSTANTES.SEGUIR_USUARIO, sagaSeguirUsuario) //LN 193
+    yield takeEvery(CONSTANTES.DEJAR_SEGUIR_USUARIO, sagaDejarSeguirUsuario) //LN 193
+    yield takeEvery(CONSTANTES.HACER_LISTA_USUARIOS_FOLLOWER_FOLLOW, sagaObtenerListaUsuarios) //LN 193
+
+
 
 
 

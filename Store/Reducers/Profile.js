@@ -14,6 +14,17 @@ export const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
 
 
 
+export const reducerConseguirUsuariosFollowerFollow = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_STORE_LISTA_FOLLOWER_FOLOW:
+          
+            
+            return action.arrayUsuarios
+        
+        default:
+            return state;
+    }
+}
 
 
 
