@@ -1,29 +1,61 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button, TouchableHighlight } from 'react-native'
+import { Text, View, StyleSheet, Button, TouchableHighlight, FlatList } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { connect } from 'react-redux'
+import SearchImages from './SearchItems/SearchImages'
+class Search extends Component {
+  state = {
+    listaPublicaciones: null
+  }
+  componentWillMount() {
+    this.props.descargarPublicaciones()
+  }
+  componentDidUpdate() {
+    if (this.props.publicaciones != null && this.props.autores && this.state.listaPublicaciones == null) {
+      listaPublicaciones = []
+      for (let i = 0; i < this.props.publicaciones.length; i += 3) {
+        arrayLista = []
+        for (let j = i; j < i + 3; j++) {
+          arrayLista.push({publicacion: this.props.publicaciones[j], usuario:  this.props.autores[j]})
+        }
+        listaPublicaciones.push(arrayLista)
+      }
 
-export default class Search extends Component {
+      this.setState({listaPublicaciones: listaPublicaciones})
+      
+     
+      
+    }
+
+  }
   render() {
     return (
       <View style={styles.container}>
 
         <View style={{ flex: 1, flexDirection: "row", marginTop: 24, alignItems: "center" }}>
           <View style={{ flex: 1, alignItems: "center" }}>
-            <TouchableHighlight onPress={()=>{this.props.navigation.navigate('SearchProfile')}}>
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate('SearchProfile') }}>
               <Ionicons name='ios-search' size={30} />
             </TouchableHighlight>
           </View>
           <View style={{ flex: 9, }}>
-            <TouchableHighlight onPress={()=>{this.props.navigation.navigate('SearchProfile')}}>
-              <Text style={{ color: '#A6A6A6', fontSize: 17, padding: 5 }}>Buscar</Text>
+            <TouchableHighlight onPress={() => { this.props.navigation.navigate('SearchProfile') }}>
+              <Text style={{ fontSize: 17, padding: 5 }}>Buscar</Text>
             </TouchableHighlight>
 
           </View>
         </View>
-        <View style={{ flex: 9, backgroundColor: '#454545' }}>
-
+        <View style={{ flex: 9}}>
+          {this.state.listaPublicaciones != null &&
+            <FlatList data={this.state.listaPublicaciones}
+         
+            renderItem={({ item, index }) =>
+            <SearchImages item={item} navigation={this.props.navigation} editor={false}/>
+            }
+          />         
+          }
         </View>
-       
+
       </View>
     )
   }
@@ -36,3 +68,20 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = (state) => {
+  return {
+    publicaciones: state.reducerDescargarPublicaciones,
+    autores: state.reducerDescargarAutores
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    descargarPublicaciones: () => {
+      dispatch({ type: 'DESCARGAR_PUBLICACIONES' })
+    },
+
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

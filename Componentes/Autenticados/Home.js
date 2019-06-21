@@ -11,11 +11,11 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.props.conseguirUsuario(this.props.usuario.user.uid)
-    this.props.descargarPublicaciones()
+   // this.props.descargarPublicaciones()
   }
 
   componentWillReceiveProps() {
-    this.setState({ loading: false })
+    this.setState({ loading: true })
   }
 
   render() {
