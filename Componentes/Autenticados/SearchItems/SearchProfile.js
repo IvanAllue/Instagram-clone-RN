@@ -11,7 +11,9 @@ class SearchProfile extends Component {
         };
     }
 
-
+    componentWillMount(){
+        this.props.enviarTextoBuscar('')
+    }
 
     render() {
 
@@ -28,6 +30,7 @@ class SearchProfile extends Component {
                         <TextInput
                             placeholder='Busca'
                             onChangeText={texto => this.props.enviarTextoBuscar(texto)}
+                            
                         />
                     </View>
                 </View>
@@ -46,10 +49,7 @@ class SearchProfile extends Component {
                     }
 
                 </View>
-                {/* <Button title="Ir a los post"
-        onPress={()=>{this.props.navigation.navigate('Post')}}> */}
-
-                {/* </Button> */}
+              
             </View>
         );
     }
