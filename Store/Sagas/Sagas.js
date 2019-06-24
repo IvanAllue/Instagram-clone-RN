@@ -282,7 +282,15 @@ function* sagaConseguirPublicaciones(values) {
     let uid = values.datos
     const publicaciones = yield call(getPublicaciones, uid)
     const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
-    const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
+    if (values.type == 'CONSEGUIR_PUBLICACIONES'){
+        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL, publicacionesPerfil })
+
+    }else{
+        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
+    }
+    
+    
+    
 
 }
 const guardarLikeBd = ({ uid, userId }) => baseDatos.ref('publicaciones/' + uid + "/likes").update({ [userId]: true })
@@ -487,6 +495,8 @@ export default function* functionPrimaria() {
 
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES, sagaDescargarPublicaciones) //LN 193
     yield takeEvery(CONSTANTES.CONSEGUIR_PUBLICACIONES, sagaConseguirPublicaciones) //LN 193
+    yield takeEvery(CONSTANTES.CONSEGUIR_PUBLICACIONES_PERFIL_AJENO, sagaConseguirPublicaciones) //LN 193
+
     yield takeEvery(CONSTANTES.DAR_LIKE, sagaDarLike) //LN 193
     yield takeEvery(CONSTANTES.QUITAR_LIKE, sagaQuitarLike) //LN 193
     yield takeEvery(CONSTANTES.CONSEGUIR_USUARIOS_LIKES, conseguirUsuariosLikes) //LN 193

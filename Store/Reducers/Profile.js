@@ -12,6 +12,17 @@ export const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
     }
 }
 
+export const reducerPublicacaionesPerfil = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.PUBLICACIONES_PERFIL:
+            
+            return [...action.publicacionesPerfil].reverse();
+
+        default:
+            return state;
+    }
+}
+
 
 
 export const reducerConseguirUsuariosFollowerFollow = (state = null, action) => {

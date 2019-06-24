@@ -24,9 +24,7 @@ componentDidUpdate(){
   }
 
   if (this.props.publicaciones != null && this.state.loading){
-console.log('============homehomeome========================');
-console.log(  this.props.publicaciones);
-console.log('====================================');    
+ 
     this.setState({ loading: false })
   }
 }

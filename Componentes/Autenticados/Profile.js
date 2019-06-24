@@ -144,7 +144,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     usuario: state.reducerSesion,
     datosUsuario: state.reducerDatosProfile,
-    getPublicacionesUsuario: state.reducerPublicacaionesPerfilAjeno
+    getPublicacionesUsuario: state.reducerPublicacaionesPerfil
   }
 }
 

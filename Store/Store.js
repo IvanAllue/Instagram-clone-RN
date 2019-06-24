@@ -6,6 +6,8 @@ import functionPrimaria from './Sagas/Sagas'
 //DATOS USUARIO PERFILES
 
 import {reducerPublicacaionesPerfilAjeno} from './Reducers/Profile' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+import {reducerPublicacaionesPerfil} from './Reducers/Profile' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+
 import {reducerConseguirUsuariosFollowerFollow} from './Reducers/Profile' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
 
 import {reducerImagenPerfil} from './Reducers/Profile' //-> Obtiene la url de la imagen que se va a cambiar por el usuario
@@ -67,7 +69,8 @@ const reducers = combineReducers({
     reducerConseguirUsuariosFollowerFollow,
 
     reducerPublicacionesSeguidos,
-    reducerUsuariosSeguidos
+    reducerUsuariosSeguidos,
+    reducerPublicacaionesPerfil
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

@@ -214,7 +214,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
 
     }, conseguirPublicaciones: (values) => {
-      dispatch({ type: 'CONSEGUIR_PUBLICACIONES', datos: values })
+      dispatch({ type: 'CONSEGUIR_PUBLICACIONES_PERFIL_AJENO', datos: values })
     },
     limpiarUsuario: () => {
       dispatch({ type: 'LIMPIAR_USUARIO' })
