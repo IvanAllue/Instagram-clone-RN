@@ -382,6 +382,9 @@ const descargarComentariosBd = (publicacionId) => baseDatos.ref('publicaciones/'
 
 
 function* sagaDescargarComentarios(values) {
+    console.log('=====================comentarios===============');
+    console.log(values);
+    console.log('====================================');
 
     const conseguirComentarios = yield call(descargarComentariosBd, values.datos)
 

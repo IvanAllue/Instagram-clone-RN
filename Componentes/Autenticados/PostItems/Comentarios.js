@@ -10,7 +10,8 @@ class Comentarios extends Component {
     publicacion: null,
     loading: true,
     usuario: null,
-    comentario: ''
+    comentario: '',
+    idPost: null
   }
   async componentWillMount() {
     autorPublicacion = this.props.navigation.getParam('autor', null);
@@ -19,7 +20,12 @@ class Comentarios extends Component {
     await this.setState({ publicacion: publicacion })
     usuario = this.props.navigation.getParam('usuario', null);
     await this.setState({ usuario: usuario })
-    this.props.descargarComentarios(this.state.publicacion.key)
+    idPost =  this.props.navigation.getParam('idPost', null);
+    await this.setState({ idPost: idPost })
+
+    this.props.descargarComentarios( this.state.idPost)
+    console.log(this.state);
+    
 
 
 
@@ -34,7 +40,7 @@ class Comentarios extends Component {
 
   enviarComentario() {
 
-    this.props.enviarComentario({ idPublicacion: this.state.publicacion.key, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser })
+    this.props.enviarComentario({ idPublicacion:  this.state.idPost, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser })
   }
   componentDidUpdate() {
 
@@ -74,7 +80,7 @@ class Comentarios extends Component {
             <FlatList data={this.props.comentarios}
               refreshing={false}
               onRefresh={() => {
-                this.props.descargarComentarios(this.state.publicacion.key)
+                this.props.descargarComentarios(this.state.idPost)
               }}
               renderItem={({ item, index }) =>
                 <Comentario item={item} navigation={this.props.navigation}  />

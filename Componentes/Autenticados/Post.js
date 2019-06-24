@@ -114,7 +114,7 @@ idPublicacion: null
 
 
           <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Ionicons name='ios-chatbubbles' size={30} onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item, usuario: this.props.usuario})} />
+            <Ionicons name='ios-chatbubbles' size={30} onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item, usuario: this.props.usuario,  idPost: this.state.idPublicacion})} />
 
           </View>
 
@@ -126,7 +126,7 @@ idPublicacion: null
 
         </TouchableHighlight>
         </View>
-        <TouchableHighlight onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item})}>
+        <TouchableHighlight onPress={() => this.props.navigation.navigate('Comentarios', {autor: this.props.autor, publicacion: this.props.item, idPost: this.state.idPublicacion })}>
           <Text>{this.props.item.texto}</Text>
         </TouchableHighlight>       
       </View>
