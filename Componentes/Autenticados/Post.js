@@ -13,7 +13,7 @@ var width = Dimensions.get('window').width;
 class Post extends Component {
   
  async componentWillMount() {
-
+  
     cont = 0
     for (let i in this.props.item.likes) {
       if (i == this.props.usuario.user.uid) {
@@ -117,7 +117,9 @@ idPublicacion: null
           <View style={{ flex: 6 }}></View>
         </View>
         <View>
-        <TouchableHighlight onPress={()=>{this.props.navigation.navigate('Likes', { uid:this.state.idPublicacion})}}>
+        <TouchableHighlight onPress={()=>{
+          console.log(this.state.idPublicacion)
+          this.props.navigation.navigate('Likes', { uid:this.state.idPublicacion})}}>
         <Text style={{marginLeft: width*0.1, fontWeight: "bold"}}>Le gusta a {this.state.contLike} personas</Text>
 
         </TouchableHighlight>

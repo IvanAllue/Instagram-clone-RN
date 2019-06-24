@@ -50,7 +50,7 @@ class Search extends Component {
             <FlatList data={this.state.listaPublicaciones}
          
             renderItem={({ item, index }) =>
-            <SearchImages item={item} navigation={this.props.navigation} editor={true}/>
+            <SearchImages item={item} navigation={this.props.navigation} editor={false}/>
             }
           />         
           }

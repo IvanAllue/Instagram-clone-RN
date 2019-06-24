@@ -53,13 +53,15 @@ async componentWillReceiveProps(){
     editor: false
   };
   componentWillMount() {
+    
     this.props.limpiarUsuarioImagenes()
     this.cargarDatos()
   }
 
   async cargarDatos() {
     const autorId = this.props.navigation.getParam('uid', this.props.usuario.user.uid);
-   
+ 
+    
     
     await this.props.conseguirPublicaciones(autorId)
     await this.props.conseguirUsuario(autorId)

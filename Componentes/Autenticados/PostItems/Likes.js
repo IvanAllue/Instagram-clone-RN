@@ -42,7 +42,15 @@ class Likes extends PureComponent {
             renderItem={({ item, index }) =>
               {
                 return(
-                  <TouchableWithoutFeedback onPress={()=>{this.props.navigation.navigate('AutorProfile', { uid: this.props.userUids[index] })}}>
+                  <TouchableWithoutFeedback onPress={()=>{
+                    let uid = this.props.userUids[index]
+                    this.props.limpiarUsuarioImagenes()
+                 
+                      this.props.navigation.navigate('AutorProfile', { uid: uid 
+
+               
+                    
+                    })}}>
                 <View style={{ height: 80, marginLeft: 20, flexDirection: "row", marginTop: 10 }}>
                   <View style={{ flex: 2 }}>
                     <Avatar size={55} rounded source={{ uri: JSON.parse(JSON.stringify(item)).fotoPerfil }} />
@@ -67,6 +75,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     conseguirUsuarios: (values) => {
       dispatch({ type: 'CONSEGUIR_USUARIOS_LIKES', datos: values })
+    },
+    limpiarUsuarioImagenes: () => {
+      dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
+
+    },
+    limpiarUsuario: () => {
+      dispatch({ type: 'LIMPIAR_USUARIO' })
+
     }
   }
 }

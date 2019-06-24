@@ -11,16 +11,28 @@ import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 
 const StackSearch = createStackNavigator({
     Search: {
-        screen: Search
+        screen: Search,
+        navigationOptions:{
+            header: null
+        }
     },
     Post: {
-        screen: Post
+        screen: Post,
+        navigationOptions: () => ({
+            headerTitle:'Explorar'
+            ,
+          }),
     },
     Autor: {
         screen: Profile
     },
     Comentarios: {
-        screen: Comentarios
+        screen: Comentarios,
+        navigationOptions: () => ({
+            headerTitle:'Comentarios'
+            ,
+          }),
+        
     },
     SearchProfile: {
         screen:SearchProfile
@@ -28,12 +40,16 @@ const StackSearch = createStackNavigator({
     PostProfile: {
         screen: PostProfileGrande,
         navigationOptions: () => ({
-            headerTitle:'Foto'
+            headerTitle:'Explorar'
             ,
           }),
        
     },Likes:{
-        screen: Likes
+        screen: Likes,
+        navigationOptions: () => ({
+            headerTitle:'Me gusta'
+            ,
+          }),
     },
     FollowersAndFollows: {
         screen: FollowersAndFollows
@@ -41,7 +57,7 @@ const StackSearch = createStackNavigator({
 
 },
 {
-    headerMode: 'none'
+   
 })
 
 export default createAppContainer(StackSearch);
