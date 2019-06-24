@@ -24,7 +24,9 @@ componentDidUpdate(){
   }
 
   if (this.props.publicaciones != null && this.state.loading){
- 
+      console.log('Home: ');
+      console.log(JSON.parse(JSON.stringify(this.props.publicaciones[0])).key);
+      
     this.setState({ loading: false })
   }
 }
@@ -41,8 +43,13 @@ componentDidUpdate(){
           refreshing={this.state.refreshing}
           onRefresh={()=>{  this.props.descargarPublicaciones()
           }}
-            renderItem={({ item, index }) =>
-            <Post item={item.publicacion} navigation={this.props.navigation} autor={JSON.parse(JSON.stringify(item.autor))} />
+            renderItem={({ item, index }) =>{
+              
+              return (
+                <Post item={item.publicacion} navigation={this.props.navigation} autor={JSON.parse(JSON.stringify(item.autor))} idPost={JSON.parse(JSON.stringify(item)).key}/>
+
+              )
+            }
             }
           />         
         </View>

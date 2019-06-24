@@ -4,7 +4,7 @@ export const reducerPublicacaionesPerfilAjeno = (state = null, action) => {
     switch (action.type) {
         case CONSTANTES.PUBLICACIONES_PERFIL_AJENO:
             
-            return [...action.publicacionesPerfil].reverse();
+            return [...action.arrayPublicaciones].reverse();
         case CONSTANTES.LIMPIAR_PUBLICACIONES_PERFIL_AJENO: 
         return null
         default:
@@ -16,7 +16,7 @@ export const reducerPublicacaionesPerfil = (state = null, action) => {
     switch (action.type) {
         case CONSTANTES.PUBLICACIONES_PERFIL:
             
-            return [...action.publicacionesPerfil].reverse();
+            return [...action.arrayPublicaciones].reverse();
 
         default:
             return state;

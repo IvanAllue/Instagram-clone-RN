@@ -282,11 +282,18 @@ function* sagaConseguirPublicaciones(values) {
     let uid = values.datos
     const publicaciones = yield call(getPublicaciones, uid)
     const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
+    let arrayPublicaciones = []
+
+    for (let i = 0; i < publicacionesPerfil.length; i++){
+        arrayPublicaciones.push({publicaciones: publicacionesPerfil[i], idPublicacion: publicaciones[i]})
+    }
+    console.log(arrayPublicaciones);
+    
     if (values.type == 'CONSEGUIR_PUBLICACIONES'){
-        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL, publicacionesPerfil })
+        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL, arrayPublicaciones })
 
     }else{
-        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, publicacionesPerfil })
+        const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, arrayPublicaciones })
     }
     
     
@@ -295,6 +302,9 @@ function* sagaConseguirPublicaciones(values) {
 }
 const guardarLikeBd = ({ uid, userId }) => baseDatos.ref('publicaciones/' + uid + "/likes").update({ [userId]: true })
 function* sagaDarLike(values) {
+    console.log('====================================');
+    console.log(values);
+    console.log('====================================');
     const autor = yield select(state => state.reducerSesion)
 
     let uid = values.datos.uid
@@ -473,12 +483,14 @@ function* sagaPublicacionesSeguidos() {
     publicacionesArray = []
     autoresArray = []
     for (i in userBd.follow){
+        
         const autor = yield call(conseguirUsuarioBd, i)
         autoresArray.push(JSON.parse(JSON.stringify(autor))) 
         const publicaciones = yield call(getPublicaciones, i)
+        
         const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
         for (let i = 0; i< publicacionesPerfil.length; i++){
-            publicacionesArray.push({publicacion: publicacionesPerfil[i], autor:autor})
+            publicacionesArray.push({publicacion: publicacionesPerfil[i], autor:autor, key: publicaciones[i]})
         }
     }
     yield put({type: CONSTANTES.GUARDAR_PUBLICACIONES_SEGUIDOS_STORE, publicacionesArray})

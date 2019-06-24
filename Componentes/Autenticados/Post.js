@@ -12,7 +12,8 @@ var width = Dimensions.get('window').width;
 
 class Post extends Component {
   
-  componentWillMount() {
+ async componentWillMount() {
+    console.log(this.props.item);
 
     cont = 0
     for (let i in this.props.item.likes) {
@@ -21,12 +22,25 @@ class Post extends Component {
       }
       cont++
     }
-    this.setState({ contLike: cont })
+    await this.setState({ contLike: cont })
+    console.log(this.props.item.key);
+    
+    if ( this.props.idPost != undefined ){
+     await this.setState({idPublicacion: this.props.idPost})
+    }else{
+      await this.setState({idPublicacion:this.props.item.key})
+    }
+    console.log('===================ewrwrwerwrr=================');
+    console.log(this.state.idPublicacion);
+    console.log('====================================');
+    
+    
   }
 
   async cambiarEstado() {
     await this.setState({ like: !this.state.like })
     if (this.state.like) {
+      
       this.props.darLike({ uid: this.props.item.key })
       this.setState({ contLike: this.state.contLike + 1 })
     } else {
@@ -37,12 +51,13 @@ class Post extends Component {
   state = {
     like: false,
     contLike: 0,
-autor: null
+autor: null,
+idPublicacion: null
   }
 
   render() {
    
-
+   
     return (
       <View>
         {this.props.editor &&
