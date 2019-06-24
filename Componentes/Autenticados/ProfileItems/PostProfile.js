@@ -10,7 +10,7 @@ export default class PostProfile extends PureComponent {
         };
         console.log('GALERIAS');
         
-        console.log(this.props.item[1].publicaciones.url);
+        console.log(this.props.item[0]);
     }
 
     render() {
@@ -20,13 +20,13 @@ export default class PostProfile extends PureComponent {
         if ( this.props.item[2] != null) {
             return (
                 <View style={{ height: width * 0.3, flexDirection: "row", marginBottom: 3, justifyContent: "space-between" }}>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor}) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[0].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3 }} source={{ uri: this.props.item[0].publicaciones.url }} />
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[1].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor }) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[1].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[1].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3 }} source={{ uri: this.props.item[1].publicaciones.url }} />
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[2].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor }) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[2].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[2].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3 }} source={{ uri: this.props.item[2].publicaciones.url }} />
                     </TouchableHighlight>
                 </View>
@@ -34,10 +34,10 @@ export default class PostProfile extends PureComponent {
         } else if ( this.props.item[1] != null) {
             return (
                 <View style={{ height: width * 0.3, flexDirection: "row", marginBottom: 3 }}>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor }) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[0].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3, marginRight: 3 }} source={{ uri: this.props.item[0].publicaciones.url }} />
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[1].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor }) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[1].publicaciones, user:  JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[1].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3 }} source={{ uri: this.props.item[1].publicaciones.url }} />
                     </TouchableHighlight>
                 </View>
@@ -45,7 +45,7 @@ export default class PostProfile extends PureComponent {
         } else {
             return (
                 <View style={{ height: width * 0.3, flexDirection: "row", marginBottom: 3 }}>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user: JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor }) }}>
+                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('PostProfile', { imagen: this.props.item[0].publicaciones, user: JSON.parse(JSON.stringify(this.props.usuario)), editor: this.props.editor, idPost:this.props.item[0].idPublicacion }) }}>
                         <Image style={{ width: width * 0.33, height: width * 0.3, marginLeft: 3 }} source={{ uri: this.props.item[0].publicaciones.url }} />
                     </TouchableHighlight>
                 </View>

@@ -41,10 +41,10 @@ class Post extends Component {
     await this.setState({ like: !this.state.like })
     if (this.state.like) {
       
-      this.props.darLike({ uid: this.props.item.key })
+      this.props.darLike({ uid: this.state.idPublicacion })
       this.setState({ contLike: this.state.contLike + 1 })
     } else {
-      this.props.quitarLike({ uid: this.props.item.key })
+      this.props.quitarLike({ uid: this.state.idPublicacion })
       this.setState({ contLike: this.state.contLike - 1 })
     }
   }
@@ -121,7 +121,7 @@ idPublicacion: null
           <View style={{ flex: 6 }}></View>
         </View>
         <View>
-        <TouchableHighlight onPress={()=>{this.props.navigation.navigate('Likes', { uid: this.props.item.key})}}>
+        <TouchableHighlight onPress={()=>{this.props.navigation.navigate('Likes', { uid:this.state.idPublicacion})}}>
         <Text style={{marginLeft: width*0.1, fontWeight: "bold"}}>Le gusta a {this.state.contLike} personas</Text>
 
         </TouchableHighlight>
