@@ -42,6 +42,23 @@ export const reducerDescargarAutores = (state = null, action) => {
     }
 }
 
-
+export const reducerPublicacionesSeguidos = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_PUBLICACIONES_SEGUIDOS_STORE: 
+                   
+            return [...action.publicacionesArray].reverse()
+        default:
+            return state
+    }
+}
+export const reducerUsuariosSeguidos = (state = null, action) => {
+    switch (action.type) {
+        case CONSTANTES.GUARDAR_USUARIOS_SEGUIDOS_STORE:            
+        
+            return [...action.autoresArray].reverse()
+        default:
+            return state
+    }
+}
 
 

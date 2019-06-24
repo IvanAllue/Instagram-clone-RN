@@ -9,14 +9,31 @@ class Home extends React.Component {
     refreshing: false
   }
 
-  componentDidMount() {
-    this.props.conseguirUsuario(this.props.usuario.user.uid)
-   // this.props.descargarPublicaciones()
+componentWillMount(){
+  this.props.conseguirUsuario(this.props.usuario.user.uid)
+
+    
+
+
+
+}
+componentDidUpdate(){
+  if (this.props.usuario != null && this.state.loading){
+    this.props.conseguirPostSeguidos()
+
   }
 
-  componentWillReceiveProps() {
-    this.setState({ loading: true })
+  if (this.props.publicaciones != null && this.state.loading){
+console.log('============homehomeome========================');
+console.log(  this.props.publicaciones);
+console.log('====================================');    
+    this.setState({ loading: false })
   }
+}
+
+
+
+  
 
   render() {
     if (!this.state.loading) {
@@ -27,7 +44,7 @@ class Home extends React.Component {
           onRefresh={()=>{  this.props.descargarPublicaciones()
           }}
             renderItem={({ item, index }) =>
-            <Post item={item} navigation={this.props.navigation} autor={this.props.autores[index]} />
+            <Post item={item.publicacion} navigation={this.props.navigation} autor={JSON.parse(JSON.stringify(item.autor))} />
             }
           />         
         </View>
@@ -56,8 +73,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
   return {
     usuario: state.reducerSesion,
-    publicaciones: state.reducerDescargarPublicaciones,
-    autores: state.reducerDescargarAutores
+    userBd: state.reducerDatosProfile,
+    publicaciones: state.reducerPublicacionesSeguidos,
+    autores: state.reducerUsuariosSeguidos
   }
 }
 
@@ -68,6 +86,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     conseguirUsuario: (values) => {
       dispatch({ type: 'CONSEGUIR_USUARIO', datos: values })
+    },
+    conseguirPostSeguidos: () => {
+      dispatch({ type: 'DESCARGAR_PUBLICACIONES_SEGUIDOS' })
+
     }
   }
 }

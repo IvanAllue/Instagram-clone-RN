@@ -13,6 +13,9 @@ var width = Dimensions.get('window').width;
 class Post extends Component {
   
   componentWillMount() {
+console.log('====================================');
+console.log(this.props.autor.email);
+console.log('====================================');    
     cont = 0
     for (let i in this.props.item.likes) {
       if (i == this.props.usuario.user.uid) {
@@ -35,7 +38,8 @@ class Post extends Component {
   }
   state = {
     like: false,
-    contLike: 0
+    contLike: 0,
+autor: null
   }
 
   render() {

@@ -458,6 +458,23 @@ function* sagaObtenerListaUsuarios(values) {
     
 }
 
+
+function* sagaPublicacionesSeguidos() {
+    const usuario = yield select(state => state.reducerDatosProfile)
+    userBd = JSON.parse(JSON.stringify(usuario.datosUser))
+    publicacionesArray = []
+    autoresArray = []
+    for (i in userBd.follow){
+        const autor = yield call(conseguirUsuarioBd, i)
+        autoresArray.push(JSON.parse(JSON.stringify(autor))) 
+        const publicaciones = yield call(getPublicaciones, i)
+        const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
+        for (let i = 0; i< publicacionesPerfil.length; i++){
+            publicacionesArray.push({publicacion: publicacionesPerfil[i], autor:autor})
+        }
+    }
+    yield put({type: CONSTANTES.GUARDAR_PUBLICACIONES_SEGUIDOS_STORE, publicacionesArray})
+ }
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)//LN 37
@@ -479,6 +496,8 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.SEGUIR_USUARIO, sagaSeguirUsuario) //LN 193
     yield takeEvery(CONSTANTES.DEJAR_SEGUIR_USUARIO, sagaDejarSeguirUsuario) //LN 193
     yield takeEvery(CONSTANTES.HACER_LISTA_USUARIOS_FOLLOWER_FOLLOW, sagaObtenerListaUsuarios) //LN 193
+    yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES_SEGUIDOS, sagaPublicacionesSeguidos) //LN 193
+
 
 
 
