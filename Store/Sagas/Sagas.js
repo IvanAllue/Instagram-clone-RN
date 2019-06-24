@@ -287,7 +287,6 @@ function* sagaConseguirPublicaciones(values) {
     for (let i = 0; i < publicacionesPerfil.length; i++){
         arrayPublicaciones.push({publicaciones: publicacionesPerfil[i], idPublicacion: publicaciones[i]})
     }
-    console.log(arrayPublicaciones);
     
     if (values.type == 'CONSEGUIR_PUBLICACIONES'){
         const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL, arrayPublicaciones })
@@ -302,9 +301,7 @@ function* sagaConseguirPublicaciones(values) {
 }
 const guardarLikeBd = ({ uid, userId }) => baseDatos.ref('publicaciones/' + uid + "/likes").update({ [userId]: true })
 function* sagaDarLike(values) {
-    console.log('====================================');
-    console.log(values);
-    console.log('====================================');
+   
     const autor = yield select(state => state.reducerSesion)
 
     let uid = values.datos.uid
@@ -382,9 +379,7 @@ const descargarComentariosBd = (publicacionId) => baseDatos.ref('publicaciones/'
 
 
 function* sagaDescargarComentarios(values) {
-    console.log('=====================comentarios===============');
-    console.log(values);
-    console.log('====================================');
+   
 
     const conseguirComentarios = yield call(descargarComentariosBd, values.datos)
 

@@ -8,9 +8,7 @@ export default class PostProfile extends PureComponent {
         super(props);
         this.state = {
         };
-        console.log('GALERIAS');
-        
-        console.log(this.props.item[0]);
+
     }
 
     render() {

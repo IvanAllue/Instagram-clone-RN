@@ -24,7 +24,6 @@ class Comentarios extends Component {
     await this.setState({ idPost: idPost })
 
     this.props.descargarComentarios( this.state.idPost)
-    console.log(this.state);
     
 
 

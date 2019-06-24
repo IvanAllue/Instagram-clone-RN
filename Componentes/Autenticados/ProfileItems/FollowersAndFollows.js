@@ -15,7 +15,6 @@ class FollowersAndFollows extends PureComponent {
   }
   async componentWillMount() {
     const listaSeguidores = this.props.navigation.getParam('lista', null);
-    console.log(listaSeguidores);
     
     await this.setState({ lista: listaSeguidores })
 

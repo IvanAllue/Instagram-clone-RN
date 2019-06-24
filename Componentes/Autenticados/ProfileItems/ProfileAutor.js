@@ -59,7 +59,7 @@ async componentWillReceiveProps(){
 
   async cargarDatos() {
     const autorId = this.props.navigation.getParam('uid', this.props.usuario.user.uid);
-    console.log(autorId);
+   
     
     await this.props.conseguirPublicaciones(autorId)
     await this.props.conseguirUsuario(autorId)
@@ -67,7 +67,6 @@ async componentWillReceiveProps(){
 
     setTimeout(async () => {
       if (this.state.loading && this.props.datosUsuario.datosUser != null) {
-        console.log( this.props.datosUsuario.datosUser);
 
         await this.setState({ datosUser: JSON.stringify(this.props.datosUsuario.datosUser) })
         if (this.props.usuarioProio.user.uid == autorId){
@@ -100,7 +99,6 @@ async componentWillReceiveProps(){
        this.cargarDatos()
      }else{
       if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
-        console.log(this.props.datosUsuario);
         
         this.cargarPublicaciones()
       }

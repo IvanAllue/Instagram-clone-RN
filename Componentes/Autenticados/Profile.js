@@ -108,7 +108,6 @@ class Profile extends Component {
               <ScrollView>
               <FlatList data={this.state.listaPublicaciones} style={{marginBottom: 200}}
                 renderItem={({ item }) => {
-                  console.log(item)
                   return(
                     <PostProfile item={JSON.parse(JSON.stringify(item))} navigation={this.props.navigation} usuario={this.props.datosUsuario.datosUser} editor={true}/>
                   )

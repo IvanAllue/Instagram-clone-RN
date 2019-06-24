@@ -5,7 +5,6 @@ var width = Dimensions.get('window').width;
 export default class SearchImages extends Component {
 
     componentWillMount() {
-        console.log(this.props.item[0].publicacion);
 
     }
     render() {

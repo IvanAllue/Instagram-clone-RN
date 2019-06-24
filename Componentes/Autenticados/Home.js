@@ -24,8 +24,7 @@ componentDidUpdate(){
   }
 
   if (this.props.publicaciones != null && this.state.loading){
-      console.log('Home: ');
-      console.log(JSON.parse(JSON.stringify(this.props.publicaciones[0])).key);
+
       
     this.setState({ loading: false })
   }
