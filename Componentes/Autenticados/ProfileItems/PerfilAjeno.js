@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, Button, TouchableOpacity, FlatList, Dimensions,
 import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
-import PostProfile from './PostProfile'
+import PostProfile from '../PostItems/TresFotosGaleria'
 var width = Dimensions.get('window').width;
 var height = Dimensions.get('window').height;
 import GestionPerfil from './GestionPerfil'

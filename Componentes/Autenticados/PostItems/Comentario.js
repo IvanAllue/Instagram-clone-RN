@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
 import { Avatar } from 'react-native-elements';
 
+import { connect } from 'react-redux'
 
-
-export default class Comentario extends Component {
+ class Comentario extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,11 +23,15 @@ export default class Comentario extends Component {
             <View style={{ height: 50, flexDirection: "row", marginBottom: 5 }}>
                 <View style={{ flex: 2, alignItems: "center" }}>
 
-                    <Avatar size={40} rounded source={{ uri: this.state.comentario.fotoPerfil }} onPress={()=>{this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId })}}/>
+                    <Avatar size={40} rounded source={{ uri: this.state.comentario.fotoPerfil }} onPress={()=>{
+                        this.props.limpiarUsuarioImagenes()
+                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId })}}/>
 
                 </View>
                 <View style={{ flex: 8 }}>
-                    <TouchableHighlight onPress={() => { this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId }) }}>
+                    <TouchableHighlight onPress={() => { 
+                        this.props.limpiarUsuarioImagenes()
+                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId }) }}>
                         <Text>
                             <Text style={{ fontWeight: "bold" }}> {this.state.comentario.nombreUsuario} </Text> {this.state.comentario.contenido}  </Text>
                     </TouchableHighlight>
@@ -36,3 +40,19 @@ export default class Comentario extends Component {
         );
     }
 }
+
+const mapStateToProps = (state, ownProps) => {
+    return {
+        prop: state.prop
+    }
+}
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        limpiarUsuarioImagenes: () => {
+            dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
+      
+          }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comentario)

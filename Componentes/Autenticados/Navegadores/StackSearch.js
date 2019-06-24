@@ -4,7 +4,7 @@ import Search from '../Search'
 import Profile from '../Profile';
 import Comentarios from '../PostItems/Comentarios';
 import SearchProfile from '../SearchItems/SearchProfile'
-import PostProfileGrande from '../ProfileItems/PostProfileGrande'
+import PostProfileGrande from '../PostItems/PostGrande'
 import Likes from '../PostItems/Likes'
 import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 

@@ -129,7 +129,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({ type: 'ENVIAR_COMENTARIO', datos: values })
     }, descargarComentarios: (values) => {
       dispatch({ type: 'DESCARGAR_COMENTARIOS', datos: values })
-    }
+    },
+   
   }
 }
 

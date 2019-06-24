@@ -3,10 +3,10 @@ import { Text, View, TouchableHighlight, StyleSheet, Dimensions, Image } from 'r
 
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import Home from '../Home'
-import Autor from '../ProfileItems/ProfileAutor'
+import Autor from '../ProfileItems/PerfilAjeno'
 import Post from '../Post'
 import Comentarios from '../PostItems/Comentarios'
-import PostProfileGrande from '../ProfileItems/PostProfileGrande'
+import PostGrande from '../PostItems/PostGrande'
 import Likes from '../PostItems/Likes'
 import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 
@@ -38,7 +38,7 @@ const StackHome = createStackNavigator({
 
     },
     PostProfile: {
-        screen: PostProfileGrande,
+        screen: PostGrande,
         navigationOptions: () => ({
             headerTitle:'Foto'
             ,

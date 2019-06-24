@@ -1,11 +1,10 @@
 import { createDrawerNavigator, createAppContainer } from 'react-navigation'
 import { Dimensions, Text } from 'react-native'
-import React, { Component } from 'react'
 import DrawerComponent from '../DrawerMenu/DrawerComponent'
 import Profile from '../Profile'
 import Configuracion from '../DrawerMenu/Configuracion'
 import EditarPerfil from '../DrawerMenu/EditarPerfil'
-import PostProfileGrande from '../ProfileItems/PostProfileGrande'
+import PostProfileGrande from '../PostItems/PostGrande'
 import Likes from '../PostItems/Likes'
 import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 
