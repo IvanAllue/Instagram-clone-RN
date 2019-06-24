@@ -9,11 +9,11 @@ export default class PostProfileGrande extends PureComponent {
      const editor = this.props.navigation.getParam('editor', false)
      const idPost = this.props.navigation.getParam('idPost', false)
 
+      
      this.setState({imagen:imagen})
      this.setState({usuario:user})
      this.setState({editor: editor})
      this.setState({idPost: idPost})
-
      
     }
   constructor(props) {
@@ -22,7 +22,8 @@ export default class PostProfileGrande extends PureComponent {
         imagen: null,
         usuario: null,
         editor: false,
-        idPost: null
+        idPost: null,
+        ruta: null
     };
   }
 
@@ -32,7 +33,7 @@ export default class PostProfileGrande extends PureComponent {
       
     return (
       <View>
-       <Post item={this.state.imagen} editor={this.state.editor} navigation={this.props.navigation} autor={this.state.usuario} idPost={this.state.idPost}/>
+       <Post item={this.state.imagen} editor={this.state.editor} navigation={this.props.navigation} autor={this.state.usuario} idPost={this.state.idPost} />
       </View>
     );
   }

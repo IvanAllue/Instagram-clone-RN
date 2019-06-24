@@ -45,7 +45,7 @@ componentDidUpdate(){
             renderItem={({ item, index }) =>{
               
               return (
-                <Post item={item.publicacion} padre={'Home'} navigation={this.props.navigation} autor={JSON.parse(JSON.stringify(item.autor))} idPost={JSON.parse(JSON.stringify(item)).key}/>
+                <Post item={item.publicacion} padre={'Home'} navigation={this.props.navigation} autor={JSON.parse(JSON.stringify(item.autor))} idPost={JSON.parse(JSON.stringify(item)).key} />
 
               )
             }

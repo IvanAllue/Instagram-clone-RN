@@ -1,10 +1,10 @@
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 import Post from '../Post';
 import Search from '../Search'
-import Profile from '../Profile';
+import Profile from '../ProfileItems/PerfilAjeno';
 import Comentarios from '../PostItems/Comentarios';
 import SearchProfile from '../SearchItems/SearchProfile'
-import PostProfileGrande from '../PostItems/PostGrande'
+import PostGrande from '../PostItems/PostGrande'
 import Likes from '../PostItems/Likes'
 import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
 
@@ -23,8 +23,11 @@ const StackSearch = createStackNavigator({
             ,
           }),
     },
-    Autor: {
-        screen: Profile
+    AutorProfile: {
+        screen: Profile,
+        navigationOptions:{
+            header: null
+        }
     },
     Comentarios: {
         screen: Comentarios,
@@ -38,7 +41,7 @@ const StackSearch = createStackNavigator({
         screen:SearchProfile
     },
     PostProfile: {
-        screen: PostProfileGrande,
+        screen: PostGrande,
         navigationOptions: () => ({
             headerTitle:'Explorar'
             ,
