@@ -38,7 +38,10 @@ const StackSearch = createStackNavigator({
         
     },
     SearchProfile: {
-        screen:SearchProfile
+        screen:SearchProfile,
+        navigationOptions:{
+            header: null
+        }
     },
     PostProfile: {
         screen: PostGrande,

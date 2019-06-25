@@ -171,7 +171,7 @@ function* sagaLoginFacebook(values) {
 //
 
 const subirImagenStorage = async (imagen) => {
- 
+
     if (imagen != null) {
         const splitName = imagen.split('/')
         const name = [...splitName].pop()
@@ -195,7 +195,7 @@ const subirImagenStorage = async (imagen) => {
 }
 
 const subirFotoDatabase = (datos) => {
-   
+
     return baseDatos.ref('publicaciones/').push({
         url: datos.url,
         texto: datos.pie,
@@ -221,12 +221,12 @@ function* sagaSubirImagen(values) {
 
 function* sagaConseguirUsuario(values) {
     const usuario = yield call(conseguirUsuarioBd, values.datos) //LN 79
-    if (values.type == CONSTANTES.CONSEGUIR_USUARIO){
+    if (values.type == CONSTANTES.CONSEGUIR_USUARIO) {
         yield put({ type: CONSTANTES.GUARDAR_DATOS_USER, datos: usuario })
-    }else{
+    } else {
         yield put({ type: CONSTANTES.GUARDAR_DATOS_USER_PERFIL_AJENO, datos: usuario })
     }
-    
+
 
 }
 
@@ -284,30 +284,33 @@ function* sagaConseguirPublicaciones(values) {
     const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
     let arrayPublicaciones = []
 
-    for (let i = 0; i < publicacionesPerfil.length; i++){
-        arrayPublicaciones.push({publicaciones: publicacionesPerfil[i], idPublicacion: publicaciones[i]})
+    for (let i = 0; i < publicacionesPerfil.length; i++) {
+        arrayPublicaciones.push({ publicaciones: publicacionesPerfil[i], idPublicacion: publicaciones[i] })
     }
-    
-    if (values.type == 'CONSEGUIR_PUBLICACIONES'){
+
+    if (values.type == 'CONSEGUIR_PUBLICACIONES') {
         const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL, arrayPublicaciones })
 
-    }else{
+    } else {
         const descargarAutores = yield put({ type: CONSTANTES.PUBLICACIONES_PERFIL_AJENO, arrayPublicaciones })
     }
-    
-    
-    
+
+
+
 
 }
 const guardarLikeBd = ({ uid, userId }) => baseDatos.ref('publicaciones/' + uid + "/likes").update({ [userId]: true })
 function* sagaDarLike(values) {
-   
+
     const autor = yield select(state => state.reducerSesion)
 
     let uid = values.datos.uid
     let userId = autor.user.uid
 
     const darLikeBd = yield call(guardarLikeBd, { uid, userId })
+
+    let datos = { uidUsuario: userId, publicacionId:uid, tipo: 'like' }
+     yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 
 }
 
@@ -320,6 +323,9 @@ function* sagaQuitarLike(values) {
     let userId = autor.user.uid
 
     const darLikeBd = yield call(quitarLikeBd, { uid, userId })
+
+    let datos = { uidUsuario: userId, publicacionId:uid, tipo: 'quitarLike' }
+    yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 
 }
 
@@ -379,7 +385,7 @@ const descargarComentariosBd = (publicacionId) => baseDatos.ref('publicaciones/'
 
 
 function* sagaDescargarComentarios(values) {
-   
+
 
     const conseguirComentarios = yield call(descargarComentariosBd, values.datos)
 
@@ -422,26 +428,28 @@ const cambiarContadorSeguidos = ({ uid, cantidad }) => baseDatos.ref('Users/' + 
 
 function* sagaSeguirUsuario(values) {
     const usuario = yield select(state => state.reducerSesion)
+    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid )
+    usuarioSeguidoParseado = JSON.parse(JSON.stringify(usuarioSeguido))
 
-    yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
-    yield call(cambiarContadorSeguidores, { uid: values.values.uid, cantidad: values.values.user.contFollowers + 1 })
+     yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
+     yield call(cambiarContadorSeguidores, { uid: values.values.uid, cantidad:usuarioSeguidoParseado.contFollowers +1  })
 
-    usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
-    
-    yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
-    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(usuarioActual)).contFollows + 1 })
+     usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
+     yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
+     yield call(cambiarContadorSeguidos, { uid: usuario.user.uid, cantidad:  parseInt(JSON.parse(JSON.stringify(usuarioActual)).contFollows) + 1})
 
-    yield put ({type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid})
-
-
+     yield put({ type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid })
+     let datos = { uidFollow: usuario.user.uid, uidFollower: values.values.uid, tipo: 'seguir' }
+     yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 }
 
-const dejarSeguirUserBd = ({uidSeguido, uidSeguidor}) => baseDatos.ref('Users/'+uidSeguido+'/followers/'+uidSeguidor).remove()
-const dejarSeguidoBd = ({uidSeguido, uidSeguidor}) => baseDatos.ref('Users/'+uidSeguidor+'/follow/'+uidSeguido).remove()
+const dejarSeguirUserBd = ({ uidSeguido, uidSeguidor }) => baseDatos.ref('Users/' + uidSeguido + '/followers/' + uidSeguidor).remove()
+const dejarSeguidoBd = ({ uidSeguido, uidSeguidor }) => baseDatos.ref('Users/' + uidSeguidor + '/follow/' + uidSeguido).remove()
 
 function* sagaDejarSeguirUsuario(values) {
     let uidSeguido = values.values.uid
-    let userSeguido = values.values.user
+    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid )
+    userSeguido = JSON.parse(JSON.stringify(usuarioSeguido))
 
     const usuario = yield select(state => state.reducerSesion)
     usuarioBd = yield call(conseguirUsuarioBd, usuario.user.uid)
@@ -449,29 +457,32 @@ function* sagaDejarSeguirUsuario(values) {
     let uidSeguidor = usuario.user.uid
     let userSeguidor = usuarioBd
 
-    yield call(dejarSeguirUserBd, {uidSeguido, uidSeguidor})
-    yield call(cambiarContadorSeguidores, { uid: uidSeguido, cantidad: userSeguido.contFollowers - 1 })
+    yield call(dejarSeguirUserBd, { uidSeguido, uidSeguidor })
+    yield call(cambiarContadorSeguidores, { uid: uidSeguido, cantidad: (parseInt(userSeguido.contFollowers) - 1) })
 
 
-    yield call(dejarSeguidoBd, {uidSeguido, uidSeguidor})
-    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid , cantidad:JSON.parse(JSON.stringify(userSeguidor)).contFollows - 1 })
-    
-    yield put ({type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid})
+    yield call(dejarSeguidoBd, { uidSeguido, uidSeguidor })
+    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid, cantidad: (JSON.parse(JSON.stringify(userSeguidor)).contFollows - 1) })
 
+    yield put({ type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid })
+
+    let datos = { uidFollow: usuario.user.uid, uidFollower: uidSeguido, tipo: 'dejarSeguir' }
+
+    yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 
 
 }
 
 function* sagaObtenerListaUsuarios(values) {
-   arrayUsuarios = []
-   for (i in values.values){
-       usuario = yield call(conseguirUsuarioBd, i)
-       arrayUsuarios.push({usuario: JSON.parse(JSON.stringify(usuario)), uid: i})
-   }
+    arrayUsuarios = []
+    for (i in values.values) {
+        usuario = yield call(conseguirUsuarioBd, i)
+        arrayUsuarios.push({ usuario: JSON.parse(JSON.stringify(usuario)), uid: i })
+    }
 
-   yield put({type: CONSTANTES.GUARDAR_STORE_LISTA_FOLLOWER_FOLOW, arrayUsuarios})
-   
-    
+    yield put({ type: CONSTANTES.GUARDAR_STORE_LISTA_FOLLOWER_FOLOW, arrayUsuarios })
+
+
 }
 
 
@@ -480,19 +491,43 @@ function* sagaPublicacionesSeguidos() {
     userBd = JSON.parse(JSON.stringify(usuario.datosUser))
     publicacionesArray = []
     autoresArray = []
-    for (i in userBd.follow){
-        
+    for (i in userBd.follow) {
+
         const autor = yield call(conseguirUsuarioBd, i)
-        autoresArray.push(JSON.parse(JSON.stringify(autor))) 
+        autoresArray.push(JSON.parse(JSON.stringify(autor)))
         const publicaciones = yield call(getPublicaciones, i)
-        
+
         const publicacionesPerfil = yield all(publicaciones.map(publicacion => call(getPublicacion, publicacion)))
-        for (let i = 0; i< publicacionesPerfil.length; i++){
-            publicacionesArray.push({publicacion: publicacionesPerfil[i], autor:autor, key: publicaciones[i]})
+        for (let i = 0; i < publicacionesPerfil.length; i++) {
+            publicacionesArray.push({ publicacion: publicacionesPerfil[i], autor: autor, key: publicaciones[i] })
         }
     }
-    yield put({type: CONSTANTES.GUARDAR_PUBLICACIONES_SEGUIDOS_STORE, publicacionesArray})
- }
+    yield put({ type: CONSTANTES.GUARDAR_PUBLICACIONES_SEGUIDOS_STORE, publicacionesArray })
+}
+
+const comenzarSeguirNotificacionFollow = ({ uidFollow, uidFollower, tipo }) => baseDatos.ref('FollowNotificaciones/' + uidFollow + '/' + uidFollower).set({
+    fecha: Date.now(),
+    tipo: tipo
+})
+
+const dejarSeguirNotificacionFollow = ({ uidFollow, uidFollower }) => baseDatos.ref('FollowNotificaciones/' + uidFollow + '/' + uidFollower).remove()
+
+
+function* sagaGenerarNotificacionFollow(values) {
+    if (values.datos.tipo == 'seguir') {
+        yield call(comenzarSeguirNotificacionFollow, { uidFollow: values.datos.uidFollow, uidFollower: values.datos.uidFollower, tipo: 'seguir' })
+    } else if (values.datos.tipo == 'dejarSeguir') {
+        yield call(dejarSeguirNotificacionFollow, { uidFollow: values.datos.uidFollow, uidFollower: values.datos.uidFollower })
+    }else if(values.datos.tipo == 'like'){
+        yield call(comenzarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId, tipo: 'like' })            
+    }else{
+        
+       yield call(dejarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId })
+
+    }
+
+}
+
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
     yield takeEvery(CONSTANTES.LOGIN, sagaLogin)//LN 37
@@ -517,6 +552,8 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.DEJAR_SEGUIR_USUARIO, sagaDejarSeguirUsuario) //LN 193
     yield takeEvery(CONSTANTES.HACER_LISTA_USUARIOS_FOLLOWER_FOLLOW, sagaObtenerListaUsuarios) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES_SEGUIDOS, sagaPublicacionesSeguidos) //LN 193
+    yield takeEvery(CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, sagaGenerarNotificacionFollow) //LN 193
+
 
 
 

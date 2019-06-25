@@ -16,15 +16,15 @@ class Search extends Component {
       for (let i = 0; i < this.props.publicaciones.length; i += 3) {
         arrayLista = []
         for (let j = i; j < i + 3; j++) {
-          arrayLista.push({publicaciones: this.props.publicaciones[j], usuario:  this.props.autores[j]})
+          arrayLista.push({ publicaciones: this.props.publicaciones[j], usuario: this.props.autores[j] })
         }
         listaPublicaciones.push(arrayLista)
       }
 
-      this.setState({listaPublicaciones: listaPublicaciones})
-      
-     
-      
+      this.setState({ listaPublicaciones: listaPublicaciones })
+
+
+
     }
 
   }
@@ -45,19 +45,12 @@ class Search extends Component {
 
           </View>
         </View>
-        <View style={{ flex: 9}}>
+        <View style={{ flex: 9 }}>
           {this.state.listaPublicaciones != null &&
             <FlatList data={this.state.listaPublicaciones}
-         
-            renderItem={({ item, index }) =>{
-             // console.log(item[1])
-              return <PostProfile item={item} navigation={this.props.navigation} usuario={null} editor={false}/>
 
-            }
-            
-            // <SearchImages item={item} navigation={this.props.navigation} editor={false}/>
-            }
-          />         
+              renderItem={({ item, index }) =><PostProfile item={item} navigation={this.props.navigation} usuario={null} editor={false} />}
+            />
           }
         </View>
 
