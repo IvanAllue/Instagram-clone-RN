@@ -165,7 +165,7 @@ async componentWillReceiveProps(){
 
             {!this.state.loadingImages ?
               <FlatList data={this.state.listaPublicaciones}  style={{marginBottom: 200}}
-                renderItem={({ item }) => <PostProfile item={JSON.parse(JSON.stringify(item))} navigation={this.props.navigation} usuario={this.props.datosUsuario.datosUser} editor={false}/>
+                renderItem={({ item }) => <PostProfile item={JSON.parse(JSON.stringify(item))} navigation={this.props.navigation} usuario={JSON.parse(JSON.stringify(this.props.datosUsuario.datosUser))} editor={false}/>
                 }
               />
               :

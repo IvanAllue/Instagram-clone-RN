@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, StyleSheet, Button, TouchableHighlight, FlatList } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { connect } from 'react-redux'
-import SearchImages from './SearchItems/SearchImages'
+import PostProfile from './PostItems/TresFotosGaleria'
 class Search extends Component {
   state = {
     listaPublicaciones: null
@@ -16,7 +16,7 @@ class Search extends Component {
       for (let i = 0; i < this.props.publicaciones.length; i += 3) {
         arrayLista = []
         for (let j = i; j < i + 3; j++) {
-          arrayLista.push({publicacion: this.props.publicaciones[j], usuario:  this.props.autores[j]})
+          arrayLista.push({publicaciones: this.props.publicaciones[j], usuario:  this.props.autores[j]})
         }
         listaPublicaciones.push(arrayLista)
       }
@@ -49,8 +49,13 @@ class Search extends Component {
           {this.state.listaPublicaciones != null &&
             <FlatList data={this.state.listaPublicaciones}
          
-            renderItem={({ item, index }) =>
-            <SearchImages item={item} navigation={this.props.navigation} editor={false}/>
+            renderItem={({ item, index }) =>{
+             // console.log(item[1])
+              return <PostProfile item={item} navigation={this.props.navigation} usuario={null} editor={false}/>
+
+            }
+            
+            // <SearchImages item={item} navigation={this.props.navigation} editor={false}/>
             }
           />         
           }
