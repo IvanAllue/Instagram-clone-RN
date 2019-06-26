@@ -1,24 +1,42 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button } from 'react-native'
+import { Text, View, StyleSheet, Button, FlatList } from 'react-native'
 import { connect } from 'react-redux'
-
+import Notificaciones from './FollowItems/Notificaciones'
 class Follow extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      ruta: null
+      ruta: null,
+      followAll: null,
+      followTu: null
     };
   }
   async componentWillMount() {
-    this.props.getNotificacionesTu()
-    if(this.props.navigation.state.key == 'Tu')
-    this.props.getNotificaciones()
+    if (this.props.navigation.state.key == 'Tu') {
+      this.props.getNotificacionesTu()
+
+    } else {
+      this.props.getNotificaciones()
+
+    }
+
 
 
 
   }
 
-  componentDidUpdate() {
+  async componentDidUpdate() {
+    if (this.props.followAll != null && this.state.followAll == null) {
+      await this.setState({ followAll: this.props.followAll })
+
+    }
+
+    if (this.props.followTu != null && this.state.followTu == null) {
+      await this.setState({ followTu: this.props.followTu })
+
+    }
+
+
 
   }
   render() {
@@ -26,9 +44,18 @@ class Follow extends Component {
     if (this.props.navigation.state.key == 'Tu') {
       return (
         <View style={styles.container}>
+          <FlatList data={this.state.followTu}
+           
+            renderItem={({ item, index }) => {
 
-          <Text> {this.props.navigation.state.key} </Text>
-          <Button title='Autor' onPress={() => { navigation.navigate('Autor') }}></Button>
+              return (
+                <Notificaciones item={item} />
+
+              )
+            }
+            }
+          />
+
         </View>
       )
 
@@ -58,7 +85,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    followTu: state.reducerDescargarNotificacionesFollowTu
+    followTu: state.reducerDescargarNotificacionesFollowTu,
+    followAll: state.reducerDescargarNotificacionesFollowAll
   }
 }
 const mapDispatchToProps = (dispatch, ownProps) => {

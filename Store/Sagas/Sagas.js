@@ -549,7 +549,7 @@ getNotificacionesFollorUidAll = ({ uid }) => baseDatos.ref('FollowNotificaciones
 
 })
 
-conseguirPublicacionId = ({id}) => baseDatos.ref('publicaciones/'+id).once('value')
+conseguirPublicacionId = ({ id }) => baseDatos.ref('publicaciones/' + id).once('value')
 
 
 
@@ -561,44 +561,33 @@ function* sagaDescargarNotificaionesFollow(values) {
         notificacionesPropias.sort(function (a, b) {
             return (a.fecha - b.fecha)
         })
+        notificacionesTodosUsuarios = notificacionesPropias
+        datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'user' }
+        yield put({ type: CONSTANTES.FORMATEAR_NOTIFICACIONES_FOLLOW, datos })
 
-        yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU, notificacionesPropias })
+
+
 
     } else if (CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW) {
         const usuarioActual = yield select(state => state.reducerDatosProfile)
         usuarioParseado = JSON.parse(JSON.stringify(usuarioActual.datosUser))
         notificacionesTodosUsuarios = []
-        
+
         for (let i in usuarioParseado.follow) {
             const notificaciones = yield call(getNotificacionesFollorUidAll, { uid: i })
             if (notificaciones.length > 0) {
-               
-                notificacionesTodosUsuarios.push(...notificaciones)             
+
+                notificacionesTodosUsuarios.push(...notificaciones)
             }
         }
         notificacionesTodosUsuarios.sort(function (a, b) {
             return (a.fecha - b.fecha)
         })
-        let listaNotificaciones = []
-        for (i in notificacionesTodosUsuarios){
-            notificacion = notificacionesTodosUsuarios[i]
+        datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'all' }
+        yield put({ type: CONSTANTES.FORMATEAR_NOTIFICACIONES_FOLLOW, datos })
 
-            fechaNotificacion = new Date(notificacion.fecha)
-            usuario = yield call(conseguirUsuarioBd, notificacion.uid)
-            let objeto = null
-            if (notificacion.tipo == 'seguir'){
-                objeto = yield call(conseguirUsuarioBd,  notificacion.uid)
-            }else{
-                objeto = yield call(conseguirPublicacionId, {id: notificacion.uidObjeto})
-            }
 
-            notificacionConstruida = {fecha:fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo }
-            
-            listaNotificaciones.push(notificacionConstruida)
-            
-            
-        }
-        yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW, listaNotificaciones })
+
 
 
 
@@ -606,6 +595,42 @@ function* sagaDescargarNotificaionesFollow(values) {
 
 
 }
+
+function* sagaFormatearNotificacionesFollow(values) {
+
+    let notificacionesTodosUsuarios = values.datos.notificaciones
+    let listaNotificaciones = []
+    for (i in notificacionesTodosUsuarios) {
+        notificacion = notificacionesTodosUsuarios[i]
+
+        fechaNotificacion = new Date(notificacion.fecha)
+        usuario = yield call(conseguirUsuarioBd, notificacion.uid)
+        let objeto = null
+        if (notificacion.tipo == 'seguir') {
+            objeto = yield call(conseguirUsuarioBd, notificacion.uid)
+        } else {
+            objeto = yield call(conseguirPublicacionId, { id: notificacion.uidObjeto })
+        }
+
+        notificacionConstruida = { fecha: fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo }
+
+        listaNotificaciones.push(notificacionConstruida)
+
+        
+
+    }
+    console.log(listaNotificaciones);
+
+    if (values.datos.tipo == 'all') {
+      //  yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW, listaNotificaciones })
+
+    } else {
+      //  yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU, listaNotificaciones })
+
+    }
+
+}
+
 
 export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.REGISTRO, sagaRegistro) //LN 19
@@ -634,6 +659,8 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, sagaGenerarNotificacionFollow) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW_TU, sagaDescargarNotificaionesFollow) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW, sagaDescargarNotificaionesFollow) //LN 193
+    yield takeEvery(CONSTANTES.FORMATEAR_NOTIFICACIONES_FOLLOW, sagaFormatearNotificacionesFollow) //LN 193
+
 
 
 

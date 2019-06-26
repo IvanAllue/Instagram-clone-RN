@@ -5,7 +5,7 @@ export const reducerDescargarNotificacionesFollowTu = (state = null, action) => 
     switch (action.type) {
         case CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU:
             
-            return action.notificacionesPropias
+            return action.listaNotificaciones
         default:
             return state
     }
@@ -15,9 +15,8 @@ export const reducerDescargarNotificacionesFollowAll = (state = null, action) =>
 
     switch (action.type) {
         case CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW:
-            console.log(action);
             
-            return state
+            return action.listaNotificaciones
         default:
             return state
     }
