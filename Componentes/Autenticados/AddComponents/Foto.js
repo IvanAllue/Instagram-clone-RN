@@ -64,7 +64,7 @@ class Foto extends Component {
                     rightComponent={
                      image &&
                         <TouchableOpacity onPress={() => {this.props.navigation.navigate('NuevaPublicacion')  }}>
-                            <Text style={{fontSize: 20, color: '#0077CC', marginLeft: -15
+                            <Text style={{fontSize: 20, color: '#0077CC', marginLeft: -45
                             }}> Siguiente </Text>
                         </TouchableOpacity>
                     }

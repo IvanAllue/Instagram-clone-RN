@@ -35,7 +35,7 @@ class Add extends Component {
 
   }
   getPhotos = async () => {
-    await CameraRoll.getPhotos({ first: 50, assetType: 'Photos' }).then(response => this.setState({ image: response.edges }))
+    await CameraRoll.getPhotos({ first: 200, assetType: 'Photos' }).then(response => this.setState({ image: response.edges }))
     listaPublicaciones = []
     for (let i = 0; i < this.state.image.length; i += 4) {
       arrayLista = []

@@ -45,7 +45,7 @@ class NuevaPublicacion extends PureComponent {
                         <TouchableHighlight onPress={() => { 
                           this.subirImagenBd()
                          }}>
-                            <Text style={{ color: '#0077CC', fontSize: 18, marginLeft: -10 }}> Compartir </Text>
+                            <Text style={{ color: '#0077CC', fontSize: 18, marginLeft: -40 }}> Compartir </Text>
                         </TouchableHighlight>
                     }
                 />

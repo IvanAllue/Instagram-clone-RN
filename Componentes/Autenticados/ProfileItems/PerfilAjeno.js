@@ -143,7 +143,7 @@ async componentWillReceiveProps(){
               </TouchableOpacity>
             }
             centerComponent={
-              <Text style={{ fontSize: 18, marginLeft: -width * 0.6, fontWeight: "bold" }}>{JSON.parse(this.state.datosUser).usuario}</Text>
+              <Text style={{ fontSize: 18, marginLeft: -width * 0.4, fontWeight: "bold" }}>{JSON.parse(this.state.datosUser).usuario}</Text>
             }
           
           />
