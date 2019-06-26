@@ -562,7 +562,7 @@ function* sagaDescargarNotificaionesFollow(values) {
         notificacionesPropias.sort(function (a, b) {
             return (a.fecha - b.fecha)
         })
-        notificacionesTodosUsuarios = notificacionesPropias
+        let notificacionesTodosUsuarios = notificacionesPropias
         datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'user' }
         //console.log(datos);
         
@@ -571,10 +571,10 @@ function* sagaDescargarNotificaionesFollow(values) {
 
 
 
-    } else if (CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW) {
+    } else if (values.type == CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW) {
         const usuarioActual = yield select(state => state.reducerDatosProfile)
         usuarioParseado = JSON.parse(JSON.stringify(usuarioActual.datosUser))
-        notificacionesTodosUsuarios = []
+        let notificacionesTodosUsuarios = []
 
         for (let i in usuarioParseado.follow) {
             const notificaciones = yield call(getNotificacionesFollorUidAll, { uid: i })
@@ -583,10 +583,14 @@ function* sagaDescargarNotificaionesFollow(values) {
                 notificacionesTodosUsuarios.push(...notificaciones)
             }
         }
+        
         notificacionesTodosUsuarios.sort(function (a, b) {
             return (a.fecha - b.fecha)
         })
+        
         datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'all' }
+
+        
         yield put({ type: CONSTANTES.FORMATEAR_NOTIFICACIONES_FOLLOW, datos })
 
 
@@ -600,14 +604,16 @@ function* sagaDescargarNotificaionesFollow(values) {
 }
 
 function* sagaFormatearNotificacionesFollow(values) {
-
+    
     let notificacionesTodosUsuarios = values.datos.notificaciones
+   
+    
     let listaNotificaciones = []
-    for (i in notificacionesTodosUsuarios) {
-        notificacion = notificacionesTodosUsuarios[i]
+    for (let i in notificacionesTodosUsuarios) {
+        let notificacion = notificacionesTodosUsuarios[i]
         
-        fechaNotificacion = new Date(notificacion.fecha)
-        usuario = yield call(conseguirUsuarioBd, notificacion.uid)
+        let fechaNotificacion = new Date(notificacion.fecha)
+        let usuario = yield call(conseguirUsuarioBd, notificacion.uid)
         let objeto = null
         if (notificacion.tipo == 'seguir') {
             
@@ -616,13 +622,16 @@ function* sagaFormatearNotificacionesFollow(values) {
 
         } else if (notificacion.tipo == 'like'){
             objeto = yield call(conseguirPublicacionId, { id: notificacion.uidObjeto })
-         
+          
             autorPublicacion = yield call(conseguirUsuarioBd,JSON.parse(JSON.stringify(objeto)).uid)
             
             notificacionConstruida = { fecha: fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo, autorPublicacion: JSON.parse(JSON.stringify(autorPublicacion)) }
 
         }
-
+        console.log('====================================');
+        console.log(values.datos.tipo);
+        console.log( notificacionConstruida);
+        console.log('====================================');
 
         listaNotificaciones.push(notificacionConstruida)
 

@@ -74,7 +74,12 @@ export default class Notificaciones extends Component {
             return (
                 <View style={{ height: 60, flexDirection: "row", marginTop: 5 }}>
                     <View style={{ flex: 8, marginLeft: 10 }}>
+                    {this.props.item.usuario == null ?
                     <Text>Te ha gustado una publicación de <Text style={{ fontWeight: "bold" }}>{this.props.item.autorPublicacion.usuario}</Text>. <Text style={{color: '#808080'}}> {this.state.hace}</Text></Text>
+                    :
+                    <Text>A <Text style={{ fontWeight: "bold" }}>{this.props.item.usuario.usuario}</Text> le ha gustado una publicación de <Text style={{ fontWeight: "bold" }}>{this.props.item.autorPublicacion.usuario}</Text>. <Text style={{color: '#808080'}}> {this.state.hace}</Text></Text>
+
+                    }
                     </View>
                     <View style={{ flex: 2, justifyContent: "center", alignItems: "center"}}>
                     <Image style={{ width: 59, height: 50 }}  source={{ uri: this.props.item.objeto.url }}/>

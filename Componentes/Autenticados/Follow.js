@@ -12,10 +12,13 @@ class Follow extends Component {
     };
   }
   async componentWillMount() {
-    
-     
+    if (this.props.navigation.state.key == 'Tu') {
+      this.props.getNotificacionesTu()
 
-    
+    } else {
+      this.props.getNotificaciones()
+
+    }
 
 
 
@@ -25,7 +28,6 @@ class Follow extends Component {
   async componentDidUpdate() {
     if (this.props.followAll != null && this.state.followAll == null) {
       await this.setState({ followAll: this.props.followAll })
-      
 
     }
 

@@ -15,7 +15,6 @@ export const reducerDescargarNotificacionesFollowAll = (state = null, action) =>
 
     switch (action.type) {
         case CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW:
-            console.log(action);
             
             
             return action.listaNotificaciones
