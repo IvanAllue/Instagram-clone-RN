@@ -121,8 +121,9 @@ const actualizarPerfilBD = ({ uid, url }) => baseDatos.ref('Users/' + uid).updat
 }).then(response => response)
 
 const conseguirUsuarioBd = (uid) => baseDatos.ref('Users/' + uid).once('value', function (snapshot) {
-    return snapshot.val()
-}).catch(() => false)
+        return snapshot.val()
+    }).catch(() => false)
+
 
 function* sagaImagenPerfil(values) {
     try {
@@ -563,6 +564,8 @@ function* sagaDescargarNotificaionesFollow(values) {
         })
         notificacionesTodosUsuarios = notificacionesPropias
         datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'user' }
+        //console.log(datos);
+        
         yield put({ type: CONSTANTES.FORMATEAR_NOTIFICACIONES_FOLLOW, datos })
 
 
@@ -602,30 +605,38 @@ function* sagaFormatearNotificacionesFollow(values) {
     let listaNotificaciones = []
     for (i in notificacionesTodosUsuarios) {
         notificacion = notificacionesTodosUsuarios[i]
-
+        
         fechaNotificacion = new Date(notificacion.fecha)
         usuario = yield call(conseguirUsuarioBd, notificacion.uid)
         let objeto = null
         if (notificacion.tipo == 'seguir') {
-            objeto = yield call(conseguirUsuarioBd, notificacion.uid)
-        } else {
+            
+            objeto = yield call(conseguirUsuarioBd, notificacion.uidObjeto)
+            notificacionConstruida = { fecha: fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo }
+
+        } else if (notificacion.tipo == 'like'){
             objeto = yield call(conseguirPublicacionId, { id: notificacion.uidObjeto })
+         
+            autorPublicacion = yield call(conseguirUsuarioBd,JSON.parse(JSON.stringify(objeto)).uid)
+            
+            notificacionConstruida = { fecha: fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo, autorPublicacion: JSON.parse(JSON.stringify(autorPublicacion)) }
+
         }
 
-        notificacionConstruida = { fecha: fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo }
 
         listaNotificaciones.push(notificacionConstruida)
 
         
 
     }
-    console.log(listaNotificaciones);
+    
 
     if (values.datos.tipo == 'all') {
-      //  yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW, listaNotificaciones })
+       yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW, listaNotificaciones })
 
     } else {
-      //  yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU, listaNotificaciones })
+        
+        yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU, listaNotificaciones })
 
     }
 

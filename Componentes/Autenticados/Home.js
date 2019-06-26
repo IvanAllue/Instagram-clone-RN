@@ -12,7 +12,6 @@ class Home extends React.Component {
 componentWillMount(){
   this.props.conseguirUsuario(this.props.usuario.user.uid)
 
-    
 
 
 
@@ -20,7 +19,11 @@ componentWillMount(){
 componentDidUpdate(){
   if (this.props.usuario != null && this.state.loading){
     this.props.conseguirPostSeguidos()
+    this.props.getNotificaciones()
 
+    setTimeout(()=>{
+      this.props.getNotificacionesTu()
+     }, 1000)
   }
 
   if (this.props.publicaciones != null && this.state.loading){
@@ -94,6 +97,12 @@ const mapDispatchToProps = (dispatch) => {
     conseguirPostSeguidos: () => {
       dispatch({ type: 'DESCARGAR_PUBLICACIONES_SEGUIDOS' })
 
+    },
+    getNotificacionesTu: () => {
+      dispatch({ type: 'DESCARGAR_NOTIFICACIONES_FOLLOW_TU' })
+    },
+    getNotificaciones: () => {
+      dispatch({ type: 'DESCARGAR_NOTIFICACIONES_FOLLOW' })
     }
   }
 }

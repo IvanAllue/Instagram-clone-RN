@@ -12,13 +12,10 @@ class Follow extends Component {
     };
   }
   async componentWillMount() {
-    if (this.props.navigation.state.key == 'Tu') {
-      this.props.getNotificacionesTu()
+    
+     
 
-    } else {
-      this.props.getNotificaciones()
-
-    }
+    
 
 
 
@@ -28,11 +25,13 @@ class Follow extends Component {
   async componentDidUpdate() {
     if (this.props.followAll != null && this.state.followAll == null) {
       await this.setState({ followAll: this.props.followAll })
+      
 
     }
 
     if (this.props.followTu != null && this.state.followTu == null) {
       await this.setState({ followTu: this.props.followTu })
+      //console.log(this.state.followTu);
 
     }
 
@@ -45,12 +44,9 @@ class Follow extends Component {
       return (
         <View style={styles.container}>
           <FlatList data={this.state.followTu}
-           
             renderItem={({ item, index }) => {
-
               return (
                 <Notificaciones item={item} />
-
               )
             }
             }
@@ -64,7 +60,14 @@ class Follow extends Component {
         <View style={styles.container}>
 
 
-          <Button title='Autor' onPress={() => { navigation.navigate('Autor') }}></Button>
+          <FlatList data={this.state.followAll}
+            renderItem={({ item, index }) => {
+              return (
+                <Notificaciones item={item} />
+              )
+            }
+            }
+          />
         </View>
       )
 
@@ -77,8 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+
   },
 });
 
