@@ -41,6 +41,10 @@ import {reducerUidsUsuarios} from './Reducers/Post/Likes' //Obtiene la uid de lo
 
 import {reducerUsuariosBuscados} from './Reducers/Search' //Obtiene la uid de los usuarios que han dado like a una foto
 
+import {reducerDescargarNotificacionesFollowTu} from './Reducers/Follow' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+import {reducerDescargarNotificacionesFollowAll} from './Reducers/Follow' //Requiere: uid -> Obtiene todas las publicaciones subidas por un usuario
+
+
 const sagaMiddleware = createSagaMiddleware()
 
 const reducers = combineReducers({
@@ -70,7 +74,10 @@ const reducers = combineReducers({
 
     reducerPublicacionesSeguidos,
     reducerUsuariosSeguidos,
-    reducerPublicacaionesPerfil
+    reducerPublicacaionesPerfil,
+
+    reducerDescargarNotificacionesFollowTu,
+    reducerDescargarNotificacionesFollowAll
 })
 
 const store = createStore(reducers, applyMiddleware(sagaMiddleware))

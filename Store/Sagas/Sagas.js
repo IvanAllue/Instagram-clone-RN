@@ -309,8 +309,8 @@ function* sagaDarLike(values) {
 
     const darLikeBd = yield call(guardarLikeBd, { uid, userId })
 
-    let datos = { uidUsuario: userId, publicacionId:uid, tipo: 'like' }
-     yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
+    let datos = { uidUsuario: userId, publicacionId: uid, tipo: 'like' }
+    yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 
 }
 
@@ -324,7 +324,7 @@ function* sagaQuitarLike(values) {
 
     const darLikeBd = yield call(quitarLikeBd, { uid, userId })
 
-    let datos = { uidUsuario: userId, publicacionId:uid, tipo: 'quitarLike' }
+    let datos = { uidUsuario: userId, publicacionId: uid, tipo: 'quitarLike' }
     yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 
 }
@@ -428,19 +428,19 @@ const cambiarContadorSeguidos = ({ uid, cantidad }) => baseDatos.ref('Users/' + 
 
 function* sagaSeguirUsuario(values) {
     const usuario = yield select(state => state.reducerSesion)
-    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid )
+    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid)
     usuarioSeguidoParseado = JSON.parse(JSON.stringify(usuarioSeguido))
 
-     yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
-     yield call(cambiarContadorSeguidores, { uid: values.values.uid, cantidad:usuarioSeguidoParseado.contFollowers +1  })
+    yield call(seguirUserBd, { uid: values.values.uid, userId: usuario.user.uid })
+    yield call(cambiarContadorSeguidores, { uid: values.values.uid, cantidad: usuarioSeguidoParseado.contFollowers + 1 })
 
-     usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
-     yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
-     yield call(cambiarContadorSeguidos, { uid: usuario.user.uid, cantidad:  parseInt(JSON.parse(JSON.stringify(usuarioActual)).contFollows) + 1})
+    usuarioActual = yield call(conseguirUsuarioBd, usuario.user.uid)
+    yield call(seguidoUserBd, { uid: usuario.user.uid, userId: values.values.uid })
+    yield call(cambiarContadorSeguidos, { uid: usuario.user.uid, cantidad: parseInt(JSON.parse(JSON.stringify(usuarioActual)).contFollows) + 1 })
 
-     yield put({ type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid })
-     let datos = { uidFollow: usuario.user.uid, uidFollower: values.values.uid, tipo: 'seguir' }
-     yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
+    yield put({ type: CONSTANTES.CONSEGUIR_USUARIO, datos: usuario.user.uid })
+    let datos = { uidFollow: usuario.user.uid, uidFollower: values.values.uid, tipo: 'seguir' }
+    yield put({ type: CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, datos })
 }
 
 const dejarSeguirUserBd = ({ uidSeguido, uidSeguidor }) => baseDatos.ref('Users/' + uidSeguido + '/followers/' + uidSeguidor).remove()
@@ -448,7 +448,7 @@ const dejarSeguidoBd = ({ uidSeguido, uidSeguidor }) => baseDatos.ref('Users/' +
 
 function* sagaDejarSeguirUsuario(values) {
     let uidSeguido = values.values.uid
-    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid )
+    const usuarioSeguido = yield call(conseguirUsuarioBd, values.values.uid)
     userSeguido = JSON.parse(JSON.stringify(usuarioSeguido))
 
     const usuario = yield select(state => state.reducerSesion)
@@ -518,13 +518,92 @@ function* sagaGenerarNotificacionFollow(values) {
         yield call(comenzarSeguirNotificacionFollow, { uidFollow: values.datos.uidFollow, uidFollower: values.datos.uidFollower, tipo: 'seguir' })
     } else if (values.datos.tipo == 'dejarSeguir') {
         yield call(dejarSeguirNotificacionFollow, { uidFollow: values.datos.uidFollow, uidFollower: values.datos.uidFollower })
-    }else if(values.datos.tipo == 'like'){
-        yield call(comenzarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId, tipo: 'like' })            
-    }else{
+    } else if (values.datos.tipo == 'like') {
+        yield call(comenzarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId, tipo: 'like' })
+    } else {
+        yield call(dejarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId })
+    }
+
+}
+
+getNotificacionesFollorUid = ({ uid }) => baseDatos.ref('FollowNotificaciones/' + uid).once('value').then(snapshot => {
+    arrayNotificaciones = []
+    snapshot.forEach(snap => {
+        arrayNotificaciones.push({ uidObjeto: snap.key, tipo: snap.val().tipo, fecha: snap.val().fecha })
+    })
+    return arrayNotificaciones
+})
+
+getNotificacionesFollorUidAll = ({ uid }) => baseDatos.ref('FollowNotificaciones/' + uid).once('value').then(snapshot => {
+
+    if (snapshot != null) {
+        arrayNotificaciones = []
+        snapshot.forEach(snap => {
+            arrayNotificaciones.push({ uidObjeto: snap.key, tipo: snap.val().tipo, fecha: snap.val().fecha, uid: uid })
+        })
+        return arrayNotificaciones
+    } else {
+        return null
+    }
+
+
+})
+
+conseguirPublicacionId = ({id}) => baseDatos.ref('publicaciones/'+id).once('value')
+
+
+
+function* sagaDescargarNotificaionesFollow(values) {
+    if (values.type == 'DESCARGAR_NOTIFICACIONES_FOLLOW_TU') {
+        const autor = yield select(state => state.reducerSesion)
+        userId = autor.user.uid
+        const notificacionesPropias = yield call(getNotificacionesFollorUid, { uid: userId })
+        notificacionesPropias.sort(function (a, b) {
+            return (a.fecha - b.fecha)
+        })
+
+        yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW_TU, notificacionesPropias })
+
+    } else if (CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW) {
+        const usuarioActual = yield select(state => state.reducerDatosProfile)
+        usuarioParseado = JSON.parse(JSON.stringify(usuarioActual.datosUser))
+        notificacionesTodosUsuarios = []
         
-       yield call(dejarSeguirNotificacionFollow, { uidFollow: values.datos.uidUsuario, uidFollower: values.datos.publicacionId })
+        for (let i in usuarioParseado.follow) {
+            const notificaciones = yield call(getNotificacionesFollorUidAll, { uid: i })
+            if (notificaciones.length > 0) {
+               
+                notificacionesTodosUsuarios.push(...notificaciones)             
+            }
+        }
+        notificacionesTodosUsuarios.sort(function (a, b) {
+            return (a.fecha - b.fecha)
+        })
+        let listaNotificaciones = []
+        for (i in notificacionesTodosUsuarios){
+            notificacion = notificacionesTodosUsuarios[i]
+
+            fechaNotificacion = new Date(notificacion.fecha)
+            usuario = yield call(conseguirUsuarioBd, notificacion.uid)
+            let objeto = null
+            if (notificacion.tipo == 'seguir'){
+                objeto = yield call(conseguirUsuarioBd,  notificacion.uid)
+            }else{
+                objeto = yield call(conseguirPublicacionId, {id: notificacion.uidObjeto})
+            }
+
+            notificacionConstruida = {fecha:fechaNotificacion, usuario: JSON.parse(JSON.stringify(usuario)), objeto: JSON.parse(JSON.stringify(objeto)), uidObjeto: notificacion.uidObjeto, tipo: notificacion.tipo }
+            
+            listaNotificaciones.push(notificacionConstruida)
+            
+            
+        }
+        yield put({ type: CONSTANTES.GUARDAR_STORE_NOTIFICACIONES_FOLLOW, listaNotificaciones })
+
+
 
     }
+
 
 }
 
@@ -553,6 +632,9 @@ export default function* functionPrimaria() {
     yield takeEvery(CONSTANTES.HACER_LISTA_USUARIOS_FOLLOWER_FOLLOW, sagaObtenerListaUsuarios) //LN 193
     yield takeEvery(CONSTANTES.DESCARGAR_PUBLICACIONES_SEGUIDOS, sagaPublicacionesSeguidos) //LN 193
     yield takeEvery(CONSTANTES.GESTIONAR_NOTIFICACION_FOLLOW, sagaGenerarNotificacionFollow) //LN 193
+    yield takeEvery(CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW_TU, sagaDescargarNotificaionesFollow) //LN 193
+    yield takeEvery(CONSTANTES.DESCARGAR_NOTIFICACIONES_FOLLOW, sagaDescargarNotificaionesFollow) //LN 193
+
 
 
 
