@@ -26,9 +26,18 @@ class Profile extends Component {
 
 
   }
+  async componentWillReceiveProps(){
+    if (this.state.loading == false){
+      await this.props.conseguirUsuario()
+
+      this.render()
+    }
+    
+  }
   componentDidUpdate() {
     
     if (this.props.getPublicacionesUsuario != null && this.state.loadingImages) {
+
       this.cargarPublicaciones()
     }
   }

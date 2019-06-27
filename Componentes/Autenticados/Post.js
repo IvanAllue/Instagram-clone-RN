@@ -13,6 +13,7 @@ var width = Dimensions.get('window').width;
 class Post extends Component {
   
  async componentWillMount() {
+   
   
     cont = 0
     for (let i in this.props.item.likes) {

@@ -40,7 +40,8 @@ componentDidUpdate(){
         <View style={styles.container}>         
           <FlatList data={this.props.publicaciones}
           refreshing={this.state.refreshing}
-          onRefresh={()=>{  this.props.descargarPublicaciones()
+          onRefresh={()=>{      this.props.conseguirPostSeguidos()
+
           }}
             renderItem={({ item, index }) =>{
               

@@ -3,7 +3,6 @@ import Post from '../Post';
 import Search from '../Search'
 import Profile from '../ProfileItems/PerfilAjeno';
 import Comentarios from '../PostItems/Comentarios';
-import SearchProfile from '../SearchItems/SearchProfile'
 import PostGrande from '../PostItems/PostGrande'
 import Likes from '../PostItems/Likes'
 import FollowersAndFollows from '../ProfileItems/FollowersAndFollows'
@@ -37,12 +36,8 @@ const StackSearch = createStackNavigator({
           }),
         
     },
-    SearchProfile: {
-        screen:SearchProfile,
-        navigationOptions:{
-            header: null
-        }
-    },
+    
+    
     PostProfile: {
         screen: PostGrande,
         navigationOptions: () => ({

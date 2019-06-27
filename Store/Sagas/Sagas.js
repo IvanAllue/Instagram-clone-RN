@@ -489,9 +489,20 @@ function* sagaObtenerListaUsuarios(values) {
 
 function* sagaPublicacionesSeguidos() {
     const usuario = yield select(state => state.reducerDatosProfile)
+    const usuarioUid = yield select(state => state.reducerSesion)
+
     userBd = JSON.parse(JSON.stringify(usuario.datosUser))
     publicacionesArray = []
     autoresArray = []
+
+    publicacionesPropias = yield call(getPublicaciones, usuarioUid.user.uid)
+    const publicacionesPerfilPropias = yield all(publicacionesPropias.map(publicacion => call(getPublicacion, publicacion)))
+
+    for (let i = 0; i < publicacionesPropias.length; i++) {
+        publicacionesArray.push({ publicacion: publicacionesPerfilPropias[i], autor: usuario.datosUser, key: publicacionesPropias[i] })
+    }
+    
+
     for (i in userBd.follow) {
 
         const autor = yield call(conseguirUsuarioBd, i)
