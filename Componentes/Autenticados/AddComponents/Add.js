@@ -4,6 +4,7 @@ import { Header } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import { connect } from 'react-redux'
+import { ImagePicker } from 'expo';
 
 
 import { Permissions } from 'expo';
@@ -47,14 +48,27 @@ class Add extends Component {
     this.setState({ listaImagenes: listaPublicaciones })
 
   }
-   listener = async (uri) => {
-   this.setState({imageSelected: uri})
+  listener = async (uri) => {
+    this.setState({ imageSelected: uri })
 
-   await this.props.imagenSeleccionada(uri)
+    await this.props.imagenSeleccionada(uri)
 
 
   }
+  _pickImage = async () => {
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 4],
+    });
   
+  
+  
+    if (!result.cancelled) {
+      this.listener(result.uri)
+    }
+  };
+
   render() {
 
     return (
@@ -102,12 +116,17 @@ class Add extends Component {
 
         </ScrollView>
 
+        <TouchableOpacity style={{ alignItems: "center" }} onPress={() => {this._pickImage()}}>
+          <Text style={{ fontSize: 17, color: '#0077CC' }}>Buscar imagen en la galeria</Text>
+        </TouchableOpacity>
 
 
       </View>
     )
   }
 }
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,

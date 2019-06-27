@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, StyleSheet, Button, FlatList } from 'react-native'
+import { Text, View, StyleSheet, Button, FlatList, ProgressBarAndroid } from 'react-native'
 import { connect } from 'react-redux'
 import Notificaciones from './FollowItems/Notificaciones'
 class Follow extends Component {
@@ -45,14 +45,24 @@ class Follow extends Component {
     if (this.props.navigation.state.key == 'Tu') {
       return (
         <View style={styles.container}>
-          <FlatList data={this.state.followTu}
-            renderItem={({ item, index }) => {
-              return (
-                <Notificaciones item={item} />
-              )
-            }
-            }
-          />
+          {this.props.followTu != null ?
+
+            <FlatList data={this.state.followTu}
+              refreshing={false}
+              onRefresh={() => {
+                this.props.getNotificacionesTu()
+              }}
+              renderItem={({ item, index }) => {
+                return (
+                  <Notificaciones item={item} />
+                )
+
+              }
+              }
+            />
+            :
+            <ProgressBarAndroid />
+          }
 
         </View>
       )
@@ -60,16 +70,23 @@ class Follow extends Component {
     } else {
       return (
         <View style={styles.container}>
+          {this.props.followAll != null ?
 
-
-          <FlatList data={this.state.followAll}
-            renderItem={({ item, index }) => {
-              return (
-                <Notificaciones item={item} />
-              )
-            }
-            }
-          />
+            <FlatList data={this.state.followAll}
+              refreshing={false}
+              onRefresh={() => {
+                this.props.getNotificaciones()
+              }}
+              renderItem={({ item, index }) => {
+                return (
+                  <Notificaciones item={item} />
+                )
+              }
+              }
+            />
+            :
+            <ProgressBarAndroid />
+          }
         </View>
       )
 

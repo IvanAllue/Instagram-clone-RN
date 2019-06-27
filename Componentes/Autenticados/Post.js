@@ -50,6 +50,10 @@ class Post extends Component {
 autor: null,
 idPublicacion: null
   }
+  componentWillUnmount(){
+    console.log('ADIOS POST');
+    
+  }
 
   render() {
    
@@ -70,7 +74,7 @@ idPublicacion: null
               </TouchableHighlight>
             }
             centerComponent={
-              <Text style={{ fontSize: 18, marginLeft: - width * 0.35 }}>Foto</Text>
+              <Text style={{ fontSize: 18, marginLeft: - width * 0.30 }}>Foto</Text>
             }
 
           />
