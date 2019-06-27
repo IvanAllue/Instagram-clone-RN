@@ -74,7 +74,9 @@ class GestionPerfil extends Component {
                             <View style={{ flex: 1 }}>
                                 <TouchableHighlight onPress={() => {
                                     this.props.limpiarUsuarioImagenes()
-                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.followers })
+                                    this.props.limpiarListaUsuarios()
+
+                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.followers, nombre: this.props.user.usuario })
                                 }}>
                                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
                                         {this.state.seguidores}
@@ -84,7 +86,9 @@ class GestionPerfil extends Component {
                             <View style={{ flex: 1 }}>
                                 <TouchableHighlight onPress={() => {
                                     this.props.limpiarUsuarioImagenes()
-                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.followers })
+                                    this.props.limpiarListaUsuarios()
+
+                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.follows, nombre: this.props.user.usuario })
                                 }}>
                                     <Text style={{ textAlign: "center", fontSize: 14, color: '#808080' }}>
                                         Seguidores
@@ -97,7 +101,8 @@ class GestionPerfil extends Component {
                             <View style={{ flex: 1 }}>
                                 <TouchableHighlight onPress={() => {
                                     this.props.limpiarUsuarioImagenes()
-                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.follow })
+                                    this.props.limpiarListaUsuarios()
+                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.follow, nombre: this.props.user.usuario })
                                 }}>
                                     <Text style={{ textAlign: "center", fontSize: 22, fontWeight: "bold", marginTop: 5 }}>
                                         {this.state.seguidos}
@@ -107,7 +112,9 @@ class GestionPerfil extends Component {
                             <View style={{ flex: 1 }}>
                                 <TouchableHighlight onPress={() => {
                                     this.props.limpiarUsuarioImagenes()
-                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.follow })
+                                    this.props.limpiarListaUsuarios()
+
+                                    this.props.navigation.navigate('FollowersAndFollows', { lista: this.props.user.follow, nombre: this.props.user.usuario })
                                 }}>
                                     <Text style={{ textAlign: "center", fontSize: 14, color: '#808080' }}>
                                         Seguidos
@@ -200,7 +207,10 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         limpiarUsuarioImagenes: () => {
             dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
 
-        }
+        },
+        limpiarListaUsuarios: () => {
+            dispatch({ type: 'LIMPIAR_LISTA_USUARIOS_FOLLOWER_FOLLOW' })
+          },
     }
 }
 

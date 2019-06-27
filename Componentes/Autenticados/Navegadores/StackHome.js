@@ -45,10 +45,16 @@ const StackHome = createStackNavigator({
           }),
        
     },Likes:{
-        screen: Likes
+        screen: Likes,
+        navigationOptions:{
+            header: null
+        }
     },
     FollowersAndFollows: {
-        screen: FollowersAndFollows
+        screen: FollowersAndFollows,
+        navigationOptions:{
+            header: null
+        }
     }
 
 }, {

@@ -52,10 +52,9 @@ const StackSearch = createStackNavigator({
        
     },Likes:{
         screen: Likes,
-        navigationOptions: () => ({
-            headerTitle:'Me gusta'
-            ,
-          }),
+        navigationOptions:{
+            header: null
+        }
     },
     FollowersAndFollows: {
         screen: FollowersAndFollows

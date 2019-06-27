@@ -31,6 +31,8 @@ export const reducerConseguirUsuariosFollowerFollow = (state = null, action) => 
           
             
             return action.arrayUsuarios
+            case CONSTANTES.LIMPIAR_LISTA_USUARIOS_FOLLOWER_FOLLOW:
+                return null
         
         default:
             return state;

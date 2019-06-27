@@ -560,7 +560,7 @@ function* sagaDescargarNotificaionesFollow(values) {
         userId = autor.user.uid
         const notificacionesPropias = yield call(getNotificacionesFollorUid, { uid: userId })
         notificacionesPropias.sort(function (a, b) {
-            return (a.fecha - b.fecha)
+            return (b.fecha - a.fecha)
         })
         let notificacionesTodosUsuarios = notificacionesPropias
         datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'user' }
@@ -585,7 +585,7 @@ function* sagaDescargarNotificaionesFollow(values) {
         }
         
         notificacionesTodosUsuarios.sort(function (a, b) {
-            return (a.fecha - b.fecha)
+            return (b.fecha - a.fecha)
         })
         
         datos = { notificaciones: notificacionesTodosUsuarios, tipo: 'all' }
