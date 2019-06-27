@@ -41,6 +41,11 @@ class Comentarios extends Component {
 
     this.props.enviarComentario({ idPublicacion:  this.state.idPost, texto: this.state.texto, datosUser: this.props.imagenPerfil.datosUser })
   }
+
+  componentWillUnmount(){
+   this.props.limpiarComentarios()
+    
+  }
   componentDidUpdate() {
 
     if (this.state.loading && this.props.comentarios != null) {
@@ -129,6 +134,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       dispatch({ type: 'ENVIAR_COMENTARIO', datos: values })
     }, descargarComentarios: (values) => {
       dispatch({ type: 'DESCARGAR_COMENTARIOS', datos: values })
+    },limpiarComentarios: () => {
+      dispatch({ type: 'LIMPIAR_COMENTARIOS' })
     },
    
   }

@@ -6,6 +6,8 @@ export const reducerComentarios = (state = null, action) => {
             return action.datos.reverse()
         case CONSTANTES.COMENTARIOS_STORE_UNO:            
             return [action.datos, ...state]
+            case CONSTANTES.LIMPIAR_COMENTARIOS:
+            return null
         default:
             return state;
     }

@@ -25,13 +25,17 @@ import { connect } from 'react-redux'
 
                     <Avatar size={40} rounded source={{ uri: this.state.comentario.fotoPerfil }} onPress={()=>{
                         this.props.limpiarUsuarioImagenes()
-                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId })}}/>
+                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId })
+                        this.props.limpiarComentarios()
+}}/>
 
                 </View>
                 <View style={{ flex: 8 }}>
                     <TouchableHighlight onPress={() => { 
                         this.props.limpiarUsuarioImagenes()
-                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId }) }}>
+                        this.props.navigation.navigate('AutorProfile', { uid: this.state.comentario.autorId })
+                        this.props.limpiarComentarios()
+ }}>
                         <Text>
                             <Text style={{ fontWeight: "bold" }}> {this.state.comentario.nombreUsuario} </Text> {this.state.comentario.contenido}  </Text>
                     </TouchableHighlight>
@@ -51,7 +55,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         limpiarUsuarioImagenes: () => {
             dispatch({ type: 'LIMPIAR_PUBLICACIONES_PERFIL_AJENO' })
       
-          }
+          },limpiarComentarios: () => {
+            dispatch({ type: 'LIMPIAR_COMENTARIOS' })
+          },
     }
 }
 
