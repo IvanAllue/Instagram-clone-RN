@@ -28,5 +28,7 @@ Clon de Instagram creado con intenciones meramente formativas mediante React Nat
 
 #### Y disfruta cambiando el codigo de este clon de instagram! 
 
-## Prueba la app aqui:
+## Prueba la APP aqui:
 https://expo.io/@ivanallue/instagram
+### Descargar .apk:
+https://expo.io/artifacts/c330890c-d861-4545-a86a-9c419bc29a51
